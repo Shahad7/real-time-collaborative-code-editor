@@ -5,19 +5,22 @@ import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { authGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirect to login page by default
   { path: 'login', component: LoginComponent },
-  { path: 'code-editor', component: CodeEditorComponent },
-  { path: 'header', component: HeaderComponent },
-  { path: 'sidebar', component: SidebarComponent },
-  { path: 'sign-up', component: SignUpComponent }
+  {
+    path: 'code-editor',
+    component: CodeEditorComponent,
+    canActivate: [authGuard],
+  },
+  { path: 'sign-up', component: SignUpComponent },
   // Add more routes for other pages as needed
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

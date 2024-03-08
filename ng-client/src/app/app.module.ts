@@ -9,7 +9,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { EditingFieldComponent } from './components/editing-field/editing-field.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignUpComponent } from './sign-up/sign-up.component';
 
 @NgModule({
@@ -20,15 +20,16 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     HeaderComponent,
     SidebarComponent,
     EditingFieldComponent,
-    SignUpComponent
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MonacoEditorModule.forRoot(),
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

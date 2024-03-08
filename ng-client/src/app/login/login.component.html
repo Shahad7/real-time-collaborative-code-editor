@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="main">
-        <form>
-            <h2>Login</h2>
-            <label for="email">E-mail</label>
-            <input type="text">
-            <label for="password">Password</label>
-            <input type="text">
-            <div class="pad">
-                <button type="submit">Login</button>
-            </div>
-           <div style="margin-top: 10px;margin-left: 60px;">Don't have an account? Sign up <a href="">here</a></div> 
-        </form>
+      <form>
+        <h2>Login</h2>
+        <label for="email">E-mail</label>
+        <input type="text" name="email" />
+        <label for="password">Password</label>
+        <input type="password" name="password" />
+        <div class="pad">
+          <button type="submit">Login</button>
+        </div>
+        <div style="margin-top: 10px; margin-left: 60px">
+          Don't have an account? Sign up <a routerLink="/sign-up">here</a>
+        </div>
+      </form>
     </div>
     <div class="main2"></div>
-</body>
+  </body>
 </html>

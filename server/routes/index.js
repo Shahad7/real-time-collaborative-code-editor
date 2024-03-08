@@ -1,9 +1,70 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
+const mognoose = require("mongoose");
+const User = require("../models/user");
+const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get("/", function (req, res, next) {
+  res.json("yes, you have reached at thy location sire");
 });
+
+router.post("/signup", [
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("name can't be empty")
+    .isLength({ min: 3, max: 30 })
+    .withMessage("name should be of atleast length 3"),
+
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("email can't be empty")
+    .custom((value, { req }) => {
+      return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
+        req.body.email
+      );
+    })
+    .withMessage("invalid email")
+    .custom(async (value, { req }) => {
+      const user = await User.findOne({ email: req.body.email });
+      if (user) throw new Error("email already in use");
+    }),
+  body("password")
+    .trim()
+    .notEmpty()
+    .withMessage("passsword can't be empty")
+    .isLength({ min: 4 })
+    .withMessage("password should be atleast 4 characters long"),
+  body("confirm_password")
+    .trim()
+    .notEmpty()
+    .withMessage("please confirm password")
+    .custom((value, { req }) => {
+      return req.body.password === req.body.confirm_password;
+    })
+    .withMessage("password and confirm password fields should match"),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (errors.isEmpty()) {
+      try {
+        const user = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+        });
+        await user.save();
+      } catch (e) {
+        console.error(e);
+      }
+      res.json({ success: true });
+    } else {
+      res.json({ error: errors.array()[0].msg, success: false });
+    }
+  }),
+]);
 
 module.exports = router;
