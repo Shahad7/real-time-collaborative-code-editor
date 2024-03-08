@@ -1,0 +1,64 @@
+html{
+    background-color: #e6e7ee;
+}
+
+body{
+    margin: none !important;
+}
+
+.main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
+    width: 35%;
+    height: 70%;
+    padding: 3%;
+    background: linear-gradient(145deg, #f0f0f0, #e6e7ee);
+    box-shadow:  20px 20px 63px #b8b8b8,-20px -20px 63px #ffffff;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+form input{
+    margin-bottom: 15px;
+    background-color: transparent;
+    border-style: solid;
+    border-color: #7a7a7a;
+    border-radius: 10px;
+    color: #000;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 30px;
+    padding: 6px;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+form label{
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+form button{
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: #ffff;
+    width: 65%;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 35px;
+    background-color: #000;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.main form .pad{
+    padding: 0 0 0 150px;
+}

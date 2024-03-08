@@ -1,0 +1,31 @@
+<header class="app-header">
+    <div class="menu">
+      <ul>
+        <li><a href="#">File</a></li>
+        <li><a href="#">Edit</a></li>
+        <li><a (click)="toggle()">Connect</a></li>
+      </ul>
+    </div>
+</header>
+
+<div class="pop-up" id="popup">
+  <img src="assets/close.png" alt="" class="cus-img" (click)="toggle()">
+  <div class="buttons" id="buttons">
+    <div class="join border-line" id="create" (click)="createRoom()">
+      <img src="assets/settings.png" alt="">
+      <h4>Create Room</h4>
+    </div>
+    <div class="join">
+      <img src="assets/jigsaw.png" id="join" alt="" (click)="joinRoom()">
+      <h4>Join Room</h4>
+    </div>
+  </div>
+  <div class="copy-id" id="copy-id">
+    <h5>1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed</h5>
+    <button>Copy ID</button>
+  </div>
+  <div class="join-room" id="join-room">
+    <input type="text" placeholder="Enter the Room ID">
+    <button>Join Room</button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { CodeEditorComponent } from './code-editor/code-editor.component';
+import { HeaderComponent } from './components/header/header.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirect to login page by default
+  { path: 'login', component: LoginComponent },
+  { path: 'code-editor', component: CodeEditorComponent },
+  { path: 'header', component: HeaderComponent },
+  { path: 'sidebar', component: SidebarComponent },
+  { path: 'sign-up', component: SignUpComponent }
+  // Add more routes for other pages as needed
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

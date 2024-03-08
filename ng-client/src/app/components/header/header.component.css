@@ -1,0 +1,219 @@
+.app-header {
+    background-color: #333; /* Set background color */
+    color: #fff; /* Set text color */
+    padding: 10px 7.5px; /* Add padding for spacing */
+    font-size: 13px;
+  }
+  
+  .menu {
+    display: flex; /* Use flexbox for layout */
+  }
+  
+  .menu ul {
+    display: flex;
+    list-style-type: none; /* Remove bullet points from list */
+    padding: 0; /* Remove default padding */
+    margin: 0;
+  }
+  
+  .menu ul li {
+    margin-right: 20px; /* Add margin between menu items */
+  }
+  
+  .menu ul li:last-child {
+    margin-right: 0; /* Remove margin from last menu item */
+  }
+  
+  .menu ul li a {
+    color: inherit; /* Inherit text color from parent */
+    text-decoration: none; /* Remove underline from links */
+  }
+  
+  .menu ul li a:hover {
+    text-decoration: underline; /* Add underline on hover */
+  }
+
+  a{
+    cursor: pointer;
+  }
+
+  .pop-up{
+    display: flex;
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    top: 25%;
+    left: 30%;
+    z-index: 1; 
+    border-radius: 10px;
+    width: 40%;
+    height: 45%;
+    padding: 3%;
+    background: linear-gradient(145deg, #f0f0f0, #e6e7ee);
+    box-shadow:  20px 20px 63px #b8b8b8,-20px -20px 63px #ffffff;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+    border-color: #d1d9e6;
+    border-style: solid;
+    border-width: 1px;
+  }
+  
+  #popup.active{
+    visibility: visible;
+    opacity: 1;
+    transition: 0.5s;
+  }
+
+  .buttons{
+    display: flex;
+    width: 100%;
+  }
+
+  .cus-img{
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    top: 18px;
+    right: 18px;
+    cursor: pointer;
+  }
+
+  .blur-filter {
+    filter: blur(10px);
+  }
+
+
+.join{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 50%;
+  padding: 30px 0 ;
+}
+
+.join img{
+  height: 80px;
+  width: 80px;
+  cursor: pointer;
+}
+
+.join h4{
+  margin-top: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.border-line{
+  border-style: solid;
+  border-width: 1px;
+  border-color: #333;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+}
+
+form{
+    display: flex;
+    position: fixed;
+    visibility: visible;
+    top: 25%;
+    left: 35%;
+    z-index: 10;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
+    width: 35%;
+    height: 60%;
+    padding: 3%;
+    background: linear-gradient(145deg, #f0f0f0, #e6e7ee);
+    box-shadow:  20px 20px 63px #b8b8b8,-20px -20px 63px #ffffff;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+form input{
+    margin-bottom: 15px;
+    background-color: transparent;
+    border-style: solid;
+    border-color: #7a7a7a;
+    border-radius: 10px;
+    color: #000;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 30px;
+    padding: 6px;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+form label{
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+form button{
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: #ffff;
+    width: 65%;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 35px;
+    background-color: #000;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.copy-id{
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.join-room{
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.dis-flex{
+  display: flex;
+}
+
+.join-room button{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #ffff;
+  width: 35%;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 35px;
+  background-color: #000;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.join-room input{
+  margin-bottom: 15px;
+  background-color: transparent;
+  border-style: solid;
+  border-color: #7a7a7a;
+  border-radius: 10px;
+  color: #000;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 30px;
+  padding: 6px;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  width: 51%;
+}
+
+.dis{
+  display: none;
+}
