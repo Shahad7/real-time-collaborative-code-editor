@@ -7,18 +7,19 @@
   </head>
   <body>
     <div class="main">
-      <form>
+      <form [formGroup]="loginForm" (submit)="onSubmit()">
         <h2>Login</h2>
         <label for="email">E-mail</label>
-        <input type="text" name="email" />
+        <input type="text" formControlName="email" />
         <label for="password">Password</label>
-        <input type="password" name="password" />
+        <input type="password" formControlName="password" />
         <div class="pad">
           <button type="submit">Login</button>
         </div>
         <div style="margin-top: 10px; margin-left: 60px">
           Don't have an account? Sign up <a routerLink="/sign-up">here</a>
         </div>
+        <div #error style="color: rgb(188, 13, 13); text-align: center"></div>
       </form>
     </div>
     <div class="main2"></div>

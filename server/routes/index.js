@@ -5,11 +5,13 @@ const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 router.get("/", function (req, res, next) {
   res.json("yes, you have reached at thy location sire");
 });
 
+//sign-up
 router.post("/signup", [
   body("name")
     .trim()
@@ -73,5 +75,62 @@ router.post("/signup", [
     }
   }),
 ]);
+
+router.post("/login", [
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("email can't be empty")
+    .custom((value, { req }) => {
+      return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
+        req.body.email
+      );
+    })
+    .withMessage("please provide a valid email"),
+  body("password").notEmpty().withMessage("password can't be empty"),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const user = await User.findOne({ email: req.body.email });
+      if (typeof user !== "undefined") {
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if (match) {
+          jwt.sign({ user: user }, "hweFnkAeedenQgwdjk63b$", (err, token) => {
+            if (err) console.error(err);
+            else res.json({ success: true, token: token });
+          });
+        } else res.json({ success: false, error: "invalid credentials" });
+      } else res.json({ success: false, error: "invalid credentials" });
+    } else {
+      res.json({ success: false, error: errors.array()[0].msg });
+    }
+  }),
+]);
+
+//function to extract jwt token from headers
+function extractToken(req, res, next) {
+  const bearerHeader = req.headers["authorization"];
+  if (typeof bearerHeader !== "undefined") {
+    const bearer = bearerHeader.split(" ")[1];
+    req.token = bearer;
+    next();
+  } else {
+    //handle authentication failure here
+    res.json({ success: false });
+  }
+}
+
+//function to verify the jwt token
+function verifyToken(req, res, next) {
+  jwt.verify(req.token, "hweFnkAeedenQgwdjk63b$", (err, authData) => {
+    if (err) {
+      console.log(err);
+      res.json({ success: false });
+    } else {
+      res.json({ success: true });
+    }
+  });
+}
 
 module.exports = router;

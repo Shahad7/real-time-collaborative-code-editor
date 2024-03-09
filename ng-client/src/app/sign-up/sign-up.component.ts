@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ViewChild } from '@angular/core';
-import { ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -28,10 +27,10 @@ export class SignUpComponent {
         headers: { 'Content-Type': 'application/json' },
         mode: 'cors',
         body: JSON.stringify({
-          name: this.signupForm.value.name,
-          email: this.signupForm.value.email,
-          password: this.signupForm.value.password,
-          confirm_password: this.signupForm.value.confirm_password,
+          name: this.signupForm.value.name ?? '',
+          email: this.signupForm.value.email ?? '',
+          password: this.signupForm.value.password ?? '',
+          confirm_password: this.signupForm.value.confirm_password ?? '',
         }),
       });
       const data = await response.json();
@@ -41,7 +40,7 @@ export class SignUpComponent {
         this.router.navigateByUrl('/login');
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 }
