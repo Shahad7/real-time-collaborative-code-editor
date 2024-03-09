@@ -4,9 +4,9 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
 const MONGOURI =
   "mongodb+srv://shahad7:qahe7LhbAc84JQfs@cluster0.ytovchg.mongodb.net/major-project?retryWrites=true&w=majority&appName=Cluster0";
+
 try {
   (async () => {
     await mongoose.connect(MONGOURI);

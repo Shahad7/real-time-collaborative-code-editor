@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -11,6 +10,8 @@ import { EditingFieldComponent } from './components/editing-field/editing-field.
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+const config: SocketIoConfig = { url: 'http://127.0.0.1:3000', options: {} };
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     MonacoEditorModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
+    SocketIoModule.forRoot(config),
   ],
   providers: [],
   bootstrap: [AppComponent],

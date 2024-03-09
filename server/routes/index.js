@@ -8,7 +8,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 router.get("/", function (req, res, next) {
-  res.json("yes, you have reached at thy location sire");
+  res.json("yes, you have reached thy location sire");
 });
 
 //sign-up
@@ -76,6 +76,7 @@ router.post("/signup", [
   }),
 ]);
 
+//login
 router.post("/login", [
   body("email")
     .trim()
