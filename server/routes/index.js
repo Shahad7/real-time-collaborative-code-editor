@@ -4,6 +4,7 @@ const mognoose = require("mongoose");
 const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
 
 router.get("/", function (req, res, next) {
   res.json("yes, you have reached at thy location sire");
@@ -50,17 +51,23 @@ router.post("/signup", [
     const errors = validationResult(req);
 
     if (errors.isEmpty()) {
-      try {
-        const user = new User({
-          name: req.body.name,
-          email: req.body.email,
-          password: req.body.password,
-        });
-        await user.save();
-      } catch (e) {
-        console.error(e);
-      }
-      res.json({ success: true });
+      bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+        if (err) {
+          console.error(err);
+        } else {
+          try {
+            const user = new User({
+              name: req.body.name,
+              email: req.body.email,
+              password: hashedPassword,
+            });
+            await user.save();
+          } catch (e) {
+            console.error(e);
+          }
+          res.json({ success: true });
+        }
+      });
     } else {
       res.json({ error: errors.array()[0].msg, success: false });
     }
