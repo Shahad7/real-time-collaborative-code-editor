@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { SocketService } from '../socket/socket.service';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private socketService: SocketService) {}
 
   isLoggedIn(): boolean {
     const token = sessionStorage.getItem('token');
@@ -15,6 +15,7 @@ export class AuthService {
 
   login(token: string): void {
     sessionStorage.setItem('token', token);
+    this.socketService.connect();
     this.router.navigateByUrl('/code-editor');
   }
 

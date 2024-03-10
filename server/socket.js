@@ -1,4 +1,5 @@
 const { Server } = require("socket.io");
+const socketClient = require("socket.io-client");
 
 const getIo = (server) => {
   const io = new Server(server, {

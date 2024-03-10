@@ -10,9 +10,7 @@ import { EditingFieldComponent } from './components/editing-field/editing-field.
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignUpComponent } from './sign-up/sign-up.component';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-const config: SocketIoConfig = { url: 'http://127.0.0.1:3000', options: {} };
-
+import { SocketService } from './socket/socket.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +27,6 @@ const config: SocketIoConfig = { url: 'http://127.0.0.1:3000', options: {} };
     MonacoEditorModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
-    SocketIoModule.forRoot(config),
   ],
   providers: [],
   bootstrap: [AppComponent],
