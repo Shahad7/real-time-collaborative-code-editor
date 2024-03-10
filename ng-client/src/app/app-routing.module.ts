@@ -8,7 +8,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { authGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirect to login page by default
+  { path: '', redirectTo: 'code-editor', pathMatch: 'full' }, // Redirect to index guarded by login
   { path: 'login', component: LoginComponent },
   {
     path: 'code-editor',

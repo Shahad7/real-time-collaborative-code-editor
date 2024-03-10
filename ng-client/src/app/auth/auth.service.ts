@@ -8,18 +8,19 @@ export class AuthService {
   constructor(private router: Router) {}
 
   isLoggedIn(): boolean {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) return true;
     return false;
   }
 
   login(token: string): void {
-    localStorage.setItem('token', token);
+    sessionStorage.setItem('token', token);
     this.router.navigateByUrl('/code-editor');
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    sessionStorage.clear();
     this.router.navigateByUrl('/login');
   }
 }
