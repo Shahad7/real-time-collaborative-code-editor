@@ -84,7 +84,8 @@ export class HeaderComponent {
 
   //to-be-implemented as wanted
   OnLeaveRoom() {
-    //sessionStorage.removeItem('');
+    sessionStorage.removeItem('roomID');
+    window.location.reload();
   }
 
   //copies roomID to user's clipboard
