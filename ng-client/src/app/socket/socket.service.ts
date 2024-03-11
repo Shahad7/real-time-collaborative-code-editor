@@ -18,7 +18,16 @@ export class SocketService {
     this.socket.connect();
   }
 
+  setAuth(id: string, username: string) {
+    this.socket.auth = { username: username, userID: id };
+    //you can make the socket join a room with its own userID for implementing private messaging or data sharing
+  }
+
   isConnected(): boolean {
     return this.socket.connected;
+  }
+
+  disconnect(): void {
+    this.socket.disconnect();
   }
 }

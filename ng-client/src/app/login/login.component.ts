@@ -33,7 +33,7 @@ export class LoginComponent {
       const data = await response.json();
       if (!data['success']) {
         this.errorDiv.nativeElement.textContent = data['error'];
-      } else this.authService.login(data['token']);
+      } else this.authService.login(data['token'], data['user']);
     } catch (e) {
       console.error(e);
     }

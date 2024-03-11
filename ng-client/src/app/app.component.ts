@@ -14,7 +14,10 @@ export class AppComponent {
   @HostListener('document:DOMContentLoaded', ['$event'])
   handlePageRefresh(event: any) {
     const token = sessionStorage.getItem('token');
+    const userID = sessionStorage.getItem('userID') ?? '';
+    const username = sessionStorage.getItem('username') ?? '';
     if (token && !this.socketService.isConnected()) {
+      this.socketService.setAuth(userID, username);
       this.socketService.connect();
     }
   }

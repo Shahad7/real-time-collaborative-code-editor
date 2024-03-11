@@ -8,11 +8,15 @@ const getIo = (server) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("user " + socket.id + " connected");
+    console.log(
+      `user ${socket.handshake.auth.username} with userID ${socket.handshake.auth.userID} connected`
+    );
 
     //client disconnection
     socket.on("disconnect", () => {
-      console.log("user " + socket.id + " disconnected");
+      console.log(
+        `user ${socket.handshake.auth.username} with userID ${socket.handshake.auth.userID} disconnected`
+      );
     });
   });
 };

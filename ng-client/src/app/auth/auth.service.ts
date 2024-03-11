@@ -13,14 +13,18 @@ export class AuthService {
     return false;
   }
 
-  login(token: string): void {
+  login(token: string, user: { name: string; _id: string }): void {
     sessionStorage.setItem('token', token);
+    sessionStorage.setItem('username', user.name);
+    sessionStorage.setItem('userID', user._id);
+    this.socketService.setAuth(user._id, user.name);
     this.socketService.connect();
     this.router.navigateByUrl('/code-editor');
   }
 
   logout(): void {
     sessionStorage.removeItem('token');
+    this.socketService.disconnect();
     sessionStorage.clear();
     this.router.navigateByUrl('/login');
   }

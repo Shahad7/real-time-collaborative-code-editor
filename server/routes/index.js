@@ -99,7 +99,7 @@ router.post("/login", [
         if (match) {
           jwt.sign({ user: user }, "hweFnkAeedenQgwdjk63b$", (err, token) => {
             if (err) console.error(err);
-            else res.json({ success: true, token: token });
+            else res.json({ success: true, token: token, user: user });
           });
         } else res.json({ success: false, error: "invalid credentials" });
       } else res.json({ success: false, error: "invalid credentials" });
