@@ -18,7 +18,7 @@ export class AuthService {
     sessionStorage.setItem('username', user.name);
     sessionStorage.setItem('userID', user._id);
     this.socketService.setAuth(user._id, user.name);
-    this.socketService.connect();
+    this.socketService.connect(null);
     this.router.navigateByUrl('/code-editor');
   }
 

@@ -16,9 +16,10 @@ export class AppComponent {
     const token = sessionStorage.getItem('token');
     const userID = sessionStorage.getItem('userID') ?? '';
     const username = sessionStorage.getItem('username') ?? '';
+    const roomID = sessionStorage.getItem('roomID') ?? '';
     if (token && !this.socketService.isConnected()) {
       this.socketService.setAuth(userID, username);
-      this.socketService.connect();
+      this.socketService.connect(roomID);
     }
   }
 }

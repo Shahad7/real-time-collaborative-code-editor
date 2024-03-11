@@ -94,7 +94,7 @@ router.post("/login", [
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const user = await User.findOne({ email: req.body.email });
-      if (typeof user !== "undefined") {
+      if (user) {
         const match = await bcrypt.compare(req.body.password, user.password);
         if (match) {
           jwt.sign({ user: user }, "hweFnkAeedenQgwdjk63b$", (err, token) => {

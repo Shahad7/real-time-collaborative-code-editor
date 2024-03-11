@@ -26,8 +26,8 @@ export class LoginComponent {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: this.loginForm.value.email ?? ' ',
-          password: this.loginForm.value.password ?? ' ',
+          email: this.loginForm.value.email ?? '',
+          password: this.loginForm.value.password ?? '',
         }),
       });
       const data = await response.json();

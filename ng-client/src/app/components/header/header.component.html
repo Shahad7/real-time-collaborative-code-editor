@@ -22,11 +22,11 @@
     </div>
   </div>
   <div class="copy-id" id="copy-id">
-    <h5>1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed</h5>
-    <button>Copy ID</button>
+    <h5 #roomID>1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed</h5>
+    <button #copyButton (click)="copyID()">Copy ID</button>
   </div>
   <div class="join-room" id="join-room">
-    <input type="text" placeholder="Enter the Room ID" />
+    <input #roomIDInput type="text" placeholder="Enter the Room ID" />
     <button>Join Room</button>
   </div>
 </div>

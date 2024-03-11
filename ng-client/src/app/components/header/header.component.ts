@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
+import { ViewChild } from '@angular/core';
+import { SocketService } from 'src/app/socket/socket.service';
 
 @Component({
   selector: 'app-header',
@@ -7,13 +9,26 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private socketService: SocketService
+  ) {}
+
+  @ViewChild('roomID')
+  roomID: any;
+  @ViewChild('copyButton')
+  copyButton: any;
+  @ViewChild('roomIDInput')
+  roomIDInput: any;
 
   logout() {
     this.authService.logout();
   }
 
   toggle() {
+    //resetting textContent of copy button
+    this.copyButton.nativeElement.textContent = 'Copy ID';
+
     var popup = document.getElementById('popup');
     popup?.classList.toggle('active');
 
@@ -40,12 +55,33 @@ export class HeaderComponent {
     buttons?.classList.add('dis');
     var copy = document.getElementById('copy-id');
     copy?.classList.add('dis-flex');
+    //modified
+    copy?.classList.remove('dis');
+
+    //admitting the requested socket to created room first
+    this.socketService.createRoom(this.roomID.nativeElement.textContent);
   }
 
   joinRoom() {
     var buttons = document.getElementById('buttons');
     buttons?.classList.add('dis');
-    var copy = document.getElementById('join-room');
-    copy?.classList.add('dis-flex');
+    var joinRoom = document.getElementById('join-room');
+    joinRoom?.classList.add('dis-flex');
+    //modified
+    joinRoom?.classList.remove('dis');
+
+    //admits to the requested room
+    this.socketService.joinRoom(this.roomID.nativeElement.textContent);
+  }
+
+  async copyID(): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(
+        this.roomID.nativeElement.textContent
+      );
+      this.copyButton.nativeElement.textContent = 'copied';
+    } catch (e) {
+      alert('error: you have to manually copy');
+    }
   }
 }

@@ -14,8 +14,10 @@ export class SocketService {
   //socket clients are set to not automatically connect
   //so that user info can be set on handshake after successful login
   //this function initiates the connection
-  connect(): void {
+  //handles the logic of re-admitting client into the rooms it was before disconnecting
+  connect(roomID: string | null): void {
     this.socket.connect();
+    if (roomID != null && roomID != '') this.socket.emit('join-room', roomID);
   }
 
   setAuth(id: string, username: string) {
@@ -29,5 +31,15 @@ export class SocketService {
 
   disconnect(): void {
     this.socket.disconnect();
+  }
+
+  createRoom(roomID: string): void {
+    this.socket.emit('create-room', roomID);
+    sessionStorage.setItem('roomID', roomID);
+  }
+
+  joinRoom(roomID: string): void {
+    this.socket.emit('join-room', roomID);
+    sessionStorage.setItem('roomID', roomID);
   }
 }
