@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ViewChild } from '@angular/core';
 import { SocketService } from 'src/app/socket/socket.service';
-
+import { v4 as uuidv4 } from 'uuid';
+import { HostListener } from '@angular/core';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,6 +21,16 @@ export class HeaderComponent {
   copyButton: any;
   @ViewChild('roomIDInput')
   roomIDInput: any;
+  @ViewChild('connectButton')
+  connectButton: any;
+  @ViewChild('leaveButton')
+  leaveButton: any;
+
+  //options could go back to normal ('connect') afte refresh
+  @HostListener('document:DOMContentLoaded', ['$event'])
+  handlePageRefresh(event: any) {
+    this.toggleConnectOptions();
+  }
 
   logout() {
     this.authService.logout();
@@ -50,7 +61,7 @@ export class HeaderComponent {
     }, 500);
   }
 
-  createRoom() {
+  OnCreateRoom() {
     var buttons = document.getElementById('buttons');
     buttons?.classList.add('dis');
     var copy = document.getElementById('copy-id');
@@ -58,30 +69,62 @@ export class HeaderComponent {
     //modified
     copy?.classList.remove('dis');
 
-    //admitting the requested socket to created room first
-    this.socketService.createRoom(this.roomID.nativeElement.textContent);
+    //calls socket service to create room
+    this.createRoom();
   }
 
-  joinRoom() {
+  OnJoinRoom() {
     var buttons = document.getElementById('buttons');
     buttons?.classList.add('dis');
     var joinRoom = document.getElementById('join-room');
     joinRoom?.classList.add('dis-flex');
     //modified
     joinRoom?.classList.remove('dis');
-
-    //admits to the requested room
-    this.socketService.joinRoom(this.roomID.nativeElement.textContent);
   }
 
+  //to-be-implemented as wanted
+  OnLeaveRoom() {
+    //sessionStorage.removeItem('');
+  }
+
+  //copies roomID to user's clipboard
   async copyID(): Promise<void> {
     try {
       await navigator.clipboard.writeText(
         this.roomID.nativeElement.textContent
       );
       this.copyButton.nativeElement.textContent = 'copied';
+      //displays leave button
+      this.toggleConnectOptions();
     } catch (e) {
       alert('error: you have to manually copy');
     }
+  }
+
+  //
+  toggleConnectOptions() {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) {
+      this.connectButton.nativeElement.style.display = 'none';
+      this.leaveButton.nativeElement.style.display = 'block';
+    } /*else {
+      this.leaveButton.nativeElement.style.display = 'none';
+      this.connectButton.nativeElement.style.display = 'block';
+    }*/
+  }
+
+  //admitting the requested socket to created room first
+  createRoom() {
+    this.roomID.nativeElement.textContent = uuidv4();
+    this.socketService.createRoom(this.roomID.nativeElement.textContent);
+  }
+
+  //admits to the requested room
+  joinRoom() {
+    this.socketService.joinRoom(this.roomIDInput.nativeElement.value);
+
+    //closing popup + displaying leave button
+    this.toggle();
+    this.toggleConnectOptions();
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterRenderOptions, Component } from '@angular/core';
 import { HostListener } from '@angular/core';
 import { SocketService } from './socket/socket.service';
 

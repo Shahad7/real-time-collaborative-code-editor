@@ -3,7 +3,8 @@
     <ul>
       <li><a href="#">File</a></li>
       <li><a href="#">Edit</a></li>
-      <li><a (click)="toggle()">Connect</a></li>
+      <li #connectButton id="connect-btn"><a (click)="toggle()">Connect</a></li>
+      <li #leaveButton id="leave-btn"><a (click)="OnLeaveRoom()">Leave</a></li>
       <li><a (click)="logout()">Logout</a></li>
     </ul>
   </div>
@@ -12,21 +13,21 @@
 <div class="pop-up" id="popup">
   <img src="assets/close.png" alt="" class="cus-img" (click)="toggle()" />
   <div class="buttons" id="buttons">
-    <div class="join border-line" id="create" (click)="createRoom()">
+    <div class="join border-line" id="create" (click)="OnCreateRoom()">
       <img src="assets/settings.png" alt="" />
       <h4>Create Room</h4>
     </div>
     <div class="join">
-      <img src="assets/jigsaw.png" id="join" alt="" (click)="joinRoom()" />
+      <img src="assets/jigsaw.png" id="join" alt="" (click)="OnJoinRoom()" />
       <h4>Join Room</h4>
     </div>
   </div>
   <div class="copy-id" id="copy-id">
-    <h5 #roomID>1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed</h5>
+    <h5 #roomID></h5>
     <button #copyButton (click)="copyID()">Copy ID</button>
   </div>
   <div class="join-room" id="join-room">
     <input #roomIDInput type="text" placeholder="Enter the Room ID" />
-    <button>Join Room</button>
+    <button (click)="joinRoom()">Join Room</button>
   </div>
 </div>
