@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import * as Y from 'yjs';
 
 @Component({
   selector: 'app-editing-field',
