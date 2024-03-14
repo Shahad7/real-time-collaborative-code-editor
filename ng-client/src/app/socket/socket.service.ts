@@ -17,7 +17,7 @@ export class SocketService {
   //handles the logic of re-admitting client into the rooms it was before disconnecting
   connect(roomID: string | null): void {
     this.socket.connect();
-    if (!roomID && roomID != null && roomID != '')
+    if (roomID && roomID != null && roomID != '')
       this.socket.emit('join-room', roomID);
   }
 
