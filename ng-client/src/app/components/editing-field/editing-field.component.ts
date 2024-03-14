@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import * as Y from 'yjs';
 import { ViewChild } from '@angular/core';
 import { SocketService } from 'src/app/socket/socket.service';
+import { MonacoBinding } from 'y-monaco';
 
 @Component({
   selector: 'app-editing-field',
@@ -10,10 +11,11 @@ import { SocketService } from 'src/app/socket/socket.service';
 })
 export class EditingFieldComponent {
   editorOptions = { theme: 'vs-light', language: 'javascript' };
-  code: string = 'function demo(){ console.log("hey")}';
+  code: string = '';
+  monaco: any;
 
-  @ViewChild('editor')
-  editor: any;
+  @ViewChild('textarea')
+  textarea: any;
 
   //yjs integration
   ydoc = new Y.Doc();
@@ -28,20 +30,36 @@ export class EditingFieldComponent {
     });
   }
 
+  onInit(monaco: any) {
+    this.monaco = monaco;
+  }
+
   OnInput(e: any) {
-    //console.log(e);
+    // console.log(e);
+    console.log(this.monaco.getPosition());
     if (e.data == null && e.inputType == 'deleteContentBackward') {
-      this.ytext.delete(this.ytext.length - 1, 1);
+      this.ytext.delete(this.monaco.getPosition()['column'] - 2, 1);
     } else {
-      this.ytext.insert(this.ytext.length, e.data);
+      this.ytext.insert(this.monaco.getPosition()['column'] - 2, e.data);
     }
 
-    // console.log(this.ytext.length);
-    // console.log(this.ytext.toString());
+    console.log(this.ytext.length);
+    console.log(this.ytext.toString());
 
     //extracting the current updates to ydoc
     const update = Y.encodeStateAsUpdate(this.ydoc);
     //sends the updates to clients
     this.socketService.sendUpdates(update);
+  }
+
+  OnKeyUp(e: any) {
+    if (e.key == 'Backspace') {
+      this.ytext.delete(this.monaco.getPosition()['column'] - 1, 1);
+
+      //extracting the current updates to ydoc
+      const update = Y.encodeStateAsUpdate(this.ydoc);
+      //sends the updates to clients
+      this.socketService.sendUpdates(update);
+    }
   }
 }
