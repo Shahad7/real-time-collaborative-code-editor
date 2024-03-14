@@ -4,5 +4,10 @@
     [options]="editorOptions"
     [(ngModel)]="code"
   ></ngx-monaco-editor>-->
-  <textarea #editor style="height: 100%; width: 100%; padding: 50px"></textarea>
+  <textarea
+    #editor
+    style="height: 100%; width: 100%; padding: 50px"
+    (input)="OnInput($event)"
+    [value]="ytext.toString()"
+  ></textarea>
 </div>

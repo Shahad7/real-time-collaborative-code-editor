@@ -15,9 +15,9 @@ const getIo = (server) => {
 
   io.on("connection", (socket) => {
     console.log(
-      `user ${socket.handshake.auth.username} with userID ${socket.handshake.auth.userID} connected`
+      `user ${socket.handshake.auth.username} with userID ${socket.handshake.auth.userID} connected and socketID : ${socket.id}`
     );
-    logRooms(socket);
+    // logRooms(socket);
 
     //client disconnection
     socket.on("disconnect", () => {
@@ -36,7 +36,16 @@ const getIo = (server) => {
     socket.on("join-room", (roomID) => {
       socket.join(roomID);
       console.log(`${socket.handshake.auth.username} joined ${roomID}`);
-      logRooms(socket);
+      // logRooms(socket);
+    });
+
+    //client sends updates which have to be send to all clients in the same room as him
+    //have to create a new Uint8Array from the received data
+    //otherwise "unexpected end of array error" will be thrown from the client side
+    socket.on("send-updates", (updates, roomID) => {
+      io.to(roomID)
+        .except(socket.id)
+        .emit("receive-updates", new Uint8Array(updates));
     });
   });
 };
