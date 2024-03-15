@@ -10,7 +10,23 @@ import { MonacoBinding } from 'y-monaco';
   styleUrls: ['./editing-field.component.css'],
 })
 export class EditingFieldComponent {
-  editorOptions = { theme: 'vs-light', language: 'javascript' };
+  editorOptions = {
+    theme: 'vs-light',
+    language: 'javascript',
+    quickSuggestions: {
+      other: false,
+      comments: false,
+      strings: false,
+    },
+    parameterHints: {
+      enabled: false,
+    },
+    ordBasedSuggestions: false,
+    suggestOnTriggerCharacters: false,
+    acceptSuggestionOnEnter: 'off',
+    tabCompletion: 'off',
+    wordBasedSuggestions: false,
+  };
   code: string = '';
   monaco: any;
 
@@ -35,10 +51,13 @@ export class EditingFieldComponent {
   }
 
   OnInput(e: any) {
-    // console.log(e);
+    console.log(e);
     console.log(this.monaco.getPosition());
+    console.log(this.monaco);
     if (e.data == null && e.inputType == 'deleteContentBackward') {
       this.ytext.delete(this.monaco.getPosition()['column'] - 2, 1);
+    } else if (e.data == null && e.inputType == 'insertLineBreak') {
+      this.ytext.insert(this.ytext.length, '\n');
     } else {
       this.ytext.insert(this.monaco.getPosition()['column'] - 2, e.data);
     }
@@ -54,7 +73,8 @@ export class EditingFieldComponent {
 
   OnKeyUp(e: any) {
     if (e.key == 'Backspace') {
-      this.ytext.delete(this.monaco.getPosition()['column'] - 1, 1);
+      if (this.monaco.getPosition()['column'] - 1 >= 0)
+        this.ytext.delete(this.monaco.getPosition()['column'] - 1, 1);
 
       //extracting the current updates to ydoc
       const update = Y.encodeStateAsUpdate(this.ydoc);
