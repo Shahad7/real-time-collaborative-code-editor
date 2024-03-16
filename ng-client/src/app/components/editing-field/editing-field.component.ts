@@ -61,10 +61,6 @@ export class EditingFieldComponent {
     // this.yarray.get(0).insert(0, 'abcd');
     // this.yarray.get(0).insert(1, 'c');
     // this.yarray.get(0).insert(1, 'b');
-
-    // this.yarray.insert(1, [new Y.Text('def')]);
-    // this.yarray.insert(2, [new Y.Text('d3f')]);
-    // this.yarray.insert(3, [new Y.Text('deddwedf')]);
   }
 
   onInit(monaco: any) {
@@ -104,13 +100,26 @@ export class EditingFieldComponent {
     if (e.key == 'Backspace') {
       console.log('keyup event: ' + this.monaco.getPosition());
       const { lineNumber, column } = this.monaco.getPosition();
+      //checks if it's at column 1 and
+      // if there's anything to delete in its left (extreme left avoid)
       if (
         column != this.prevCursorPositionColumn &&
         column - 1 >= 0 &&
         this.yarray.get(lineNumber - 1)
       ) {
-        this.yarray.get(lineNumber - 1).delete(column - 1, 1);
+        if (
+          this.yarray
+            .get(lineNumber - 1)
+            .toString()
+            .substring(column - 1, column + 3) == '    '
+        ) {
+          //checks if a \t can be deleted : could be buggy
+          this.yarray.get(lineNumber - 1).delete(column - 1, 4);
+        } else {
+          this.yarray.get(lineNumber - 1).delete(column - 1, 1);
+        }
       }
+
       //extracting the current updates to ydoc
       const update = Y.encodeStateAsUpdate(this.ydoc);
       //sends the updates to clients
@@ -137,6 +146,11 @@ export class EditingFieldComponent {
         this.yarray
           .get(lineNumber - 1)
           .insert(this.prevCursorPositionColumn - 1, '   ');
+
+      //extracting the current updates to ydoc
+      const update = Y.encodeStateAsUpdate(this.ydoc);
+      //sends the updates to clients
+      this.socketService.sendUpdates(update);
     }
   }
   //returns the value of monaco editor. One way bind technically
