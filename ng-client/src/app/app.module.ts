@@ -11,6 +11,9 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SocketService } from './socket/socket.service';
+import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
+import { HighlightModule } from 'ngx-highlightjs';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,8 +30,18 @@ import { SocketService } from './socket/socket.service';
     MonacoEditorModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
+    HighlightModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: {
+        lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
+        fullLibraryLoader: () => import('highlight.js'),
+        lineNumbers: true,
+      },
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
