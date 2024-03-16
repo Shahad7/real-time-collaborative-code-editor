@@ -1,16 +1,6 @@
 <div style="height: 100vh">
-  <ngx-monaco-editor
-    style="height: 100%"
-    [options]="editorOptions"
-    [ngModel]="getValue()"
-    (input)="OnInput($event)"
-    (keyup)="OnKeyUp($event)"
-    (onInit)="onInit($event)"
-  ></ngx-monaco-editor>
-  <!-- <textarea
+  <textarea
     #textarea
     style="height: 100%; width: 100%; padding: 50px"
-    (input)="OnInput($event)"
-    [value]="ytext.toString()"
-  ></textarea> -->
+  ></textarea>
 </div>
