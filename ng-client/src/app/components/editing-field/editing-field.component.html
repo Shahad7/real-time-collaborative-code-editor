@@ -1,9 +1,9 @@
 <div style="height: 100vh">
-  <!-- <textarea
+  <textarea
     #textarea
-    style="height: 100%; width: 100%; padding: 50px"
+    [(ngModel)]="value"
     (keydown.tab)="onKeyDownTab($event)"
-  ></textarea> -->
+  ></textarea>
   <pre #pre><code #code [highlight]="value" 
   [languages]="['typescript','html','java','c','javascript','css','python']" 
   [lineNumbers]="true">

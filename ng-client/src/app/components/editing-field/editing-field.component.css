@@ -1,0 +1,21 @@
+textarea {
+  z-index: 1;
+}
+
+pre {
+  z-index: 0;
+}
+pre,
+textarea {
+  position: absolute;
+  height: 100%;
+  width: 80%;
+  border: 0;
+}
+
+textarea {
+  color: transparent;
+  background: transparent;
+  caret-color: black; /* Or choose your favorite color */
+  outline: none;
+}

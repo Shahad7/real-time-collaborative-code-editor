@@ -20,29 +20,7 @@ export class EditingFieldComponent implements AfterViewInit {
   pre: any;
   @ViewChild('code')
   code: any;
-  value: string = `import { Component } from '@angular/core';
-  import * as Y from 'yjs';
-  import { ViewChild } from '@angular/core';
-  import { SocketService } from 'src/app/socket/socket.service';
-  import { YArray, YText } from 'yjs/dist/src/internals';
-  import { TextAreaBinding } from 'y-textarea';
-  import { AfterViewInit } from '@angular/core';
-  import { HighlightModule } from 'ngx-highlightjs';
-  import { HighlightLoader } from 'ngx-highlightjs';
-  
-  @Component({
-    selector: 'app-editing-field',
-    templateUrl: './editing-field.component.html',
-    styleUrls: ['./editing-field.component.css'],
-  })
-  export class EditingFieldComponent implements AfterViewInit {
-    @ViewChild('textarea')
-    textarea: any;
-    @ViewChild('pre')
-    pre: any;
-    @ViewChild('code')
-    code: any;
-    value: string = ;`;
+  value: string = ``;
 
   //yjs integration
   ydoc = new Y.Doc();
