@@ -67,7 +67,16 @@ export class EditingFieldComponent {
     this.monaco = monaco;
 
     this.monaco.onKeyDown(() => {
+      console.log('keydown :' + this.monaco.getPosition());
       this.prevCursorPositionColumn = this.monaco.getPosition()['column'];
+    });
+
+    this.monaco.onDidChangeCursorPosition(() => {
+      console.log(this.monaco.getPosition());
+    });
+
+    this.monaco.onDidChangeModelContent((e: any) => {
+      console.log(e);
     });
   }
 
@@ -115,6 +124,13 @@ export class EditingFieldComponent {
         ) {
           //checks if a \t can be deleted : could be buggy
           this.yarray.get(lineNumber - 1).delete(column - 1, 4);
+        } else if (
+          this.yarray
+            .get(lineNumber - 1)
+            .toString()
+            .charAt(column - 2) == '\n'
+        ) {
+          alert('ooi');
         } else {
           this.yarray.get(lineNumber - 1).delete(column - 1, 1);
         }
