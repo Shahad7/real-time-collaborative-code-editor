@@ -47,4 +47,13 @@ export class EditingFieldComponent implements AfterViewInit {
     //sends the updates to clients
     this.socketService.sendUpdates(update);
   }
+
+  onKeyDownTab(e: Event) {
+    e.preventDefault();
+    const start = this.textarea.nativeElement.selectionStart;
+    const end = this.textarea.nativeElement.selectionEnd;
+    const value = this.textarea.nativeElement.value;
+    this.textarea.nativeElement.value =
+      value.substring(0, start) + '        ' + value.substring(end);
+  }
 }
