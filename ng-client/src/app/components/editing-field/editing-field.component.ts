@@ -49,7 +49,6 @@ export class EditingFieldComponent {
   //yjs integration
   ydoc = new Y.Doc();
   yarray: YArray<YText> = this.ydoc.getArray('experiment');
-
   constructor(private socketService: SocketService) {
     //defines what to do once the updates from a client arrives
     //have to create a new Uint8Array from the received data
@@ -58,8 +57,8 @@ export class EditingFieldComponent {
       Y.applyUpdate(this.ydoc, new Uint8Array(update));
     });
 
-    this.yarray.insert(0, [new Y.Text()]);
-    this.yarray.get(0).insert(0, 'abcd');
+    // this.yarray.insert(0, [new Y.Text()]);
+    // this.yarray.get(0).insert(0, 'abcd');
     // this.yarray.get(0).insert(1, 'c');
     // this.yarray.get(0).insert(1, 'b');
 
@@ -73,27 +72,6 @@ export class EditingFieldComponent {
 
     this.monaco.onKeyDown(() => {
       this.prevCursorPositionColumn = this.monaco.getPosition()['column'];
-      // console.log('oi' + this.prevCursorPositionColumn);
-      //console.log(this.monaco.getPosition());
-    });
-
-    this.monaco.onDidChangeModelContent((e: any) => {
-      console.log(e.changes[0]);
-      console.log('auto:' + this.monaco.getPosition());
-      console.log(e.changes[0].text.length);
-      if (e.changes[0].text == '    ' || e.changes[0].text == '   ') {
-        this.overridenPosition = this.monaco.getPosition();
-        console.log('set');
-      }
-    });
-
-    this.monaco.onDidChangeCursorPosition((e: any) => {
-      console.log('changed' + this.monaco.getPosition());
-      // if (this.overridenPosition != null) {
-      //   console.log('here');
-      //   this.monaco.setPosition(this.overridenPosition);
-      //   this.overridenPosition = null;
-      // }
     });
   }
 
@@ -138,22 +116,29 @@ export class EditingFieldComponent {
       //sends the updates to clients
       this.socketService.sendUpdates(update);
     } else if (e.key == 'Tab') {
-      console.log('tab0' + this.monaco.getPosition());
       const { lineNumber, column } = this.monaco.getPosition();
       this.initializeYTextElement(lineNumber);
-      let startIndex = this.prevCursorPositionColumn - 1;
-      console.log('startIndex :' + startIndex);
-      for (let i = 0; i < 4; i++)
-        this.yarray.get(lineNumber - 1).insert(startIndex, ' ');
-      console.log(
-        'ytext: ' +
-          this.yarray.get(lineNumber - 1).toString() +
-          'length: ' +
-          this.yarray.get(lineNumber - 1).length
-      );
+      //inserts 4 spaces if at the beginning of a row
+      //inserts 3 spaces if there is a space or character before current position
+      if (
+        this.yarray
+          .get(lineNumber - 1)
+          .toString()
+          .charAt(this.prevCursorPositionColumn - 2) == '' ||
+        this.yarray
+          .get(lineNumber - 1)
+          .toString()
+          .charAt(this.prevCursorPositionColumn - 2) == ' '
+      )
+        this.yarray
+          .get(lineNumber - 1)
+          .insert(this.prevCursorPositionColumn - 1, '    ');
+      else
+        this.yarray
+          .get(lineNumber - 1)
+          .insert(this.prevCursorPositionColumn - 1, '   ');
     }
   }
-
   //returns the value of monaco editor. One way bind technically
   getValue(): string {
     let value: string = '';
