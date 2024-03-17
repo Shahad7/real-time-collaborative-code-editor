@@ -2,10 +2,14 @@
   <textarea
     #textarea
     [(ngModel)]="value"
+    (input)="syncScroll()"
+    (keydown.enter)="changeMargin('enter')"
+    (keydown.backspace)="changeMargin('backspace')"
+    (scroll)="syncScroll()"
     (keydown.tab)="onKeyDownTab($event)"
   ></textarea>
   <pre #pre><code #code [highlight]="value" 
   [languages]="['typescript','html','java','c','javascript','css','python']" 
-  [lineNumbers]="false">
+  [lineNumbers]="true">
   </code></pre>
 </div>

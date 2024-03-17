@@ -12,8 +12,12 @@ pre {
   height: 100%;
   width: 80%;
   margin: 0;
-  padding: 0;
+  padding-top: 10px;
   border: 0;
+}
+
+code {
+  max-width: 80%;
 }
 
 textarea,
@@ -24,6 +28,8 @@ pre {
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
 }
 
 textarea {
@@ -38,59 +44,8 @@ code {
   margin: 0;
 }
 
-pre {
-  background: red;
-}
-
 ::ng-deep .hljs-ln-n {
-  margin-right: 10px;
-}
-
-/* old
-textarea {
-  all: unset;
-  position: absolute;
+  margin-right: 10px !important;
+  padding-right: 8px;
   box-sizing: content-box;
-  margin-left: 8%;
-  margin-top: 15px;
-  padding: 50px 80px 80px 80px;
-  color: transparent;
-  caret-color: white;
-  border-radius: 15px;
-  background-color: transparent;
-  overflow-wrap: break-word;
-  line-height: 30px;
-  tab-size: 8;
-  font-size: large;
-  z-index: 1;
-  resize: none;
 }
-code {
-  all: unset;
-  tab-size: 8;
-  overflow-wrap: break-word;
-  line-height: 30px;
-  font-size: large;
-  white-space: pre-wrap;
-}
-
-pre {
-  all: unset;
-  white-space: normal;
-  position: absolute;
-  box-sizing: border-box;
-  margin-left: 8%;
-  tab-size: 8;
-  margin-top: 15px;
-  padding: 50px 80px 80px 80px;
-  color: white;
-  caret-color: white;
-  border-radius: 15px;
-  background-color: black;
-  overflow-wrap: break-word;
-  line-height: 30px;
-  font-size: large;
-  width: 876px;
-  height: 3130px;
-}
-*/

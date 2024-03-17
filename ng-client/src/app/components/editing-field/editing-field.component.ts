@@ -22,6 +22,9 @@ export class EditingFieldComponent implements AfterViewInit {
   code: any;
   value: string = ``;
 
+  //changeMargin flag
+  textareaMarginSet: boolean = false;
+
   //yjs integration
   ydoc = new Y.Doc();
   ytextarea = this.ydoc.getText('textArea');
@@ -38,30 +41,47 @@ export class EditingFieldComponent implements AfterViewInit {
     });
 
     //applying event listener to ytextarea :Y.Text
-    // this.ytextarea.observe((e) => {
-    //   console.log(e);
-    //   this.sendUpdates();
-    // });
+    this.ytextarea.observe((e) => {
+      console.log(e);
+      this.sendUpdates();
+    });
   }
 
   ngAfterViewInit(): void {
-    // const areabinding = new TextAreaBinding(
-    //   this.ytextarea,
-    //   this.textarea.nativeElement
-    // );
-    // setTimeout(() => {
-    //   this.addMargins();
-    // }, 1000);
+    const areabinding = new TextAreaBinding(
+      this.ytextarea,
+      this.textarea.nativeElement
+    );
   }
 
-  //adds tiny margin to the line numbers
-  addMargins() {
-    setTimeout(() => {
-      const lns: any = document.body.getElementsByClassName('hljs-ln-n');
-      [...lns].forEach((elt) => {
-        elt.style.marginRight = '10px';
-      });
-    }, 10);
+  //add/remove margin to textarea so cursor position can be synced after linenumbers are visible
+  changeMargin(key: string) {
+    if (!this.textareaMarginSet) {
+      setTimeout(() => {
+        if (key == 'enter' && !this.textareaMarginSet) {
+          const elt: any = document.querySelector('.hljs-ln-n');
+
+          if (!elt) {
+            this.changeMargin('enter');
+          } else {
+            this.textarea.nativeElement.style.marginLeft =
+              elt.getBoundingClientRect().width + 10 + 'px';
+            this.textareaMarginSet = true;
+          }
+        }
+      }, 10);
+    } else {
+      if (key == 'backspace') {
+        if (!document.querySelector('.hljs-ln-n')) {
+          this.textarea.nativeElement.style.marginLeft = '0px';
+        }
+      }
+    }
+  }
+
+  syncScroll() {
+    this.pre.nativeElement.scrollTop = this.textarea.nativeElement.scrollTop;
+    this.pre.nativeElement.scrollLeft = this.textarea.nativeElement.scrollLeft;
   }
 
   sendUpdates() {
@@ -77,6 +97,6 @@ export class EditingFieldComponent implements AfterViewInit {
     const end = this.textarea.nativeElement.selectionEnd;
     const value = this.textarea.nativeElement.value;
     this.textarea.nativeElement.value =
-      value.substring(0, start) + '        ' + value.substring(end);
+      value.substring(0, start) + '  ' + value.substring(end);
   }
 }
