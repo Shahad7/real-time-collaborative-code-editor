@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import * as Y from 'yjs';
 import { ViewChild } from '@angular/core';
-import { SocketService } from 'src/app/socket/socket.service';
 import { YArray, YText } from 'yjs/dist/src/internals';
+import { SocketService } from '../../socket/socket.service';
 import { TextAreaBinding } from 'y-textarea';
 import { AfterViewInit } from '@angular/core';
 import { HighlightModule } from 'ngx-highlightjs';
@@ -38,6 +38,7 @@ export class EditingFieldComponent implements AfterViewInit {
     //otherwise "unexpected end of array error" will be thrown from the client side
     this.socketService.socket.on('receive-updates', (update) => {
       Y.applyUpdate(this.ydoc, new Uint8Array(update));
+      console.log('here');
     });
 
     //applying event listener to ytextarea :Y.Text
@@ -87,6 +88,7 @@ export class EditingFieldComponent implements AfterViewInit {
   sendUpdates() {
     //extracting the current updates to ydoc
     const update = Y.encodeStateAsUpdate(this.ydoc);
+    console.log(update);
     //sends the updates to clients
     this.socketService.sendUpdates(update);
   }
