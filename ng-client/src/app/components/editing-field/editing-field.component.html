@@ -1,4 +1,4 @@
-<div style="height: 100vh">
+<div id="container" style="height: 100vh">
   <textarea
     #textarea
     [(ngModel)]="value"
@@ -6,6 +6,6 @@
   ></textarea>
   <pre #pre><code #code [highlight]="value" 
   [languages]="['typescript','html','java','c','javascript','css','python']" 
-  [lineNumbers]="true">
+  [lineNumbers]="false">
   </code></pre>
 </div>

@@ -49,6 +49,19 @@ export class EditingFieldComponent implements AfterViewInit {
     //   this.ytextarea,
     //   this.textarea.nativeElement
     // );
+    // setTimeout(() => {
+    //   this.addMargins();
+    // }, 1000);
+  }
+
+  //adds tiny margin to the line numbers
+  addMargins() {
+    setTimeout(() => {
+      const lns: any = document.body.getElementsByClassName('hljs-ln-n');
+      [...lns].forEach((elt) => {
+        elt.style.marginRight = '10px';
+      });
+    }, 10);
   }
 
   sendUpdates() {

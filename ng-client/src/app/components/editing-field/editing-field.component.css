@@ -5,17 +5,92 @@ textarea {
 pre {
   z-index: 0;
 }
-pre,
-textarea {
+
+textarea,
+pre {
   position: absolute;
   height: 100%;
   width: 80%;
+  margin: 0;
+  padding: 0;
   border: 0;
+}
+
+textarea,
+code,
+pre {
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+    Liberation Mono, monospace;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
 }
 
 textarea {
   color: transparent;
-  background: transparent;
-  caret-color: black; /* Or choose your favorite color */
+  background: rgba(0, 0, 0, 0.132);
+  caret-color: black;
   outline: none;
 }
+
+code {
+  padding: 0 !important;
+  margin: 0;
+}
+
+pre {
+  background: red;
+}
+
+::ng-deep .hljs-ln-n {
+  margin-right: 10px;
+}
+
+/* old
+textarea {
+  all: unset;
+  position: absolute;
+  box-sizing: content-box;
+  margin-left: 8%;
+  margin-top: 15px;
+  padding: 50px 80px 80px 80px;
+  color: transparent;
+  caret-color: white;
+  border-radius: 15px;
+  background-color: transparent;
+  overflow-wrap: break-word;
+  line-height: 30px;
+  tab-size: 8;
+  font-size: large;
+  z-index: 1;
+  resize: none;
+}
+code {
+  all: unset;
+  tab-size: 8;
+  overflow-wrap: break-word;
+  line-height: 30px;
+  font-size: large;
+  white-space: pre-wrap;
+}
+
+pre {
+  all: unset;
+  white-space: normal;
+  position: absolute;
+  box-sizing: border-box;
+  margin-left: 8%;
+  tab-size: 8;
+  margin-top: 15px;
+  padding: 50px 80px 80px 80px;
+  color: white;
+  caret-color: white;
+  border-radius: 15px;
+  background-color: black;
+  overflow-wrap: break-word;
+  line-height: 30px;
+  font-size: large;
+  width: 876px;
+  height: 3130px;
+}
+*/
