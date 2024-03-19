@@ -5,6 +5,9 @@ ng-client/node_modules
 server/node_modules
 ng-client/.angular
 
+#tryna push node_modules/monaco-editor : modified files to get rid of module css errors
+!ng-client/node_modules/monaco-editor/
+
 # Compiled output
 /dist
 /tmp
