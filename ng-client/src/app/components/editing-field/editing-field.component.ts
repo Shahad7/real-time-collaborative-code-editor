@@ -16,17 +16,17 @@ export class EditingFieldComponent {
 
   ydoc = new Y.Doc();
   ytext = this.ydoc.getText('monaco');
-  constructor() {
-    const binding = new MonacoBinding(
+  constructor() {}
+
+  onInit(editor: any) {
+    this.editor = editor;
+    //console.log(this.editor);
+    this.binding = new MonacoBinding(
       this.ytext,
       this.editor.getModel(),
       new Set([this.editor]),
       null
     );
-  }
-
-  onInit(editor: any) {
-    this.editor = editor;
-    console.log(this.editor);
+    console.log(this.binding);
   }
 }
