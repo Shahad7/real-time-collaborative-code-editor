@@ -16,7 +16,11 @@ export class EditingFieldComponent {
 
   ydoc = new Y.Doc();
   ytext = this.ydoc.getText('monaco');
-  constructor() {}
+  constructor() {
+    this.ydoc.on('update', (update) => {
+      console.log(update);
+    });
+  }
 
   onInit(editor: any) {
     this.editor = editor;
@@ -27,6 +31,6 @@ export class EditingFieldComponent {
       new Set([this.editor]),
       null
     );
-    console.log(this.binding);
+    // console.log(this.binding);
   }
 }
