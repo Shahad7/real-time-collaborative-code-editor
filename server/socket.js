@@ -46,7 +46,7 @@ const getIo = (server) => {
       io.to(roomID)
         .except(socket.id)
         .emit("receive-updates", new Uint8Array(updates));
-      console.log(updates);
+      // console.log(updates);
     });
   });
 };
