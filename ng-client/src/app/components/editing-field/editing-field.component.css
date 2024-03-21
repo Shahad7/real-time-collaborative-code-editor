@@ -3,17 +3,18 @@
 }
 .yRemoteSelectionHead {
   position: absolute;
-  border-left: orange solid 2px;
-  border-top: orange solid 2px;
-  border-bottom: orange solid 2px;
+  z-index: 1;
   height: 100%;
   box-sizing: border-box;
 }
 .yRemoteSelectionHead::after {
   position: absolute;
-  content: " ";
-  border: 3px solid orange;
+  z-index: 1;
+  background-color: navy;
+  color: aliceblue;
+  content: "rambo";
+  border: 2px solid navy;
   border-radius: 4px;
   left: -4px;
-  top: -5px;
+  top: -19px;
 }
