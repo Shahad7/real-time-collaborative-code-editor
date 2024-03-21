@@ -43,9 +43,13 @@ const getIo = (server) => {
     //have to create a new Uint8Array from the received data
     //otherwise "unexpected end of array error" will be thrown from the client side
     socket.on("send-updates", (updates, roomID) => {
-      io.to(roomID)
-        .except(socket.id)
-        .emit("receive-updates", new Uint8Array(updates));
+      socket.to(roomID).emit("receive-updates", new Uint8Array(updates));
+      // console.log(updates);
+    });
+
+    //client sends awareness updates which have to be broadcasted to everyone else except him
+    socket.on("send-awareness", (updates, roomID) => {
+      socket.to(roomID).emit("receive-awareness", new Uint8Array(updates));
       // console.log(updates);
     });
   });

@@ -51,4 +51,11 @@ export class SocketService {
     if (roomID) this.socket.emit('send-updates', updates, roomID);
     else console.log('are you sure this client is in a room ?');
   }
+
+  //send y-protocols/awareness updates
+  sendAwareness(updates: Uint8Array): void {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('send-awareness', updates, roomID);
+    else console.log('are you sure this client is in a room ?');
+  }
 }
