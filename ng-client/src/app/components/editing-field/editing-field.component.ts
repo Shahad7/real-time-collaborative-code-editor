@@ -14,7 +14,10 @@ import { state } from '@angular/animations';
   encapsulation: ViewEncapsulation.None,
 })
 export class EditingFieldComponent {
-  editorOptions = { theme: 'vs-light', language: 'javascript' };
+  editorOptions = {
+    theme: 'vs-light',
+    language: 'javascript',
+  };
   code: string = 'function demo(){ console.log("hey")}';
   editor: any;
   binding: any;
@@ -46,7 +49,7 @@ export class EditingFieldComponent {
     if (username)
       this.awareness.setLocalStateField('user', {
         name: username,
-        color: 'red',
+        color: this.colorGenerator(),
       });
     else console.log("couldn't instantiate awareness object with username");
 
@@ -69,22 +72,29 @@ export class EditingFieldComponent {
       // console.log(new Uint8Array(updates));
 
       this.styleAwareness();
-      console.log(Array.from(this.awareness.getStates().entries()));
     });
   }
 
   //function to update remote nametags and cursor styles
   styleAwareness() {
     let states = Array.from(this.awareness.getStates().entries());
-    console.log(states);
+
     states.forEach((elt) => {
       let tag: any = document.querySelector(`.yRemoteSelectionHead-${elt[0]}`);
       if (tag) {
-        tag.setAttribute('data-nametag', elt[1]['user'].name);
-        console.log(elt[1]['user'].name);
+        // tag.setAttribute('data-nametag', elt[1]['user'].name);
         tag.style.borderColor = elt[1]['user'].color;
+        let span = document.createElement('span');
+        span.textContent = elt[1]['user'].name;
+        span.style.backgroundColor = elt[1]['user'].color;
+        tag.replaceChildren(span);
       }
     });
+  }
+
+  //generates/picks a random color for a user
+  colorGenerator() {
+    return 'navy';
   }
 
   // exposes monaco instance + y-monaco binding to ydoc

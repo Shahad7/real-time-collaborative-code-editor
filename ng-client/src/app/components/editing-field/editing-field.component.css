@@ -5,20 +5,25 @@
 
 /*styles nametag +cursor */
 .yRemoteSelectionHead {
+  z-index: 2;
   position: absolute;
   height: 100%;
   box-sizing: border-box;
-  border-left: solid 2px navy;
+  border-left: solid 2px transparent;
 }
-.yRemoteSelectionHead::after {
+.yRemoteSelectionHead > span {
+  visibility: visible;
   position: absolute;
-  background-color: navy;
+  z-index: 2;
+  background-color: transparent;
   color: aliceblue;
-  content: attr(
-    data-nametag
-  ); /*manually insert this as a rule instead of data-attr */
-  border: 2px solid black; /*manually set this as a rule instead of setting style using js */
+  /* content: attr(data-nametag); */
+  padding: 3px;
   border-radius: 4px;
   left: -1px;
   top: 20px;
+}
+
+.yRemoteSelectionHead > span:hover {
+  visibility: hidden;
 }
