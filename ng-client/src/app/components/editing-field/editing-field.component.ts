@@ -94,7 +94,15 @@ export class EditingFieldComponent {
 
   //generates/picks a random color for a user
   colorGenerator() {
-    return 'navy';
+    const letters = '0123456789ABCDEF'.split('');
+    let color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.round(Math.random() * 15)];
+    }
+
+    //for later purposes
+    sessionStorage.setItem('color', color);
+    return color;
   }
 
   // exposes monaco instance + y-monaco binding to ydoc
