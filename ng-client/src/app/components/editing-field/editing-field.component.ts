@@ -5,6 +5,7 @@ import * as Y from 'yjs';
 import * as awarenessProtocol from 'y-protocols/awareness.js';
 import { SocketService } from 'src/app/socket/socket.service';
 import { ViewEncapsulation } from '@angular/core';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-editing-field',
@@ -45,7 +46,7 @@ export class EditingFieldComponent {
     if (username)
       this.awareness.setLocalStateField('user', {
         name: username,
-        color: '#ffb61e',
+        color: 'red',
       });
     else console.log("couldn't instantiate awareness object with username");
 
@@ -67,7 +68,22 @@ export class EditingFieldComponent {
       );
       // console.log(new Uint8Array(updates));
 
-      // console.log(this.awareness.getStates());
+      this.styleAwareness();
+      console.log(Array.from(this.awareness.getStates().entries()));
+    });
+  }
+
+  //function to update remote nametags and cursor styles
+  styleAwareness() {
+    let states = Array.from(this.awareness.getStates().entries());
+    console.log(states);
+    states.forEach((elt) => {
+      let tag: any = document.querySelector(`.yRemoteSelectionHead-${elt[0]}`);
+      if (tag) {
+        tag.setAttribute('data-nametag', elt[1]['user'].name);
+        console.log(elt[1]['user'].name);
+        tag.style.borderColor = elt[1]['user'].color;
+      }
     });
   }
 

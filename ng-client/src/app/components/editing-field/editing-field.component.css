@@ -1,20 +1,24 @@
+/* styles remote user's selection - highlight text*/
 .yRemoteSelection {
   background-color: rgb(250, 129, 0, 0.5);
 }
+
+/*styles nametag +cursor */
 .yRemoteSelectionHead {
   position: absolute;
-  z-index: 1;
   height: 100%;
   box-sizing: border-box;
+  border-left: solid 2px navy;
 }
 .yRemoteSelectionHead::after {
   position: absolute;
-  z-index: 1;
   background-color: navy;
   color: aliceblue;
-  content: "rambo";
-  border: 2px solid navy;
+  content: attr(
+    data-nametag
+  ); /*manually insert this as a rule instead of data-attr */
+  border: 2px solid black; /*manually set this as a rule instead of setting style using js */
   border-radius: 4px;
-  left: -4px;
-  top: -19px;
+  left: -1px;
+  top: 20px;
 }
