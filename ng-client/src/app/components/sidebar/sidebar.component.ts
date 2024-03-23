@@ -7,18 +7,4 @@ import { Component } from '@angular/core';
 })
 export class SidebarComponent {
   constructor() {}
-
-  toggleFolder(e: any): void {
-    let folder = e.target.closest('.folder');
-    console.log(folder);
-    const folderContents = folder.querySelector('.folder-contents');
-    console.log(folderContents);
-    if (folderContents) {
-      folderContents.classList.toggle('expanded');
-    }
-  }
-
-  cancelClosing(e: any): void {
-    e.stopPropagation();
-  }
 }

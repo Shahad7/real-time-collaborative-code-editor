@@ -1,0 +1,23 @@
+<div class="folder" (click)="toggleFolder(folderContents, arrow)">
+  <div class="folder-det">
+    <img class="i1" #arrow src="assets/arrow-right.png" />
+    <img class="i2" src="assets/folder-icon.png" />
+    <p>{{ foldername }}</p>
+  </div>
+  <div class="folder-contents" #folderContents (click)="cancelClosing($event)">
+    <app-file *ngFor="let file of files" [filename]="file"></app-file>
+
+    <!-- <div class="file">
+        <img src="assets/file-icon.png" alt="" class="i3" />
+        <p>contact.html</p>
+      </div>
+      <div class="file">
+        <img src="assets/file-icon.png" alt="" class="i3" />
+        <p>about-us.html</p>
+      </div>
+      <div class="file">
+        <img src="assets/file-icon.png" alt="" class="i3" />
+        <p>services.html</p>
+      </div> -->
+  </div>
+</div>

@@ -11,6 +11,8 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SocketService } from './socket/socket.service';
+import { FolderComponent } from './components/folder/folder.component';
+import { FileComponent } from './components/file/file.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +22,8 @@ import { SocketService } from './socket/socket.service';
     SidebarComponent,
     EditingFieldComponent,
     SignUpComponent,
+    FolderComponent,
+    FileComponent,
   ],
   imports: [
     BrowserModule,

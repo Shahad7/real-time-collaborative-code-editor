@@ -2,31 +2,14 @@
   <div class="sidebar-content">
     <h5>EXPLORER</h5>
     <div class="explorer">
-      <div class="folder" (click)="toggleFolder($event)">
-        <div class="folder-det">
-          <img class="i1" src="assets/arrow-right.png" />
-          <img class="i2" src="assets/folder-icon.png" />
-          <p>Default</p>
-        </div>
-        <div class="folder-contents" (click)="cancelClosing($event)">
-          <div class="file active">
-            <img src="assets/file-icon.png" alt="" class="i3" />
-            <p>index.html</p>
-          </div>
-          <!-- <div class="file">
-                        <img src="assets/file-icon.png" alt="" class="i3">
-                        <p>contact.html</p>
-                    </div>
-                    <div class="file">
-                        <img src="assets/file-icon.png" alt="" class="i3">
-                        <p>about-us.html</p>
-                    </div>
-                    <div class="file">
-                        <img src="assets/file-icon.png" alt="" class="i3">
-                        <p>services.html</p>
-                    </div> -->
-        </div>
-      </div>
+      <app-folder
+        [foldername]="'Default'"
+        [files]="['index.js', 'core.js']"
+      ></app-folder>
+      <app-folder
+        [foldername]="'Test'"
+        [files]="['test.js', 'test.spec.js']"
+      ></app-folder>
     </div>
   </div>
 </aside>
