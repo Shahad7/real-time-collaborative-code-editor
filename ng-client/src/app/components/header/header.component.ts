@@ -89,15 +89,34 @@ export class HeaderComponent {
   }
 
   //copies roomID to user's clipboard
+
   async copyID(): Promise<void> {
     try {
-      await navigator.clipboard.writeText(
-        this.roomID.nativeElement.textContent
-      );
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(
+          this.roomID.nativeElement.textContent
+        );
+      } else {
+        // Use the 'out of viewport hidden text area' trick
+        const textArea = document.createElement('textarea');
+        textArea.value = this.roomID.nativeElement.textContent;
+
+        // Move textarea out of the viewport so it's not visible
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-999999px';
+
+        document.body.prepend(textArea);
+        textArea.select();
+
+        document.execCommand('copy');
+
+        textArea.remove();
+      }
       this.copyButton.nativeElement.textContent = 'copied';
       //displays leave button
       this.toggleConnectOptions();
     } catch (e) {
+      console.log(e);
       alert('error: you have to manually copy');
     }
   }

@@ -8,7 +8,9 @@ import { connect } from 'rxjs';
 export class SocketService {
   public socket: Socket;
   constructor() {
-    this.socket = io('http://127.0.0.1:3000', { autoConnect: false });
+    this.socket = io(`http://${window.location.hostname}:3000`, {
+      autoConnect: false,
+    });
   }
 
   //socket clients are set to not automatically connect

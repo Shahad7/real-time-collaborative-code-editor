@@ -1,9 +1,12 @@
 const { Server } = require("socket.io");
 const socketClient = require("socket.io-client");
+const os = require("os");
 
 const getIo = (server) => {
+  const ip = os.networkInterfaces()["wlo1"][0].address;
+  console.log(ip);
   const io = new Server(server, {
-    cors: { origin: "http://127.0.0.1:4200" },
+    cors: { origin: ["http://127.0.0.1:4200", `http://${ip}:4200`] },
     connectionStateRecovery: {},
   });
 
