@@ -1,78 +1,87 @@
 /* sidebar.component.css */
 
 .app-sidebar {
-    background-color: #f0f0f0; /* Set background color */
-    color: #333; /* Set text color */
-    padding: 10px; /* Add padding for spacing */
-    height: 100vh;
-  }
-  
-  .sidebar-content h5 {
-    font-size: 0.8rem;
-    margin-bottom: 10px; 
-  }
-  
-  .sidebar-content img {
-    height: 10px;
-    width: 10px;
-  }
-  
-.explorer{
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
+  background-color: #f0f0f0; /* Set background color */
+  color: #333; /* Set text color */
+  padding: 10px; /* Add padding for spacing */
+  height: 100vh;
 }
 
-.explorer img{
-    max-width: 15px;
-    max-height: 15px;
-    margin-right: 7px;
+.sidebar-content h5 {
+  font-size: 0.8rem;
+  margin-bottom: 10px;
 }
 
-.folder{
-    display: flex;
-    flex-direction: column;
+.sidebar-content img {
+  height: 10px;
+  width: 10px;
 }
 
-.folder :hover{
-    background-color: dimgray;
+.explorer {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
 }
 
-.folder .active{
-    background-color: #c0c4c1;
+.explorer img {
+  max-width: 15px;
+  max-height: 15px;
+  margin-right: 7px;
 }
 
-.folder-det{
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
+.folder {
+  display: flex;
+  flex-direction: column;
 }
 
-.explorer .folder .i1{
-    width: 6px;
-    height: 10px;
+.folder :hover {
+  background-color: dimgray;
 }
 
-.explorer .folder .i2{
-    width: 12px;
-    height: 12px;
+.folder.active {
+  background-color: #c0c4c1;
 }
 
-.explorer .folder .i3{
-    width: 8px;
-    height: 10px;
+.folder-det {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
-.explorer .folder p{
-    margin-bottom: 0;
-    font-weight: 600;
-    font-size: 13px;
+.explorer .folder .i1 {
+  width: 6px;
+  height: 10px;
 }
 
-.explorer .folder .file{
-    padding-left: 10px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 3px;
+.explorer .folder .i2 {
+  width: 12px;
+  height: 12px;
 }
-  
+
+.explorer .folder .i3 {
+  width: 8px;
+  height: 10px;
+}
+
+.explorer .folder p {
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.explorer .folder .file {
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+/*modified*/
+
+.folder-contents {
+  visibility: hidden;
+}
+
+.expanded {
+  visibility: visible;
+}
