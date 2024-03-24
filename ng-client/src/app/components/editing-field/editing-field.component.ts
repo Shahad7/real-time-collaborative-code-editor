@@ -6,7 +6,7 @@ import * as awarenessProtocol from 'y-protocols/awareness.js';
 import { SocketService } from 'src/app/socket/socket.service';
 import { ViewEncapsulation } from '@angular/core';
 import { state } from '@angular/animations';
-
+import * as monaco from 'monaco-editor';
 @Component({
   selector: 'app-editing-field',
   templateUrl: './editing-field.component.html',
@@ -21,10 +21,13 @@ export class EditingFieldComponent {
   code: string = 'function demo(){ console.log("hey")}';
   editor: any;
   binding: any;
+  model0: any;
+  model1: any;
 
   //yjs initialization
   ydoc = new Y.Doc();
   ytext = this.ydoc.getText('monaco');
+  // ytext1 = this.ydoc.getText('monaco1');
 
   //y-protocols awareness initialization
   awareness = new awarenessProtocol.Awareness(this.ydoc);
@@ -114,5 +117,10 @@ export class EditingFieldComponent {
       new Set([this.editor]),
       this.awareness
     );
+
+    //save current model
+    this.model0 = this.editor.getModel();
+    //creating new model
+    this.model1 = monaco.editor.createModel('function random()');
   }
 }
