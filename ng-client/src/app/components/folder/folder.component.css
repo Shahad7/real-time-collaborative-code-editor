@@ -16,7 +16,7 @@ img {
 .folder-det:hover {
   background-color: dimgray;
 }
-.folder.active {
+.folder-det.active {
   background-color: #c0c4c1;
 }
 

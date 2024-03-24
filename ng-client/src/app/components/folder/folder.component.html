@@ -1,10 +1,18 @@
-<div class="folder" (click)="toggleFolder(folderContents, arrow)">
-  <div class="folder-det">
+<div
+  class="folder"
+  (click)="[toggleFolder(folderContents, arrow), activate(folderDetails)]"
+>
+  <div class="folder-det" #folderDetails>
     <img class="i1" #arrow src="assets/arrow-right.png" />
     <img class="i2" src="assets/folder-icon.png" />
     <p>{{ foldername }}</p>
   </div>
   <div class="folder-contents" #folderContents (click)="cancelClosing($event)">
+    <!-- <app-folder
+      *ngIf="foldername == 'Test'"
+      [foldername]="'test2'"
+      [files]="['hehe.js', 'evil.ts']"
+    ></app-folder> -->
     <app-file *ngFor="let file of files" [filename]="file"></app-file>
 
     <!-- <div class="file">

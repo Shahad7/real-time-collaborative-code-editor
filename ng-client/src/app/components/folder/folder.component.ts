@@ -20,6 +20,14 @@ export class FolderComponent {
       }
     }
   }
+  activate(folderDetails: HTMLElement) {
+    document.querySelectorAll('.active').forEach((elt) => {
+      elt.classList.remove('active');
+    });
+    if (folderDetails) {
+      folderDetails.classList.add('active');
+    }
+  }
 
   cancelClosing(e: any): void {
     e.stopPropagation();

@@ -8,6 +8,10 @@
   margin-bottom: 3px;
 }
 
+.file.active {
+  background-color: #c0c4c1;
+}
+
 .i3 {
   width: 8px;
   height: 10px;
