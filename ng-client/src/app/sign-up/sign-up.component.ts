@@ -23,7 +23,7 @@ export class SignUpComponent {
   async OnSubmit() {
     try {
       const response = await fetch(
-        `http://${window.location.hostname}':3000/signup`,
+        `http://${window.location.hostname}:3000/signup`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
