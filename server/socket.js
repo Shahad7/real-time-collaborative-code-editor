@@ -3,8 +3,15 @@ const socketClient = require("socket.io-client");
 const os = require("os");
 
 const getIo = (server) => {
-  const ip = os.networkInterfaces()["wlo1"][0].address;
-  console.log(ip);
+  let ip;
+  if(os.networkInterfaces()["wlo1"]&&os.networkInterfaces()["wlo1"][0].address){
+    ip = os.networkInterfaces()["wlo1"][0].address
+  }
+  else if(os.networkInterfaces()['Wi-Fi']&&os.networkInterfaces()['Wi-Fi'][0].address)
+  {
+    ip=os.networkInterfaces()['Wi-Fi'][0].address
+  }
+  
   const io = new Server(server, {
     cors: { origin: ["http://127.0.0.1:4200", `http://${ip}:4200`] },
     connectionStateRecovery: {},
