@@ -22,17 +22,20 @@ export class SignUpComponent {
 
   async OnSubmit() {
     try {
-      const response = await fetch('http://127.0.0.1:3000/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'cors',
-        body: JSON.stringify({
-          name: this.signupForm.value.name ?? '',
-          email: this.signupForm.value.email ?? '',
-          password: this.signupForm.value.password ?? '',
-          confirm_password: this.signupForm.value.confirm_password ?? '',
-        }),
-      });
+      const response = await fetch(
+        `http://${window.location.hostname}:3000/signup`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          mode: 'cors',
+          body: JSON.stringify({
+            name: this.signupForm.value.name ?? '',
+            email: this.signupForm.value.email ?? '',
+            password: this.signupForm.value.password ?? '',
+            confirm_password: this.signupForm.value.confirm_password ?? '',
+          }),
+        }
+      );
       const data = await response.json();
       if (!data['success']) {
         this.errorDiv.nativeElement.textContent = data['error'];

@@ -19,17 +19,20 @@ export class LoginComponent {
 
   async onSubmit() {
     try {
-      const response = await fetch('http://127.0.0.1:3000/login', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: this.loginForm.value.email ?? '',
-          password: this.loginForm.value.password ?? '',
-        }),
-      });
+      const response = await fetch(
+        `http://${window.location.hostname}:3000/login`,
+        {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: this.loginForm.value.email ?? '',
+            password: this.loginForm.value.password ?? '',
+          }),
+        }
+      );
       const data = await response.json();
       if (!data['success']) {
         this.errorDiv.nativeElement.textContent = data['error'];
