@@ -1,4 +1,4 @@
-<div class="file" #file (click)="activate(file)">
+<div class="file" #file (click)="[activate(file), selectFile()]">
   <img src="assets/file-icon.png" alt="" class="i3" />
   <p>{{ filename }}</p>
 </div>

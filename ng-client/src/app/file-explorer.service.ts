@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FileExplorerService {
-  toggleFolder(folderElement: HTMLElement): void {
-    folderElement.classList.toggle('expanded');
-    const folderContents = folderElement.querySelector('.folder-contents');
-    if (folderContents) {
-      folderContents.classList.toggle('hidden');
-    }
+  //observable source
+  private selectedFileSource = new Subject<string>();
+
+  //observable stream
+  selectedFile$ = this.selectedFileSource.asObservable();
+
+  //setting subject using next()
+  selectFile(file: string) {
+    this.selectedFileSource.next(file);
   }
 }

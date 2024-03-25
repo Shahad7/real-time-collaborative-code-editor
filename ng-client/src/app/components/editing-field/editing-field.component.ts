@@ -7,6 +7,8 @@ import { SocketService } from 'src/app/socket/socket.service';
 import { ViewEncapsulation } from '@angular/core';
 import { state } from '@angular/animations';
 import * as monaco from 'monaco-editor';
+import { FileExplorerService } from 'src/app/file-explorer.service';
+
 @Component({
   selector: 'app-editing-field',
   templateUrl: './editing-field.component.html',
@@ -32,7 +34,10 @@ export class EditingFieldComponent {
   //y-protocols awareness initialization
   awareness = new awarenessProtocol.Awareness(this.ydoc);
 
-  constructor(private socketService: SocketService) {
+  constructor(
+    private socketService: SocketService,
+    private explorerService: FileExplorerService
+  ) {
     //listens for events on the ydoc and sends to other clients
     this.ydoc.on('update', (updates) => {
       this.socketService.sendUpdates(updates);
@@ -75,6 +80,15 @@ export class EditingFieldComponent {
       // console.log(new Uint8Array(updates));
 
       this.styleAwareness();
+    });
+
+    //subscribing to file switch events
+    this.explorerService.selectedFile$.subscribe((file) => {
+      if (file == 'index.js') {
+        this.editor.setModel(this.model0);
+      } else if (file == 'core.js') {
+        this.editor.setModel(this.model1);
+      }
     });
   }
 
