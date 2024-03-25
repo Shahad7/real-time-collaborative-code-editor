@@ -92,6 +92,13 @@ export class EditingFieldComponent {
         span.style.backgroundColor = elt[1]['user'].color;
         tag.replaceChildren(span);
       }
+      let selection: any = document.querySelector(
+        `.yRemoteSelection-${elt[0]}`
+      );
+      if (selection) {
+        //changing remote user text selection color
+        selection.style.backgroundColor = elt[1]['user'].color;
+      }
     });
   }
 
