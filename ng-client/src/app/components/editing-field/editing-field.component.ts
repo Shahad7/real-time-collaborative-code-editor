@@ -25,6 +25,7 @@ export class EditingFieldComponent {
   binding: any;
   model0: any;
   model1: any;
+  states: any = {};
 
   //yjs initialization
   ydoc = new Y.Doc();
@@ -85,9 +86,25 @@ export class EditingFieldComponent {
     //subscribing to file switch events
     this.explorerService.selectedFile$.subscribe((file) => {
       if (file == 'index.js') {
+        if (this.editor.getModel() == this.model1) {
+          this.states['core.js'] = this.editor.saveViewState();
+        }
         this.editor.setModel(this.model0);
+
+        if (this.states['index.js']) {
+          this.editor.restoreViewState(this.states['index.js']);
+        }
+        this.editor.focus();
       } else if (file == 'core.js') {
+        if (this.editor.getModel() == this.model0) {
+          this.states['index.js'] = this.editor.saveViewState();
+        }
         this.editor.setModel(this.model1);
+
+        if (this.states['core.js']) {
+          this.editor.restoreViewState(this.states['core.js']);
+        }
+        this.editor.focus();
       }
     });
   }
