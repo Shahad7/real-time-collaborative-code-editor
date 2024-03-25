@@ -139,9 +139,20 @@ export class EditingFieldComponent {
       this.awareness
     );
 
-    //save current model
-    this.model0 = this.editor.getModel();
+    //saving current model and then switching to it later doesn't work
+    //as initial model is disposed on the first setModel
+    //So intializing your own model works
+    this.model0 = (window as any).monaco.editor.createModel(
+      'function initialModel()',
+      'javascript'
+    );
+
+    this.editor.setModel(this.model0);
+
     //creating new model
-    this.model1 = monaco.editor.createModel('function random()');
+    this.model1 = (window as any).monaco.editor.createModel(
+      'function random()',
+      'javascript'
+    );
   }
 }
