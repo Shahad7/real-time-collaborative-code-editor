@@ -6,6 +6,7 @@ import * as awarenessProtocol from 'y-protocols/awareness.js';
 import { SocketService } from 'src/app/socket/socket.service';
 import { ViewEncapsulation } from '@angular/core';
 import { state } from '@angular/animations';
+import { YText } from 'yjs/dist/src/internals';
 
 @Component({
   selector: 'app-editing-field',
@@ -18,25 +19,35 @@ export class EditingFieldComponent {
     theme: 'vs-light',
     language: 'javascript',
   };
-  code: string = 'function demo(){ console.log("hey")}';
+  code: string = '';
   editor: any;
   binding: any;
 
   //yjs initialization
   ydoc = new Y.Doc();
   // ytext = this.ydoc.getText('monaco');
+  ytext: any;
+
   yarray: any = this.ydoc.getArray('monaco');
 
   //y-protocols awareness initialization
   awareness = new awarenessProtocol.Awareness(this.ydoc);
 
   constructor(private socketService: SocketService) {
+    //create two ytext instances
+
+    // this.yarray.push([new Y.Text('')]);
+
     //listens for events on the ydoc and sends to other clients
     this.ydoc.on('update', (updates) => {
       this.socketService.sendUpdates(updates);
       console.log('sending');
       // console.log(updates);
-      console.log(this.yarray.get(0).toString());
+      // console.log(this.yarray.get(0).toString());
+      // console.log(this.yarray.get(1).toString());
+      this.yarray.forEach((elt: any) => {
+        console.log(elt.toString());
+      });
     });
 
     //on receiving an update from others
@@ -44,7 +55,11 @@ export class EditingFieldComponent {
       Y.applyUpdate(this.ydoc, new Uint8Array(updates));
       console.log('receiving');
       // console.log(updates);
-      console.log(this.yarray.get(0).toString());
+      // console.log(this.yarray.get(0).toString());
+      // console.log(this.yarray.get(1).toString());
+      this.yarray.forEach((elt: any) => {
+        console.log(elt.toString());
+      });
     });
 
     //configuring awareness instance
@@ -110,7 +125,8 @@ export class EditingFieldComponent {
 
   // exposes monaco instance + y-monaco binding to ydoc
   onInit(editor: any) {
-    this.yarray.push([new Y.Text('')]);
+    this.ytext = new Y.Text('');
+    this.yarray.push([this.ytext]);
     this.editor = editor;
     this.binding = new MonacoBinding(
       this.yarray.get(0),
