@@ -22,6 +22,8 @@ export class EditingFieldComponent {
   };
   code: string = 'function demo(){ console.log("hey")}';
   editor: any;
+  binding0: any;
+  binding1: any;
   binding: any;
   model0: any;
   model1: any;
@@ -29,7 +31,10 @@ export class EditingFieldComponent {
 
   //yjs initialization
   ydoc = new Y.Doc();
-  ytext = this.ydoc.getText('monaco');
+  yarray: any = this.ydoc.getArray('monaco');
+  ytext0 = new Y.Text('index.js');
+  ytext1 = new Y.Text('core.js');
+
   // ytext1 = this.ydoc.getText('monaco1');
 
   //y-protocols awareness initialization
@@ -39,11 +44,16 @@ export class EditingFieldComponent {
     private socketService: SocketService,
     private explorerService: FileExplorerService
   ) {
+    //pushing ytexts to yarray
+    this.yarray.push([this.ytext0]);
+    this.yarray.push([this.ytext1]);
+
     //listens for events on the ydoc and sends to other clients
     this.ydoc.on('update', (updates) => {
       this.socketService.sendUpdates(updates);
       // console.log('sending');
       // console.log(updates);
+      console.log(this.yarray.get(0).toString());
     });
 
     //on receiving an update from others
@@ -51,6 +61,7 @@ export class EditingFieldComponent {
       Y.applyUpdate(this.ydoc, new Uint8Array(updates));
       // console.log('receiving');
       // console.log(updates);
+      console.log(this.yarray.get(0).toString());
     });
 
     //configuring awareness instance
@@ -85,27 +96,43 @@ export class EditingFieldComponent {
 
     //subscribing to file switch events
     this.explorerService.selectedFile$.subscribe((file) => {
-      if (file == 'index.js') {
-        if (this.editor.getModel() == this.model1) {
-          this.states['core.js'] = this.editor.saveViewState();
-        }
-        this.editor.setModel(this.model0);
-
-        if (this.states['index.js']) {
-          this.editor.restoreViewState(this.states['index.js']);
-        }
-        this.editor.focus();
-      } else if (file == 'core.js') {
-        if (this.editor.getModel() == this.model0) {
-          this.states['index.js'] = this.editor.saveViewState();
-        }
-        this.editor.setModel(this.model1);
-
-        if (this.states['core.js']) {
-          this.editor.restoreViewState(this.states['core.js']);
-        }
-        this.editor.focus();
-      }
+      //   if (file == 'index.js') {
+      //     if (this.editor.getModel() == this.model1) {
+      //       this.states['core.js'] = this.editor.saveViewState();
+      //     }
+      //     this.editor.setModel(this.model0);
+      //     if (this.binding) {
+      //       this.binding.destroy();
+      //     }
+      //     this.binding = new MonacoBinding(
+      //       this.yarray.get(0),
+      //       this.model0,
+      //       new Set([this.editor]),
+      //       this.awareness
+      //     );
+      //     if (this.states['index.js']) {
+      //       this.editor.restoreViewState(this.states['index.js']);
+      //     }
+      //     this.editor.focus();
+      //   } else if (file == 'core.js') {
+      //     if (this.editor.getModel() == this.model0) {
+      //       this.states['index.js'] = this.editor.saveViewState();
+      //     }
+      //     this.editor.setModel(this.model1);
+      //     if (this.binding) {
+      //       this.binding.destroy();
+      //     }
+      //     this.binding = new MonacoBinding(
+      //       this.yarray.get(1),
+      //       this.model1,
+      //       new Set([this.editor]),
+      //       this.awareness
+      //     );
+      //     if (this.states['core.js']) {
+      //       this.editor.restoreViewState(this.states['core.js']);
+      //     }
+      //     this.editor.focus();
+      //   }
     });
   }
 
@@ -148,28 +175,30 @@ export class EditingFieldComponent {
 
   // exposes monaco instance + y-monaco binding to ydoc
   onInit(editor: any) {
+    //saving the editor instance
     this.editor = editor;
+
+    //saving current model and then switching to it later doesn't work
+    //as initial model is disposed on the first setModel
+    //So intializing your own model works
+    this.model0 = (window as any).monaco.editor.createModel('', 'javascript');
+    this.editor.setModel(this.model0);
+    //binding for this model
     this.binding = new MonacoBinding(
-      this.ytext,
+      this.yarray.get(0),
       this.editor.getModel(),
       new Set([this.editor]),
       this.awareness
     );
 
-    //saving current model and then switching to it later doesn't work
-    //as initial model is disposed on the first setModel
-    //So intializing your own model works
-    this.model0 = (window as any).monaco.editor.createModel(
-      'function initialModel()',
-      'javascript'
-    );
-
-    this.editor.setModel(this.model0);
-
-    //creating new model
-    this.model1 = (window as any).monaco.editor.createModel(
-      'function random()',
-      'javascript'
-    );
+    //creating new model for second file
+    this.model1 = (window as any).monaco.editor.createModel('', 'javascript');
+    //second binding
+    // this.binding1 = new MonacoBinding(
+    //   this.ytext1,
+    //   this.model1,
+    //   new Set([this.editor]),
+    //   this.awareness
+    // );
   }
 }
