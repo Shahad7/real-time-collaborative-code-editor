@@ -24,7 +24,8 @@ export class EditingFieldComponent {
 
   //yjs initialization
   ydoc = new Y.Doc();
-  ytext = this.ydoc.getText('monaco');
+  // ytext = this.ydoc.getText('monaco');
+  yarray: any = this.ydoc.getArray('monaco');
 
   //y-protocols awareness initialization
   awareness = new awarenessProtocol.Awareness(this.ydoc);
@@ -33,15 +34,17 @@ export class EditingFieldComponent {
     //listens for events on the ydoc and sends to other clients
     this.ydoc.on('update', (updates) => {
       this.socketService.sendUpdates(updates);
-      // console.log('sending');
+      console.log('sending');
       // console.log(updates);
+      console.log(this.yarray.get(0).toString());
     });
 
     //on receiving an update from others
     this.socketService.socket.on('receive-updates', (updates) => {
       Y.applyUpdate(this.ydoc, new Uint8Array(updates));
-      // console.log('receiving');
+      console.log('receiving');
       // console.log(updates);
+      console.log(this.yarray.get(0).toString());
     });
 
     //configuring awareness instance
@@ -107,9 +110,10 @@ export class EditingFieldComponent {
 
   // exposes monaco instance + y-monaco binding to ydoc
   onInit(editor: any) {
+    this.yarray.push([new Y.Text('')]);
     this.editor = editor;
     this.binding = new MonacoBinding(
-      this.ytext,
+      this.yarray.get(0),
       this.editor.getModel(),
       new Set([this.editor]),
       this.awareness
