@@ -45,8 +45,9 @@ export class EditingFieldComponent {
     private explorerService: FileExplorerService
   ) {
     //pushing ytexts to yarray
-    this.yarray.push([this.ytext0]);
-    this.yarray.push([this.ytext1]);
+    this.yarray.insert(0, [this.ytext0]);
+    this.yarray.insert(1, [this.ytext1]);
+    console.log(this.yarray.get(0));
 
     //listens for events on the ydoc and sends to other clients
     this.ydoc.on('update', (updates) => {
