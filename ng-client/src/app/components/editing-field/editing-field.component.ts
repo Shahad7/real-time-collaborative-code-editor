@@ -26,9 +26,9 @@ export class EditingFieldComponent {
   //yjs initialization
   ydoc = new Y.Doc();
   // ytext = this.ydoc.getText('monaco');
-  ytext: any;
+  ytext = new Y.Text('');
 
-  yarray: any = this.ydoc.getArray('monaco');
+  ymap: any = this.ydoc.getMap('monaco');
 
   //y-protocols awareness initialization
   awareness = new awarenessProtocol.Awareness(this.ydoc);
@@ -43,11 +43,16 @@ export class EditingFieldComponent {
       this.socketService.sendUpdates(updates);
       console.log('sending');
       // console.log(updates);
-      // console.log(this.yarray.get(0).toString());
-      // console.log(this.yarray.get(1).toString());
-      this.yarray.forEach((elt: any) => {
-        console.log(elt.toString());
-      });
+      // console.log(this.yarray.map((elt: any) => elt.toString()));
+      // this.ymap.forEach((value: any, key: any) => {
+      //   console.log('key : ' + key);
+      //   console.log('value : ' + value.toString());
+      // });
+      // let results = [];
+      // for (const value of this.ymap.values()) {
+      //   results.push(value.toString());
+      // }
+      // console.log(results);
     });
 
     //on receiving an update from others
@@ -55,11 +60,16 @@ export class EditingFieldComponent {
       Y.applyUpdate(this.ydoc, new Uint8Array(updates));
       console.log('receiving');
       // console.log(updates);
-      // console.log(this.yarray.get(0).toString());
-      // console.log(this.yarray.get(1).toString());
-      this.yarray.forEach((elt: any) => {
-        console.log(elt.toString());
-      });
+      // console.log(this.yarray.map((elt: any) => elt.toString()));
+      // this.ymap.forEach((value: any, key: any) => {
+      //   console.log('key : ' + key);
+      //   console.log('value : ' + value.toString());
+      // });
+      // let results = [];
+      // for (const value of this.ymap.values()) {
+      //   results.push(value.toString());
+      // }
+      // console.log(results);
     });
 
     //configuring awareness instance
@@ -125,11 +135,10 @@ export class EditingFieldComponent {
 
   // exposes monaco instance + y-monaco binding to ydoc
   onInit(editor: any) {
-    this.ytext = new Y.Text('');
-    this.yarray.push([this.ytext]);
+    this.ymap.set('index.js', this.ytext);
     this.editor = editor;
     this.binding = new MonacoBinding(
-      this.yarray.get(0),
+      this.ymap.get('index.js'),
       this.editor.getModel(),
       new Set([this.editor]),
       this.awareness
