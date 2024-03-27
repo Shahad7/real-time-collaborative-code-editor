@@ -31,9 +31,7 @@ export class EditingFieldComponent {
 
   //yjs initialization
   ydoc = new Y.Doc();
-  yarray: any = this.ydoc.getArray('monaco');
-  ytext0 = new Y.Text('index.js');
-  ytext1 = new Y.Text('core.js');
+  ymap: any = this.ydoc.getMap('monaco');
 
   // ytext1 = this.ydoc.getText('monaco1');
 
@@ -44,17 +42,11 @@ export class EditingFieldComponent {
     private socketService: SocketService,
     private explorerService: FileExplorerService
   ) {
-    //pushing ytexts to yarray
-    this.yarray.insert(0, [this.ytext0]);
-    this.yarray.insert(1, [this.ytext1]);
-    console.log(this.yarray.get(0));
-
     //listens for events on the ydoc and sends to other clients
     this.ydoc.on('update', (updates) => {
       this.socketService.sendUpdates(updates);
       // console.log('sending');
       // console.log(updates);
-      console.log(this.yarray.get(0).toString());
     });
 
     //on receiving an update from others
@@ -62,7 +54,6 @@ export class EditingFieldComponent {
       Y.applyUpdate(this.ydoc, new Uint8Array(updates));
       // console.log('receiving');
       // console.log(updates);
-      console.log(this.yarray.get(0).toString());
     });
 
     //configuring awareness instance
@@ -97,43 +88,49 @@ export class EditingFieldComponent {
 
     //subscribing to file switch events
     this.explorerService.selectedFile$.subscribe((file) => {
-      //   if (file == 'index.js') {
-      //     if (this.editor.getModel() == this.model1) {
-      //       this.states['core.js'] = this.editor.saveViewState();
-      //     }
-      //     this.editor.setModel(this.model0);
-      //     if (this.binding) {
-      //       this.binding.destroy();
-      //     }
-      //     this.binding = new MonacoBinding(
-      //       this.yarray.get(0),
-      //       this.model0,
-      //       new Set([this.editor]),
-      //       this.awareness
-      //     );
-      //     if (this.states['index.js']) {
-      //       this.editor.restoreViewState(this.states['index.js']);
-      //     }
-      //     this.editor.focus();
-      //   } else if (file == 'core.js') {
-      //     if (this.editor.getModel() == this.model0) {
-      //       this.states['index.js'] = this.editor.saveViewState();
-      //     }
-      //     this.editor.setModel(this.model1);
-      //     if (this.binding) {
-      //       this.binding.destroy();
-      //     }
-      //     this.binding = new MonacoBinding(
-      //       this.yarray.get(1),
-      //       this.model1,
-      //       new Set([this.editor]),
-      //       this.awareness
-      //     );
-      //     if (this.states['core.js']) {
-      //       this.editor.restoreViewState(this.states['core.js']);
-      //     }
-      //     this.editor.focus();
-      //   }
+      if (file == 'index.js') {
+        if (this.editor.getModel() == this.model1) {
+          this.states['core.js'] = this.editor.saveViewState();
+        }
+        this.editor.setModel(this.model0);
+        if (this.binding) {
+          this.binding.destroy();
+        }
+        if (!this.ymap.has('index.js')) {
+          this.ymap.set('index.js', new Y.Text());
+        }
+        this.binding = new MonacoBinding(
+          this.ymap.get('index.js'),
+          this.model0,
+          new Set([this.editor]),
+          this.awareness
+        );
+        if (this.states['index.js']) {
+          this.editor.restoreViewState(this.states['index.js']);
+        }
+        this.editor.focus();
+      } else if (file == 'core.js') {
+        if (this.editor.getModel() == this.model0) {
+          this.states['index.js'] = this.editor.saveViewState();
+        }
+        this.editor.setModel(this.model1);
+        if (this.binding) {
+          this.binding.destroy();
+        }
+        if (!this.ymap.has('core.js')) {
+          this.ymap.set('core.js', new Y.Text());
+        }
+        this.binding = new MonacoBinding(
+          this.ymap.get('core.js'),
+          this.model1,
+          new Set([this.editor]),
+          this.awareness
+        );
+        if (this.states['core.js']) {
+          this.editor.restoreViewState(this.states['core.js']);
+        }
+        this.editor.focus();
+      }
     });
   }
 
@@ -185,12 +182,6 @@ export class EditingFieldComponent {
     this.model0 = (window as any).monaco.editor.createModel('', 'javascript');
     this.editor.setModel(this.model0);
     //binding for this model
-    this.binding = new MonacoBinding(
-      this.yarray.get(0),
-      this.editor.getModel(),
-      new Set([this.editor]),
-      this.awareness
-    );
 
     //creating new model for second file
     this.model1 = (window as any).monaco.editor.createModel('', 'javascript');
