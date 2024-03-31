@@ -11,7 +11,11 @@ export class SidebarComponent {
   alertClick(e: any) {
     if (
       e.srcElement.tagName == 'INPUT' ||
-      e.srcElement.className == 'create-btns-identifier'
+      e.srcElement.className ==
+        'explorer-head-identifier create-btns-identifier' ||
+      e.srcElement.className == 'explorer-head' ||
+      e.srcElement.className == 'explorer-head active' ||
+      e.srcElement.className == 'create-btns'
     ) {
       this.explorerService.alertClick(false);
     } else {
