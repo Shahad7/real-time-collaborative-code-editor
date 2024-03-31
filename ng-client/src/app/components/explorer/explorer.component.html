@@ -1,0 +1,32 @@
+<div class="explorer-head">
+  <h5>EXPLORER</h5>
+  <div class="create-btns">
+    <img
+      src="assets/file-plus.svg"
+      class="create-btns-identifier"
+      alt=""
+      (click)="setInputVisibility(true)"
+    />
+    <img
+      src="assets/folder-plus.svg"
+      class="create-btns-identifier"
+      alt=""
+      (click)="setInputVisibility(true)"
+    />
+  </div>
+</div>
+<div class="explorer">
+  <input
+    type="text"
+    #input
+    [ngClass]="inputVisibility ? 'input-visible' : ''"
+  />
+  <app-folder
+    [foldername]="'Default'"
+    [files]="['index.js', 'core.js']"
+  ></app-folder>
+  <!-- <app-folder
+        [foldername]="'Test'"
+        [files]="['test.js', 'test.spec.js']"
+      ></app-folder> -->
+</div>

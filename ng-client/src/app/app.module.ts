@@ -13,6 +13,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SocketService } from './socket/socket.service';
 import { FolderComponent } from './components/folder/folder.component';
 import { FileComponent } from './components/file/file.component';
+import { ExplorerComponent } from './components/explorer/explorer.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +25,7 @@ import { FileComponent } from './components/file/file.component';
     SignUpComponent,
     FolderComponent,
     FileComponent,
+    ExplorerComponent,
   ],
   imports: [
     BrowserModule,
