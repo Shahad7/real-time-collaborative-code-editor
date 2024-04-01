@@ -52,8 +52,18 @@ export class ExplorerComponent {
     this.socketService.socket.on(
       'receive-explorer-updates',
       (name, mode, path) => {
-        // if(mode=='file')
-        //   this.create
+        if (path == '') {
+          if (mode == 'file') this.createFile(name);
+          else if (mode == 'folder') this.createFolder(name);
+        } else {
+          let extracts = path.split('/');
+          let parent = extracts.pop();
+          this.explorerService.relayExplorerUpdate({
+            name: parent,
+            path: path,
+            mode: mode,
+          });
+        }
       }
     );
   }
@@ -69,6 +79,9 @@ export class ExplorerComponent {
   initializeFileCreation() {
     if (this.isRootFolder()) {
       this.setInputVisibility(true);
+      setTimeout(() => {
+        this.input.nativeElement.focus();
+      }, 0);
     } else {
       this.explorerService.toggleFolder(this.selectedFolder);
     }
@@ -79,6 +92,9 @@ export class ExplorerComponent {
   initializeFolderCreation() {
     if (this.isRootFolder()) {
       this.setInputVisibility(true);
+      setTimeout(() => {
+        this.input.nativeElement.focus();
+      }, 0);
     } else {
       this.explorerService.toggleFolder(this.selectedFolder);
     }
@@ -159,5 +175,6 @@ export class ExplorerComponent {
   setInputVisibility(value: boolean) {
     this.inputVisibility = value;
     this.input.nativeElement.value = '';
+    this.resetBorder();
   }
 }

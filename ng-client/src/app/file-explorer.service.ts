@@ -11,6 +11,11 @@ export class FileExplorerService {
   private chosenFolderSource = new Subject<{ name: string; path: string }>();
   private clickedOutsideSource = new Subject<boolean>();
   private createModeSource = new Subject<'folder' | 'file' | null>();
+  private explorerUpdateRelaySource = new Subject<{
+    name: string;
+    path: string;
+    mode: 'file' | 'folder' | null;
+  }>();
 
   //observable stream
   selectedFile$ = this.selectedFileSource.asObservable();
@@ -18,6 +23,7 @@ export class FileExplorerService {
   clickedOutside$ = this.clickedOutsideSource.asObservable();
   chosenFolder$ = this.chosenFolderSource.asObservable();
   createMode$ = this.createModeSource.asObservable();
+  explorerUpdateRelay$ = this.explorerUpdateRelaySource.asObservable();
 
   //setting subject using next()
   selectFile(file: { name: string; path: string }) {
@@ -42,5 +48,14 @@ export class FileExplorerService {
   //setting create mode
   setCreateMode(mode: 'folder' | 'file' | null) {
     this.createModeSource.next(mode);
+  }
+
+  //for publishing exact parent folder of new file/folder being created
+  relayExplorerUpdate(parent: {
+    name: string;
+    path: string;
+    mode: 'file' | 'folder' | null;
+  }) {
+    this.explorerUpdateRelaySource.next(parent);
   }
 }
