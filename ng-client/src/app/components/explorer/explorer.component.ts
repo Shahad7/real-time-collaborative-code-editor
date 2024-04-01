@@ -52,7 +52,8 @@ export class ExplorerComponent {
     this.socketService.socket.on(
       'receive-explorer-updates',
       (name, mode, path) => {
-        console.log(name);
+        // if(mode=='file')
+        //   this.create
       }
     );
   }
