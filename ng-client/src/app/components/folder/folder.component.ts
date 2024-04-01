@@ -9,10 +9,11 @@ import { FileExplorerService } from 'src/app/file-explorer.service';
 })
 export class FolderComponent {
   @Input() foldername: string = '';
+  @Input() path: string = '';
 
   inputVisibility: boolean = false;
-  folders: Array<string> = [];
-  files: Array<string> = [];
+  folders: Array<{ name: string; path: string }> = [];
+  files: Array<{ name: string; path: string }> = [];
   createMode: 'folder' | 'file' | null = null;
 
   @ViewChild('input')
@@ -31,8 +32,8 @@ export class FolderComponent {
     });
 
     //toggle the respective folder when it's selected
-    this.explorerService.chosenFolder$.subscribe((foldername) => {
-      if (this.foldername == foldername) {
+    this.explorerService.chosenFolder$.subscribe(({ name, path }) => {
+      if (this.foldername == name && this.path == path) {
         if (this.arrow.nativeElement.style.transform != 'rotate(90deg)')
           this.toggleFolder();
         this.setInputVisibility(true);
@@ -70,7 +71,11 @@ export class FolderComponent {
   }
 
   selectFolder() {
-    this.explorerService.selectFolder(this.foldername);
+    this.explorerService.selectFolder({
+      name: this.foldername,
+      path: this.path,
+    });
+    console.log(this.path);
   }
 
   create() {
@@ -92,9 +97,9 @@ export class FolderComponent {
   createFile(filename: string) {
     if (
       /^[\w,-]+\.[A-Za-z]+$/.test(filename) &&
-      !this.files.includes(filename)
+      !this.includes(this.files, filename)
     ) {
-      this.files.push(filename);
+      this.files.push({ name: filename, path: `${this.path}/${filename}` });
       this.setInputVisibility(false);
     } else {
       this.input.nativeElement.style.borderColor = 'red';
@@ -106,14 +111,27 @@ export class FolderComponent {
       /^[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\!\-\#\(\)\%\+\~\_ ]+$/.test(
         foldername
       ) &&
-      !this.folders.includes(foldername)
+      !this.includes(this.folders, foldername)
     ) {
-      this.folders.push(foldername);
+      this.folders.push({
+        name: foldername,
+        path: `${this.path}/${foldername}`,
+      });
 
       this.setInputVisibility(false);
     } else {
       this.input.nativeElement.style.borderColor = 'red';
     }
+  }
+
+  //checks if the file or folder already exists
+  includes(items: Array<{ name: string; path: string }>, itemname: string) {
+    let found = false;
+    items.forEach((elt) => {
+      if (elt.name == itemname) found = true;
+    });
+
+    return found;
   }
 
   resetBorder() {

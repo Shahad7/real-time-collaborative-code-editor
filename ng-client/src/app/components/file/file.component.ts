@@ -8,6 +8,7 @@ import { FileExplorerService } from 'src/app/file-explorer.service';
 })
 export class FileComponent {
   @Input() filename: string = '';
+  @Input() path: string = '';
 
   constructor(private explorerService: FileExplorerService) {}
 
@@ -19,6 +20,6 @@ export class FileComponent {
   }
 
   selectFile(): void {
-    this.explorerService.selectFile(this.filename);
+    this.explorerService.selectFile({ name: this.filename, path: this.path });
   }
 }

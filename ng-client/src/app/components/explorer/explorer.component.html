@@ -28,9 +28,17 @@
     (keyup.enter)="create()"
     (input)="resetBorder()"
   />
-  <app-folder *ngFor="let folder of folders" [foldername]="folder"></app-folder>
+  <app-folder
+    *ngFor="let folder of folders"
+    [foldername]="folder.name"
+    [path]="folder.path"
+  ></app-folder>
 
-  <app-file *ngFor="let file of files" [filename]="file"></app-file>
+  <app-file
+    *ngFor="let file of files"
+    [filename]="file.name"
+    [path]="file.path"
+  ></app-file>
   <!-- <app-folder
     [foldername]="'Default'"
     [files]="['index.js', 'core.js']"

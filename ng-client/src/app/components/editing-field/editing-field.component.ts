@@ -88,7 +88,7 @@ export class EditingFieldComponent {
 
     //subscribing to file switch events
     this.explorerService.selectedFile$.subscribe((file) => {
-      if (file == 'index.js') {
+      if (file.name == 'index.js') {
         if (this.editor.getModel() == this.model1) {
           this.states['core.js'] = this.editor.saveViewState();
         }
@@ -109,7 +109,7 @@ export class EditingFieldComponent {
           this.editor.restoreViewState(this.states['index.js']);
         }
         this.editor.focus();
-      } else if (file == 'core.js') {
+      } else if (file.name == 'core.js') {
         if (this.editor.getModel() == this.model0) {
           this.states['index.js'] = this.editor.saveViewState();
         }

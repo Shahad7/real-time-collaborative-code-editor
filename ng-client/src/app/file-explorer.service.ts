@@ -6,9 +6,9 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class FileExplorerService {
   //observable source
-  private selectedFileSource = new Subject<string>();
-  private selectedFolderSource = new Subject<string>();
-  private chosenFolderSource = new Subject<string>();
+  private selectedFileSource = new Subject<{ name: string; path: string }>();
+  private selectedFolderSource = new Subject<{ name: string; path: string }>();
+  private chosenFolderSource = new Subject<{ name: string; path: string }>();
   private clickedOutsideSource = new Subject<boolean>();
   private createModeSource = new Subject<'folder' | 'file' | null>();
 
@@ -20,17 +20,17 @@ export class FileExplorerService {
   createMode$ = this.createModeSource.asObservable();
 
   //setting subject using next()
-  selectFile(file: string) {
+  selectFile(file: { name: string; path: string }) {
     this.selectedFileSource.next(file);
   }
 
   //set selected folder
-  selectFolder(folder: string) {
+  selectFolder(folder: { name: string; path: string }) {
     this.selectedFolderSource.next(folder);
   }
 
   //toggle chosen folder
-  toggleFolder(folder: string) {
+  toggleFolder(folder: { name: string; path: string }) {
     this.chosenFolderSource.next(folder);
   }
 
