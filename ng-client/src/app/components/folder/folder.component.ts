@@ -75,7 +75,6 @@ export class FolderComponent {
       name: this.foldername,
       path: this.path,
     });
-    console.log(this.path);
   }
 
   create() {

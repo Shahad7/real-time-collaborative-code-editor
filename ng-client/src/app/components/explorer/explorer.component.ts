@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FileExplorerService } from 'src/app/file-explorer.service';
 import { ViewChild } from '@angular/core';
+import { SocketService } from 'src/app/socket/socket.service';
 
 @Component({
   selector: 'app-explorer',
@@ -10,12 +11,12 @@ import { ViewChild } from '@angular/core';
 export class ExplorerComponent {
   inputVisibility: boolean = false;
   folders: Array<{ name: string; path: string }> = [
-    { name: 'Default', path: 'Default' },
-    { name: 'root', path: 'root' },
+    // { name: 'Default', path: 'Default' },
+    // { name: 'root', path: 'root' },
   ];
   files: Array<{ name: string; path: string }> = [
-    { name: 'main.js', path: 'main.js' },
-    { name: 'spec.ts', path: 'spec.ts' },
+    // { name: 'main.js', path: 'main.js' },
+    // { name: 'spec.ts', path: 'spec.ts' },
   ];
   createMode: 'folder' | 'file' | null = null;
   selectedFolder: { name: string; path: string } = { name: '', path: '' };
@@ -27,7 +28,10 @@ export class ExplorerComponent {
   @ViewChild('root')
   root: any;
 
-  constructor(private explorerService: FileExplorerService) {
+  constructor(
+    private explorerService: FileExplorerService,
+    private socketService: SocketService
+  ) {
     this.explorerService.clickedOutside$.subscribe((value) => {
       if (value == true) {
         this.setInputVisibility(false);
@@ -43,6 +47,14 @@ export class ExplorerComponent {
         this.rootSelected = false;
       }
     });
+
+    //receiving explorer updates from other clients
+    this.socketService.socket.on(
+      'receive-explorer-updates',
+      (name, mode, path) => {
+        console.log(name);
+      }
+    );
   }
 
   activateRoot() {
@@ -105,6 +117,8 @@ export class ExplorerComponent {
       !this.includes(this.files, filename)
     ) {
       this.files.push({ name: filename, path: filename });
+      //letting other clients know a new file is created
+      this.socketService.sendExplorerUpdates(filename, 'file', '');
       this.setInputVisibility(false);
     } else {
       this.input.nativeElement.style.borderColor = 'red';
@@ -119,6 +133,8 @@ export class ExplorerComponent {
       !this.includes(this.folders, foldername)
     ) {
       this.folders.push({ name: foldername, path: foldername });
+      //letting other clients know a new folder is created
+      this.socketService.sendExplorerUpdates(foldername, 'folder', '');
       this.setInputVisibility(false);
     } else {
       this.input.nativeElement.style.borderColor = 'red';

@@ -111,6 +111,11 @@ const getIo = (server) => {
       socket.to(roomID).emit("receive-awareness", new Uint8Array(updates));
       // console.log(updates);
     });
+
+    //relaying explorer updates
+    socket.on("explorer-updates", (name, mode, path, roomID) => {
+      socket.to(roomID).emit("receive-explorer-updates", name, mode, path);
+    });
   });
 };
 

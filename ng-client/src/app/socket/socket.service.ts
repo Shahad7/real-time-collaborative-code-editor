@@ -60,4 +60,14 @@ export class SocketService {
     if (roomID) this.socket.emit('send-awareness', updates, roomID);
     else console.log('are you sure this client is in a room ?');
   }
+
+  //send explorer updates i.e, when a new file or folder is created by the leader
+  sendExplorerUpdates(
+    name: string,
+    mode: 'file' | 'folder' | null,
+    path: string
+  ) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('explorer-updates', name, mode, path, roomID);
+  }
 }
