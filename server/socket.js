@@ -21,7 +21,13 @@ const getIo = (server) => {
   }
 
   const io = new Server(server, {
-    cors: { origin: ["http://127.0.0.1:4200", `http://${ip}:4200`] },
+    cors: {
+      origin: [
+        "http://127.0.0.1:4200",
+        "http://localhost:4200",
+        `http://${ip}:4200`,
+      ],
+    },
     connectionStateRecovery: {},
   });
 
