@@ -22,8 +22,7 @@ export class EditingFieldComponent {
   };
   code: string = 'function demo(){ console.log("hey")}';
   editor: any;
-  binding0: any;
-  binding1: any;
+  monaco: any;
   binding: any;
   model0: any;
   model1: any;
@@ -32,8 +31,6 @@ export class EditingFieldComponent {
   //yjs initialization
   ydoc = new Y.Doc();
   ymap: any = this.ydoc.getMap('monaco');
-
-  // ytext1 = this.ydoc.getText('monaco1');
 
   //y-protocols awareness initialization
   awareness = new awarenessProtocol.Awareness(this.ydoc);
@@ -171,10 +168,12 @@ export class EditingFieldComponent {
     return color;
   }
 
-  // exposes monaco instance + y-monaco binding to ydoc
+  // exposes monaco editor instance
   onInit(editor: any) {
     //saving the editor instance
     this.editor = editor;
+    //setting ref to global monaco instance
+    this.monaco = (window as any).monaco;
 
     //saving current model and then switching to it later doesn't work
     //as initial model is disposed on the first setModel

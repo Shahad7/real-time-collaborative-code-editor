@@ -65,9 +65,11 @@ export class SocketService {
   sendExplorerUpdates(
     name: string,
     mode: 'file' | 'folder' | null,
-    path: string
+    path: string,
+    id: string | null
   ) {
     const roomID = sessionStorage.getItem('roomID');
-    if (roomID) this.socket.emit('explorer-updates', name, mode, path, roomID);
+    if (roomID)
+      this.socket.emit('explorer-updates', name, mode, path, id, roomID);
   }
 }

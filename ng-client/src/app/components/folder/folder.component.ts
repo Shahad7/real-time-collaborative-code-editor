@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { FileExplorerService } from 'src/app/file-explorer.service';
 import { SocketService } from 'src/app/socket/socket.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-folder',
@@ -14,7 +15,7 @@ export class FolderComponent {
 
   inputVisibility: boolean = false;
   folders: Array<{ name: string; path: string }> = [];
-  files: Array<{ name: string; path: string }> = [];
+  files: Array<{ name: string; path: string; id: string }> = [];
   createMode: 'folder' | 'file' | null = null;
 
   @ViewChild('input')
@@ -54,10 +55,10 @@ export class FolderComponent {
 
     //listen and see if this folder is the one which is being published for new file/folder creation
     this.explorerService.explorerUpdateRelay$.subscribe(
-      ({ name, parent, path, mode }) => {
+      ({ name, parent, path, mode, id }) => {
         if (this.foldername == parent && this.path == path) {
           if (mode == 'file') {
-            this.createFile(name);
+            this.createFile(name, id);
           } else if (mode == 'folder') this.createFolder(name);
         }
       }
@@ -101,7 +102,7 @@ export class FolderComponent {
       this.input.nativeElement.value.length != 0
     ) {
       if (this.createMode == 'file') {
-        this.createFile(this.input.nativeElement.value);
+        this.createFile(this.input.nativeElement.value, null);
       }
 
       if (this.createMode == 'folder') {
@@ -111,14 +112,22 @@ export class FolderComponent {
     }
   }
 
-  createFile(filename: string) {
+  createFile(filename: string, id: string | null) {
+    if (!id) {
+      id = uuidv4();
+    }
     if (
       /^[\w,-]+\.[A-Za-z]+$/.test(filename) &&
       !this.includes(this.files, filename)
     ) {
-      this.files.push({ name: filename, path: `${this.path}/${filename}` });
+      this.files.push({
+        name: filename,
+        path: `${this.path}/${filename}`,
+        id: id,
+      });
+      console.log(this.files);
       //letting other clients know a new file is created
-      this.socketService.sendExplorerUpdates(filename, 'file', this.path);
+      this.socketService.sendExplorerUpdates(filename, 'file', this.path, id);
       this.setInputVisibility(false);
     } else {
       this.input.nativeElement.style.borderColor = 'red';
@@ -137,7 +146,12 @@ export class FolderComponent {
         path: `${this.path}/${foldername}`,
       });
       //letting other clients know a new folder is created
-      this.socketService.sendExplorerUpdates(foldername, 'folder', this.path);
+      this.socketService.sendExplorerUpdates(
+        foldername,
+        'folder',
+        this.path,
+        null
+      );
 
       this.setInputVisibility(false);
     } else {

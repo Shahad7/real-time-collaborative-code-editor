@@ -6,7 +6,11 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class FileExplorerService {
   //observable source
-  private selectedFileSource = new Subject<{ name: string; path: string }>();
+  private selectedFileSource = new Subject<{
+    name: string;
+    path: string;
+    id: string;
+  }>();
   private selectedFolderSource = new Subject<{ name: string; path: string }>();
   private chosenFolderSource = new Subject<{ name: string; path: string }>();
   private clickedOutsideSource = new Subject<boolean>();
@@ -16,6 +20,7 @@ export class FileExplorerService {
     path: string;
     parent: string;
     mode: 'file' | 'folder' | null;
+    id: string | null;
   }>();
 
   //observable stream
@@ -27,7 +32,7 @@ export class FileExplorerService {
   explorerUpdateRelay$ = this.explorerUpdateRelaySource.asObservable();
 
   //setting subject using next()
-  selectFile(file: { name: string; path: string }) {
+  selectFile(file: { name: string; path: string; id: string }) {
     this.selectedFileSource.next(file);
   }
 
@@ -57,6 +62,7 @@ export class FileExplorerService {
     path: string;
     parent: string;
     mode: 'file' | 'folder' | null;
+    id: string | null;
   }) {
     this.explorerUpdateRelaySource.next(update);
   }

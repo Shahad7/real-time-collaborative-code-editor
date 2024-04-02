@@ -119,8 +119,8 @@ const getIo = (server) => {
     });
 
     //relaying explorer updates
-    socket.on("explorer-updates", (name, mode, path, roomID) => {
-      socket.to(roomID).emit("receive-explorer-updates", name, mode, path);
+    socket.on("explorer-updates", (name, mode, path, id, roomID) => {
+      socket.to(roomID).emit("receive-explorer-updates", name, mode, path, id);
     });
   });
 };
