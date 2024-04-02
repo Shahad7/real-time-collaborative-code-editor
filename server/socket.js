@@ -7,6 +7,11 @@ const Y = require("yjs");
 const getIo = (server) => {
   //stores ydocs of all rooms in memory
   let ydocs = {};
+
+  //server keeps track of the explorer updates for the late-comers
+  let explorerUpdates = {};
+
+  //for configuring socket.io server cors
   let ip;
   if (
     os.networkInterfaces()["wlo1"] &&
@@ -68,9 +73,9 @@ const getIo = (server) => {
 
       //sending updates to late-comer
       if (
-        ydocs[roomID] &&
+        ydocs[roomID] /*&&
         ydocs[roomID].share &&
-        ydocs[roomID].share.values().next().value.length > 0
+        ydocs[roomID].share.values().next().value.length > 0*/
       ) {
         try {
           const ydoc = ydocs[roomID];
@@ -80,6 +85,23 @@ const getIo = (server) => {
           console.log(
             "should recreate the room as server copy is instantiated at the beginning only"
           );
+        }
+
+        //send explorer updates as well
+        try {
+          if (explorerUpdates[roomID]) {
+            for (update of explorerUpdates[roomID])
+              socket.emit(
+                "receive-explorer-updates",
+                update.name,
+                update.mode,
+                update.path,
+                update.id
+              );
+          }
+        } catch (e) {
+          console.log("couldn't send explorer updates to late-comer");
+          console.error(e);
         }
       }
 
@@ -120,6 +142,14 @@ const getIo = (server) => {
 
     //relaying explorer updates
     socket.on("explorer-updates", (name, mode, path, id, roomID) => {
+      //to store explorer updates on server in-memory
+      if (!explorerUpdates[roomID]) explorerUpdates[roomID] = [];
+      try {
+        explorerUpdates[roomID].push({ name, mode, path, id });
+      } catch (e) {
+        console.log("couldn't store explorer updates on server side");
+      }
+
       socket.to(roomID).emit("receive-explorer-updates", name, mode, path, id);
     });
   });
