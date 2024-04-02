@@ -125,11 +125,7 @@ export class EditingFieldComponent {
         console.log('detected language as ' + language);
         if (language != null && language != undefined)
           model = this.monaco.editor.createModel('', language);
-        else
-          model = this.monaco.editor.createModel(
-            '',
-            this.monaco.editor.ModelLanguage.PlainText
-          );
+        else model = this.monaco.editor.createModel('');
         this.models[file.id] = model;
       }
 
@@ -150,51 +146,6 @@ export class EditingFieldComponent {
         this.awareness
       );
       this.editor.focus();
-
-      // code to switch between two tabs alone
-      // if (file.name == 'index.js') {
-      //   if (this.editor.getModel() == this.model1) {
-      //     this.states['core.js'] = this.editor.saveViewState();
-      //   }
-      //   this.editor.setModel(this.model0);
-      //   if (this.binding) {
-      //     this.binding.destroy();
-      //   }
-      //   if (!this.ymap.has('index.js')) {
-      //     this.ymap.set('index.js', new Y.Text());
-      //   }
-      //   this.binding = new MonacoBinding(
-      //     this.ymap.get('index.js'),
-      //     this.model0,
-      //     new Set([this.editor]),
-      //     this.awareness
-      //   );
-      //   if (this.states['index.js']) {
-      //     this.editor.restoreViewState(this.states['index.js']);
-      //   }
-      //   this.editor.focus();
-      // } else if (file.name == 'core.js') {
-      //   if (this.editor.getModel() == this.model0) {
-      //     this.states['index.js'] = this.editor.saveViewState();
-      //   }
-      //   this.editor.setModel(this.model1);
-      //   if (this.binding) {
-      //     this.binding.destroy();
-      //   }
-      //   if (!this.ymap.has('core.js')) {
-      //     this.ymap.set('core.js', new Y.Text());
-      //   }
-      //   this.binding = new MonacoBinding(
-      //     this.ymap.get('core.js'),
-      //     this.model1,
-      //     new Set([this.editor]),
-      //     this.awareness
-      //   );
-      //   if (this.states['core.js']) {
-      //     this.editor.restoreViewState(this.states['core.js']);
-      //   }
-      //   this.editor.focus();
-      // }
     });
   }
 
@@ -244,22 +195,5 @@ export class EditingFieldComponent {
 
     //detaching initial model from the editor instance simply cuz we don't want it
     this.editor.setModel(null);
-
-    //saving current model and then switching to it later doesn't work
-    //as initial model is disposed on the first setModel
-    //So intializing your own model works
-    // this.model0 = (window as any).monaco.editor.createModel('', 'javascript');
-    // this.editor.setModel(this.model0);
-    //binding for this model
-
-    //creating new model for second file
-    // this.model1 = (window as any).monaco.editor.createModel('', 'javascript');
-    //second binding
-    // this.binding1 = new MonacoBinding(
-    //   this.ytext1,
-    //   this.model1,
-    //   new Set([this.editor]),
-    //   this.awareness
-    // );
   }
 }
