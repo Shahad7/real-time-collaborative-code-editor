@@ -14,6 +14,7 @@ export class FileExplorerService {
   private explorerUpdateRelaySource = new Subject<{
     name: string;
     path: string;
+    parent: string;
     mode: 'file' | 'folder' | null;
   }>();
 
@@ -51,11 +52,12 @@ export class FileExplorerService {
   }
 
   //for publishing exact parent folder of new file/folder being created
-  relayExplorerUpdate(parent: {
+  relayExplorerUpdate(update: {
     name: string;
     path: string;
+    parent: string;
     mode: 'file' | 'folder' | null;
   }) {
-    this.explorerUpdateRelaySource.next(parent);
+    this.explorerUpdateRelaySource.next(update);
   }
 }

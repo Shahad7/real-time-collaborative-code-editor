@@ -59,7 +59,8 @@ export class ExplorerComponent {
           let extracts = path.split('/');
           let parent = extracts.pop();
           this.explorerService.relayExplorerUpdate({
-            name: parent,
+            name: name,
+            parent: parent,
             path: path,
             mode: mode,
           });

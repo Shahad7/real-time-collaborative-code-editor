@@ -54,19 +54,10 @@ export class FolderComponent {
 
     //listen and see if this folder is the one which is being published for new file/folder creation
     this.explorerService.explorerUpdateRelay$.subscribe(
-      ({ name, path, mode }) => {
-        if (this.foldername == name && this.path == path) {
-          console.log(
-            'i was called and i am ' +
-              this.foldername +
-              ' for creating ' +
-              name +
-              ' with path ' +
-              path
-          );
+      ({ name, parent, path, mode }) => {
+        if (this.foldername == parent && this.path == path) {
           if (mode == 'file') {
             this.createFile(name);
-            console.log(this.files);
           } else if (mode == 'folder') this.createFolder(name);
         }
       }
