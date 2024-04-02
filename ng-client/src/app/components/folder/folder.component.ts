@@ -108,7 +108,8 @@ export class FolderComponent {
       if (this.createMode == 'folder') {
         this.createFolder(this.input.nativeElement.value);
       }
-      if (this.createMode == null) alert('oh null');
+      if (this.createMode == null)
+        console.warn('no createMode was set for this operation');
     }
   }
 

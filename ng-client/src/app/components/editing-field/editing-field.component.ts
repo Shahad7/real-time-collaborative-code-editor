@@ -24,9 +24,20 @@ export class EditingFieldComponent {
   editor: any;
   monaco: any;
   binding: any;
-  model0: any;
-  model1: any;
+  models: any = {};
   states: any = {};
+  languages: any = {
+    css: 'css',
+    js: 'javascript',
+    ts: 'typescript',
+    java: 'java',
+    c: 'c',
+    py: 'python',
+    html: 'html',
+    json: 'json',
+    md: 'markdown',
+    mjs: 'javascript',
+  };
 
   //yjs initialization
   ydoc = new Y.Doc();
@@ -85,49 +96,105 @@ export class EditingFieldComponent {
 
     //subscribing to file switch events
     this.explorerService.selectedFile$.subscribe((file) => {
-      if (file.name == 'index.js') {
-        if (this.editor.getModel() == this.model1) {
-          this.states['core.js'] = this.editor.saveViewState();
-        }
-        this.editor.setModel(this.model0);
-        if (this.binding) {
-          this.binding.destroy();
-        }
-        if (!this.ymap.has('index.js')) {
-          this.ymap.set('index.js', new Y.Text());
-        }
-        this.binding = new MonacoBinding(
-          this.ymap.get('index.js'),
-          this.model0,
-          new Set([this.editor]),
-          this.awareness
+      //saving current model and state before switching
+      let currentModel: any, currentState, currentFileID;
+      if (this.editor.getModel() != null) {
+        currentModel = this.editor.getModel();
+        currentState = this.editor.saveViewState();
+        currentFileID = Object.keys(this.models).find(
+          (elt) => this.models[elt] == currentModel
         );
-        if (this.states['index.js']) {
-          this.editor.restoreViewState(this.states['index.js']);
-        }
-        this.editor.focus();
-      } else if (file.name == 'core.js') {
-        if (this.editor.getModel() == this.model0) {
-          this.states['index.js'] = this.editor.saveViewState();
-        }
-        this.editor.setModel(this.model1);
-        if (this.binding) {
-          this.binding.destroy();
-        }
-        if (!this.ymap.has('core.js')) {
-          this.ymap.set('core.js', new Y.Text());
-        }
-        this.binding = new MonacoBinding(
-          this.ymap.get('core.js'),
-          this.model1,
-          new Set([this.editor]),
-          this.awareness
-        );
-        if (this.states['core.js']) {
-          this.editor.restoreViewState(this.states['core.js']);
-        }
-        this.editor.focus();
+        this.states[currentFileID as any] = currentState;
+        console.log('state saved for ' + currentFileID);
       }
+
+      // if the currently selected file already has a model created,
+      //fetch it and restore state
+      if (this.models[file.id]) {
+        this.editor.setModel(this.models[file.id]);
+        if (this.states[file.id])
+          this.editor.restoreViewState(this.states[file.id]);
+      }
+
+      //if the selected file is new without an associated model,
+      //create a model after detecting the language
+      if (!this.models[file.id]) {
+        let model;
+        let index: any = file.name.split('.').pop();
+        let language = this.languages[index];
+        console.log('detected language as ' + language);
+        if (language != null && language != undefined)
+          model = this.monaco.editor.createModel('', language);
+        else
+          model = this.monaco.editor.createModel(
+            '',
+            this.monaco.editor.ModelLanguage.PlainText
+          );
+        this.models[file.id] = model;
+      }
+
+      //if the current file doesn't already have a YText instance, instantiate
+      if (!this.ymap.has(file.id)) {
+        this.ymap.set(file.id, new Y.Text());
+      }
+
+      //destroy current binding if any before new binding
+      if (this.binding) this.binding.destroy();
+
+      //set model and also create new binding
+      this.editor.setModel(this.models[file.id]);
+      this.binding = new MonacoBinding(
+        this.ymap.get(file.id),
+        this.models[file.id],
+        new Set([this.editor]),
+        this.awareness
+      );
+      this.editor.focus();
+
+      // code to switch between two tabs alone
+      // if (file.name == 'index.js') {
+      //   if (this.editor.getModel() == this.model1) {
+      //     this.states['core.js'] = this.editor.saveViewState();
+      //   }
+      //   this.editor.setModel(this.model0);
+      //   if (this.binding) {
+      //     this.binding.destroy();
+      //   }
+      //   if (!this.ymap.has('index.js')) {
+      //     this.ymap.set('index.js', new Y.Text());
+      //   }
+      //   this.binding = new MonacoBinding(
+      //     this.ymap.get('index.js'),
+      //     this.model0,
+      //     new Set([this.editor]),
+      //     this.awareness
+      //   );
+      //   if (this.states['index.js']) {
+      //     this.editor.restoreViewState(this.states['index.js']);
+      //   }
+      //   this.editor.focus();
+      // } else if (file.name == 'core.js') {
+      //   if (this.editor.getModel() == this.model0) {
+      //     this.states['index.js'] = this.editor.saveViewState();
+      //   }
+      //   this.editor.setModel(this.model1);
+      //   if (this.binding) {
+      //     this.binding.destroy();
+      //   }
+      //   if (!this.ymap.has('core.js')) {
+      //     this.ymap.set('core.js', new Y.Text());
+      //   }
+      //   this.binding = new MonacoBinding(
+      //     this.ymap.get('core.js'),
+      //     this.model1,
+      //     new Set([this.editor]),
+      //     this.awareness
+      //   );
+      //   if (this.states['core.js']) {
+      //     this.editor.restoreViewState(this.states['core.js']);
+      //   }
+      //   this.editor.focus();
+      // }
     });
   }
 
@@ -175,15 +242,18 @@ export class EditingFieldComponent {
     //setting ref to global monaco instance
     this.monaco = (window as any).monaco;
 
+    //detaching initial model from the editor instance simply cuz we don't want it
+    this.editor.setModel(null);
+
     //saving current model and then switching to it later doesn't work
     //as initial model is disposed on the first setModel
     //So intializing your own model works
-    this.model0 = (window as any).monaco.editor.createModel('', 'javascript');
-    this.editor.setModel(this.model0);
+    // this.model0 = (window as any).monaco.editor.createModel('', 'javascript');
+    // this.editor.setModel(this.model0);
     //binding for this model
 
     //creating new model for second file
-    this.model1 = (window as any).monaco.editor.createModel('', 'javascript');
+    // this.model1 = (window as any).monaco.editor.createModel('', 'javascript');
     //second binding
     // this.binding1 = new MonacoBinding(
     //   this.ytext1,
