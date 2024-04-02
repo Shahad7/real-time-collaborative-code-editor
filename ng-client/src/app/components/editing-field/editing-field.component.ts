@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { MonacoBinding } from 'y-monaco';
 import * as Y from 'yjs';
-import * as awarenessProtocol from 'y-protocols/awareness.js';
+import * as awarenessProtocol from 'y-protocols/awareness';
 import { SocketService } from 'src/app/socket/socket.service';
 import { ViewEncapsulation } from '@angular/core';
 import { state } from '@angular/animations';

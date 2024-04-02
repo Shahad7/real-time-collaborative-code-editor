@@ -2,7 +2,11 @@ const { Server } = require("socket.io");
 const socketClient = require("socket.io-client");
 const os = require("os");
 const Y = require("yjs");
-// const awarenessProtocol = import("y-protocols/awareness.js");
+const {
+  encodeAwarenessUpdate,
+  Awareness,
+  applyAwarenessUpdate,
+} = require("y-protocols/awareness");
 
 const getIo = (server) => {
   //stores ydocs of all rooms in memory
@@ -10,6 +14,9 @@ const getIo = (server) => {
 
   //server keeps track of the explorer updates for the late-comers
   let explorerUpdates = {};
+
+  //stores awareness instances for each room as well
+  let awarenesses = {};
 
   //for configuring socket.io server cors
   let ip;
@@ -63,6 +70,10 @@ const getIo = (server) => {
       ydoc.getText("monaco");
       ydocs[roomID] = ydoc;
 
+      //intantiate awareness for the room
+      let awareness = new Awareness(ydoc);
+      awarenesses[roomID] = awareness;
+
       console.log(`${socket.handshake.auth.username} created ${roomID}`);
     });
 
@@ -103,6 +114,19 @@ const getIo = (server) => {
           console.log("couldn't send explorer updates to late-comer");
           console.error(e);
         }
+
+        //send awareness updates as well
+        try {
+          if (awarenesses[roomID]) {
+            let awarenessUpdates = encodeAwarenessUpdate(
+              awarenesses[roomID],
+              Array.from(awarenesses[roomID].getStates().keys())
+            );
+            socket.emit("receive-awareness", new Uint8Array(awarenessUpdates));
+          }
+        } catch (e) {
+          console.log("couldn't send awareness updates to late comer");
+        }
       }
 
       // logRooms(socket);
@@ -113,6 +137,7 @@ const getIo = (server) => {
     //otherwise "unexpected end of array error" will be thrown from the client side
     socket.on("send-updates", (updates, roomID) => {
       socket.to(roomID).emit("receive-updates", new Uint8Array(updates));
+      //replicate updates to server's copy of ydoc instance of this room
       let ydoc = ydocs[roomID];
       try {
         Y.applyUpdate(ydoc, new Uint8Array(updates));
@@ -138,6 +163,15 @@ const getIo = (server) => {
     socket.on("send-awareness", (updates, roomID) => {
       socket.to(roomID).emit("receive-awareness", new Uint8Array(updates));
       // console.log(updates);
+
+      //replicate updates to server's copy of awareness instance of this room
+      try {
+        let awareness = awarenesses[roomID];
+        applyAwarenessUpdate(awareness, new Uint8Array(updates), null);
+        awarenesses[roomID] = awareness;
+      } catch (e) {
+        console.log("couldn't apply awareness update to server's copy");
+      }
     });
 
     //relaying explorer updates
