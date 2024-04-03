@@ -20,17 +20,29 @@ const getIo = (server) => {
 
   //for configuring socket.io server cors
   let ip;
-  if (
-    os.networkInterfaces()["wlo1"] &&
-    os.networkInterfaces()["wlo1"][0].address
-  ) {
-    ip = os.networkInterfaces()["wlo1"][0].address;
-  } else if (
-    os.networkInterfaces()["Wi-Fi"] &&
-    os.networkInterfaces()["Wi-Fi"][0].address
-  ) {
-    ip = os.networkInterfaces()["Wi-Fi"][0].address;
+
+  if (os.networkInterfaces()["wlo1"]) {
+    for (interface of os.networkInterfaces()["wlo1"]) {
+      if (
+        interface &&
+        interface.address &&
+        interface.address.startsWith("192.168")
+      ) {
+        ip = interface.address;
+      }
+    }
+  } else if (os.networkInterfaces()["Wi-Fi"]) {
+    for (interface of os.networkInterfaces()["Wi-Fi"]) {
+      if (
+        interface &&
+        interface.address &&
+        interface.address.startsWith("192.168")
+      ) {
+        ip = interface.address;
+      }
+    }
   }
+  console.log("server ip address : " + ip);
 
   const io = new Server(server, {
     cors: {
@@ -115,7 +127,7 @@ const getIo = (server) => {
           console.error(e);
         }
 
-        //send awareness updates as well
+        //send awareness updates as well (doesn't seem necessary since it automatically gets updated)
         // try {
         //   if (awarenesses[roomID]) {
         //     let awarenessUpdates = encodeAwarenessUpdate(
@@ -165,13 +177,14 @@ const getIo = (server) => {
       // console.log(updates);
 
       //replicate updates to server's copy of awareness instance of this room
-      try {
-        let awareness = awarenesses[roomID];
-        applyAwarenessUpdate(awareness, new Uint8Array(updates), null);
-        awarenesses[roomID] = awareness;
-      } catch (e) {
-        console.log("couldn't apply awareness update to server's copy");
-      }
+      //(not necessary it seems)
+      // try {
+      //   let awareness = awarenesses[roomID];
+      //   applyAwarenessUpdate(awareness, new Uint8Array(updates), null);
+      //   awarenesses[roomID] = awareness;
+      // } catch (e) {
+      //   console.log("couldn't apply awareness update to server's copy");
+      // }
     });
 
     //relaying explorer updates
