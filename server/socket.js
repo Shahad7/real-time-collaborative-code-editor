@@ -116,17 +116,17 @@ const getIo = (server) => {
         }
 
         //send awareness updates as well
-        try {
-          if (awarenesses[roomID]) {
-            let awarenessUpdates = encodeAwarenessUpdate(
-              awarenesses[roomID],
-              Array.from(awarenesses[roomID].getStates().keys())
-            );
-            socket.emit("receive-awareness", new Uint8Array(awarenessUpdates));
-          }
-        } catch (e) {
-          console.log("couldn't send awareness updates to late comer");
-        }
+        // try {
+        //   if (awarenesses[roomID]) {
+        //     let awarenessUpdates = encodeAwarenessUpdate(
+        //       awarenesses[roomID],
+        //       Array.from(awarenesses[roomID].getStates().keys())
+        //     );
+        //     socket.emit("receive-awareness", new Uint8Array(awarenessUpdates));
+        //   }
+        // } catch (e) {
+        //   console.log("couldn't send awareness updates to late comer");
+        // }
       }
 
       // logRooms(socket);
@@ -185,6 +185,12 @@ const getIo = (server) => {
       }
 
       socket.to(roomID).emit("receive-explorer-updates", name, mode, path, id);
+    });
+
+    //send clientID of disconnected client so that others
+    //can clean the respective awareness instance
+    socket.on("alert-purge", (clientID, roomID) => {
+      socket.to(roomID).emit("purge-awareness", clientID);
     });
   });
 };

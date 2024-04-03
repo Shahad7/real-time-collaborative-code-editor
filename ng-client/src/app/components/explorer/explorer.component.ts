@@ -140,7 +140,7 @@ export class ExplorerComponent {
       !this.includes(this.files, filename)
     ) {
       this.files.push({ name: filename, path: filename, id: id });
-      console.log(this.files);
+
       //letting other clients know a new file is created
       this.socketService.sendExplorerUpdates(filename, 'file', '', id);
       this.setInputVisibility(false);

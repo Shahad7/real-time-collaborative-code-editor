@@ -72,4 +72,11 @@ export class SocketService {
     if (roomID)
       this.socket.emit('explorer-updates', name, mode, path, id, roomID);
   }
+
+  //send clientID of disconnected client so that others
+  //can clean the respective awareness instance
+  purgeDeadAwareness(clientID: number) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('alert-purge', clientID, roomID);
+  }
 }

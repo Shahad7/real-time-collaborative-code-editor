@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, importProvidersFrom } from '@angular/core';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { MonacoBinding } from 'y-monaco';
 import * as Y from 'yjs';
@@ -8,6 +8,7 @@ import { ViewEncapsulation } from '@angular/core';
 import { state } from '@angular/animations';
 import * as monaco from 'monaco-editor';
 import { FileExplorerService } from 'src/app/file-explorer.service';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-editing-field',
@@ -45,6 +46,20 @@ export class EditingFieldComponent {
 
   //y-protocols awareness initialization
   awareness = new awarenessProtocol.Awareness(this.ydoc);
+
+  //remove awareness instance of disconnected user
+  @HostListener('window:beforeunload', ['$event'])
+  removeDisconnectedAwareness(e: BeforeUnloadEvent): void {
+    e.preventDefault();
+    this.socketService.purgeDeadAwareness(this.awareness.clientID);
+    // console.log('purge req sent');
+
+    // awarenessProtocol.removeAwarenessStates(
+    //   this.awareness,
+    //   [this.awareness.clientID],
+    //   'window unload'
+    // );
+  }
 
   constructor(
     private socketService: SocketService,
@@ -94,6 +109,16 @@ export class EditingFieldComponent {
       this.styleAwareness();
     });
 
+    //to purge offline client's awareness instance
+    this.socketService.socket.on('purge-awareness', (clientID) => {
+      //console.log('purge req received for ' + clientID);
+      awarenessProtocol.removeAwarenessStates(
+        this.awareness,
+        [clientID],
+        'window unload'
+      );
+    });
+
     //subscribing to file switch events
     this.explorerService.selectedFile$.subscribe((file) => {
       //saving current model and state before switching
@@ -105,7 +130,7 @@ export class EditingFieldComponent {
           (elt) => this.models[elt] == currentModel
         );
         this.states[currentFileID as any] = currentState;
-        console.log('state saved for ' + currentFileID);
+        //console.log('state saved for ' + currentFileID);
       }
 
       // if the currently selected file already has a model created,
@@ -122,7 +147,7 @@ export class EditingFieldComponent {
         let model;
         let index: any = file.name.split('.').pop();
         let language = this.languages[index];
-        console.log('detected language as ' + language);
+        // console.log('detected language as ' + language);
         if (language != null && language != undefined)
           model = this.monaco.editor.createModel('', language);
         else model = this.monaco.editor.createModel('');
