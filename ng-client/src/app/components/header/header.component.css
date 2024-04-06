@@ -1,5 +1,5 @@
 .app-header {
-  background-color: #333; /* Set background color */
+  background-color: #000; /* Set background color */
   color: #fff; /* Set text color */
   padding: 10px 7.5px; /* Add padding for spacing */
   font-size: 13px;
@@ -14,10 +14,17 @@
   list-style-type: none; /* Remove bullet points from list */
   padding: 0; /* Remove default padding */
   margin: 0;
+  text-align: center;
+  cursor: pointer;
 }
 
 .menu ul li {
-  margin-right: 20px; /* Add margin between menu items */
+  padding: 2px 10px;
+}
+
+.menu ul :hover{
+  background-color: #333;
+  border-radius: 5px;
 }
 
 .menu ul li:last-child {
@@ -30,7 +37,7 @@
 }
 
 .menu ul li a:hover {
-  text-decoration: underline; /* Add underline on hover */
+  text-decoration: none;
 }
 
 a {

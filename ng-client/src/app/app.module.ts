@@ -13,6 +13,8 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SocketService } from './socket/socket.service';
 import { FolderComponent } from './components/folder/folder.component';
 import { FileComponent } from './components/file/file.component';
+import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
+import { ChatboxComponent } from './components/chatbox/chatbox.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +26,8 @@ import { FileComponent } from './components/file/file.component';
     SignUpComponent,
     FolderComponent,
     FileComponent,
+    SidebarMenuComponent,
+    ChatboxComponent,
   ],
   imports: [
     BrowserModule,
