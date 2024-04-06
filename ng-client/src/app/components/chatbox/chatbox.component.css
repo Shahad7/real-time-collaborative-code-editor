@@ -33,12 +33,13 @@
 
 .chatbox .chat-sec .msg{
     display: flex;
+    align-items: center;
 }
 
 .chatbox .chat-sec .msg img{
-    width: 14%;
-    height: 14%;
-    margin-right: 5px;
+    width: 12%;
+    height: 12%;
+    margin-right: 10px;
 }
 
 .chatbox .chat-sec .msg p{
@@ -74,7 +75,7 @@
 }
 
 .chat-input img{
-    width: 14%;
+    width: 10%;
     background-color: #ffff;
     cursor: pointer;
 }
