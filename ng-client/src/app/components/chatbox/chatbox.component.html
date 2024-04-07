@@ -1,18 +1,23 @@
 <div class="container">
-    <div class="chatbox">
-        <div class="heading">In-room messages</div>
-        <div class="chat-sec">
-            <div class="msg">
-                <img src="assets/user.png" alt="">
-                <div class="text">
-                    <p class="user">Max:</p>
-                    <p class="cont">Lorem ipsum dolor sit amet</p>
-                </div>
-            </div>
-        </div>
-        <div class="chat-input">
-            <input type="text" placeholder="Type your message...">
-            <img src="assets/send.png" alt="">
-        </div>
+  <div class="chatbox">
+    <div class="heading">In-room messages</div>
+    <div class="chat-sec">
+      <app-message
+        *ngFor="let msg of messages"
+        [sender]="msg.sender"
+        [message]="msg.message"
+        [color]="msg.color"
+      ></app-message>
     </div>
+
+    <div class="chat-input">
+      <input
+        #input
+        type="text"
+        (keydown.enter)="sendMessage(input)"
+        placeholder="Type your message..."
+      />
+      <img src="assets/send.png" (click)="sendMessage(input)" alt="" />
+    </div>
+  </div>
 </div>

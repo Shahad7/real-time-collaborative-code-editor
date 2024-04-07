@@ -205,6 +205,11 @@ const getIo = (server) => {
     socket.on("alert-purge", (clientID, roomID) => {
       socket.to(roomID).emit("purge-awareness", clientID);
     });
+
+    /************chat service part */
+    socket.on("send-message", (message, sender, color, roomID) => {
+      io.to(roomID).emit("receive-message", message, sender, color);
+    });
   });
 };
 

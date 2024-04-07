@@ -16,6 +16,7 @@ import { FileComponent } from './components/file/file.component';
 import { ExplorerComponent } from './components/explorer/explorer.component';
 import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
 import { ChatboxComponent } from './components/chatbox/chatbox.component';
+import { MessageComponent } from './components/chatbox/message/message.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +31,7 @@ import { ChatboxComponent } from './components/chatbox/chatbox.component';
     ExplorerComponent,
     SidebarMenuComponent,
     ChatboxComponent,
+    MessageComponent,
   ],
   imports: [
     BrowserModule,

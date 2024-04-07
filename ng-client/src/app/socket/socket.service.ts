@@ -13,6 +13,8 @@ export class SocketService {
     });
   }
 
+  /********************* code sync part */
+
   //socket clients are set to not automatically connect
   //so that user info can be set on handshake after successful login
   //this function initiates the connection
@@ -78,5 +80,13 @@ export class SocketService {
   purgeDeadAwareness(clientID: number) {
     const roomID = sessionStorage.getItem('roomID');
     if (roomID) this.socket.emit('alert-purge', clientID, roomID);
+  }
+
+  /******************************chat service part */
+
+  sendMessage(message: string, sender: string, color: string) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID)
+      this.socket.emit('send-message', message, sender, color, roomID);
   }
 }
