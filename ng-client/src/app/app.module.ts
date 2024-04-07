@@ -14,6 +14,8 @@ import { SocketService } from './socket/socket.service';
 import { FolderComponent } from './components/folder/folder.component';
 import { FileComponent } from './components/file/file.component';
 import { ExplorerComponent } from './components/explorer/explorer.component';
+import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
+import { ChatboxComponent } from './components/chatbox/chatbox.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +28,8 @@ import { ExplorerComponent } from './components/explorer/explorer.component';
     FolderComponent,
     FileComponent,
     ExplorerComponent,
+    SidebarMenuComponent,
+    ChatboxComponent,
   ],
   imports: [
     BrowserModule,

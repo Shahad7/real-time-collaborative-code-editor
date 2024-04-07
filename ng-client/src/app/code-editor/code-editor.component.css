@@ -6,3 +6,12 @@
 .padd{
   padding-top: 10px;
 }
+
+.col-md-1{
+  width: 4%;
+  padding-right: 0;
+}
+
+.col-md-3{
+  padding-left: 05px;
+}
