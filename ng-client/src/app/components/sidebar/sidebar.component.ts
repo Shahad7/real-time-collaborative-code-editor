@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FileExplorerService } from 'src/app/file-explorer.service';
+import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,7 +8,17 @@ import { FileExplorerService } from 'src/app/file-explorer.service';
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent {
-  constructor(private explorerService: FileExplorerService) {}
+  currentSidebarOption: 'explorer' | 'chatbox' | 'view-members' = 'explorer';
+
+  constructor(
+    private explorerService: FileExplorerService,
+    private sidebarService: SidebarService
+  ) {
+    //subscribe to currentSidebarOption rxjs subject to switch b/w sidebar options
+    this.sidebarService.currentSidebarOption$.subscribe((option) => {
+      this.currentSidebarOption = option;
+    });
+  }
   alertClick(e: any) {
     if (
       e.srcElement.tagName == 'INPUT' ||

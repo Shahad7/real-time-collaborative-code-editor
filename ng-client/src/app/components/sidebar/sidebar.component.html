@@ -1,5 +1,17 @@
 <aside class="app-sidebar" (click)="alertClick($event)" capture>
   <div class="sidebar-content">
-    <app-explorer></app-explorer>
+    <app-explorer
+      [ngClass]="
+        currentSidebarOption == 'explorer'
+          ? 'sidebar-visible'
+          : 'sidebar-hidden'
+      "
+    ></app-explorer>
+    <app-chatbox
+      [ngClass]="
+        currentSidebarOption == 'chatbox' ? 'sidebar-visible' : 'sidebar-hidden'
+      "
+    ></app-chatbox>
+    <!-- <app-members></app-members> -->
   </div>
 </aside>
