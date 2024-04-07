@@ -15,6 +15,7 @@ import { FolderComponent } from './components/folder/folder.component';
 import { FileComponent } from './components/file/file.component';
 import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
 import { ChatboxComponent } from './components/chatbox/chatbox.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +29,7 @@ import { ChatboxComponent } from './components/chatbox/chatbox.component';
     FileComponent,
     SidebarMenuComponent,
     ChatboxComponent,
+    UserListComponent,
   ],
   imports: [
     BrowserModule,
