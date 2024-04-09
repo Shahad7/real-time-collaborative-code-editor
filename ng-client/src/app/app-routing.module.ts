@@ -6,8 +6,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { authGuard } from './auth/auth.guard';
+import { LandingComponent } from './components/landing/landing.component';
 
 const routes: Routes = [
+  { path: 'landing', component: LandingComponent },
   { path: '', redirectTo: 'code-editor', pathMatch: 'full' }, // Redirect to index guarded by login
   { path: 'login', component: LoginComponent },
   {
