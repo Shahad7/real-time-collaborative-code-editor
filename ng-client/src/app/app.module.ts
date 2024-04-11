@@ -17,6 +17,7 @@ import { ExplorerComponent } from './components/explorer/explorer.component';
 import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
 import { ChatboxComponent } from './components/chatbox/chatbox.component';
 import { MessageComponent } from './components/chatbox/message/message.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,6 +33,7 @@ import { MessageComponent } from './components/chatbox/message/message.component
     SidebarMenuComponent,
     ChatboxComponent,
     MessageComponent,
+    UserListComponent,
   ],
   imports: [
     BrowserModule,
