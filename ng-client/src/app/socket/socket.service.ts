@@ -22,8 +22,7 @@ export class SocketService {
   connect(roomID: string | null): void {
     this.socket.connect();
     //might have checked for '!roomID' in  the no-yjs branch
-    if (roomID && roomID != null && roomID != '')
-      this.socket.emit('join-room', roomID);
+    if (roomID && roomID != null && roomID != '') this.joinRoom(roomID);
   }
 
   setAuth(id: string, username: string) {
@@ -44,8 +43,13 @@ export class SocketService {
     sessionStorage.setItem('roomID', roomID);
   }
 
-  joinRoom(roomID: string): void {
-    this.socket.emit('join-room', roomID);
+  joinRoom(
+    roomID: string,
+    callback: Function = (response: { status: boolean }) => {
+      console.log('someone rejoined');
+    }
+  ): void {
+    this.socket.emit('join-room', roomID, callback);
     // sessionStorage.setItem('roomID', roomID);
   }
 

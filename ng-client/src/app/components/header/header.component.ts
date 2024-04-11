@@ -13,18 +13,7 @@ export class HeaderComponent {
   constructor(
     private authService: AuthService,
     private socketService: SocketService
-  ) {
-    this.socketService.socket.on('joined-room', (roomID) => {
-      //closing popup + displaying leave button
-      sessionStorage.setItem('roomID', roomID);
-      this.toggle();
-      this.toggleConnectOptions();
-    });
-
-    this.socketService.socket.on('no-such-room', () => {
-      this.errorDiv.nativeElement.style.display = 'block';
-    });
-  }
+  ) {}
 
   @ViewChild('roomID')
   roomID: any;
@@ -156,6 +145,19 @@ export class HeaderComponent {
 
   //admits to the requested room
   joinRoom() {
-    this.socketService.joinRoom(this.roomIDInput.nativeElement.value);
+    this.socketService.joinRoom(
+      this.roomIDInput.nativeElement.value,
+      (response: { status: boolean }) => {
+        if (response.status) {
+          //closing popup + displaying leave button
+          sessionStorage.setItem(
+            'roomID',
+            this.roomIDInput.nativeElement.value
+          );
+          this.toggle();
+          this.toggleConnectOptions();
+        } else this.errorDiv.nativeElement.style.display = 'block';
+      }
+    );
   }
 }

@@ -93,10 +93,10 @@ const getIo = (server) => {
     });
 
     //join room request
-    socket.on("join-room", (roomID) => {
+    socket.on("join-room", (roomID, callback) => {
       if (rooms[roomID]) {
         socket.join(roomID);
-        socket.emit("joined-room");
+        callback({ status: true });
         console.log(`${socket.handshake.auth.username} joined ${roomID}`);
         rooms[roomID]++;
 
@@ -148,9 +148,10 @@ const getIo = (server) => {
         }
 
         // logRooms(socket);
+      } else {
+        //if the  room doesn't exist alert the client
+        callback({ status: false });
       }
-      //if the  room doesn't exist alert the client
-      socket.emit("no-such-room", roomID);
     });
 
     //client sends updates which have to be send to all clients in the same room as him
