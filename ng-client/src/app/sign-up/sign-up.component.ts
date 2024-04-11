@@ -14,7 +14,7 @@ export class SignUpComponent {
   errorDiv: any;
 
   signupForm = new FormGroup({
-    name: new FormControl(''),
+    username: new FormControl(''),
     email: new FormControl(''),
     password: new FormControl(''),
     confirm_password: new FormControl(''),
@@ -29,7 +29,7 @@ export class SignUpComponent {
           headers: { 'Content-Type': 'application/json' },
           mode: 'cors',
           body: JSON.stringify({
-            name: this.signupForm.value.name ?? '',
+            username: this.signupForm.value.username ?? '',
             email: this.signupForm.value.email ?? '',
             password: this.signupForm.value.password ?? '',
             confirm_password: this.signupForm.value.confirm_password ?? '',

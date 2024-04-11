@@ -1,8 +1,16 @@
+.row {
+  width: 100%;
+}
 
-.row{
-    width: 100%;
-  }
-
-.padd{
+.padd {
   padding-top: 10px;
+}
+
+.col-md-1 {
+  width: 4%;
+  padding-right: 0;
+}
+
+.col-md-3 {
+  padding-left: 05px;
 }

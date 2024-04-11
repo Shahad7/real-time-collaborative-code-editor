@@ -1,0 +1,20 @@
+.msg {
+  display: flex;
+  align-items: center;
+}
+
+.msg img {
+  width: 12%;
+  height: 12%;
+  margin-right: 10px;
+}
+
+.msg p {
+  margin: 0;
+  line-height: 12px;
+}
+
+.msg .user {
+  /* color: purple; */
+  font-weight: 700;
+}

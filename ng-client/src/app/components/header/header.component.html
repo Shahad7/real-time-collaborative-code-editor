@@ -1,8 +1,8 @@
 <header class="app-header">
   <div class="menu">
     <ul>
-      <li><a href="#">File</a></li>
-      <li><a href="#">Edit</a></li>
+      <li><a>File</a></li>
+      <li><a>Edit</a></li>
       <li #connectButton id="connect-btn"><a (click)="toggle()">Connect</a></li>
       <li #leaveButton id="leave-btn"><a (click)="OnLeaveRoom()">Leave</a></li>
       <li><a (click)="logout()">Logout</a></li>
@@ -27,7 +27,18 @@
     <button #copyButton (click)="copyID()">Copy ID</button>
   </div>
   <div class="join-room" id="join-room">
-    <input #roomIDInput type="text" placeholder="Enter the Room ID" />
+    <input
+      #roomIDInput
+      type="text"
+      (keydown.enter)="joinRoom()"
+      placeholder="Enter the Room ID"
+    />
     <button (click)="joinRoom()">Join Room</button>
+    <div #error id="error">No such room exists</div>
   </div>
+</div>
+
+<div #notificationDiv class="pop">
+  <img src="assets/user.png" alt="" />
+  <p #notification></p>
 </div>

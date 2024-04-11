@@ -1,5 +1,5 @@
 .app-header {
-  background-color: #333; /* Set background color */
+  background-color: #000; /* Set background color */
   color: #fff; /* Set text color */
   padding: 10px 7.5px; /* Add padding for spacing */
   font-size: 13px;
@@ -14,10 +14,17 @@
   list-style-type: none; /* Remove bullet points from list */
   padding: 0; /* Remove default padding */
   margin: 0;
+  text-align: center;
+  cursor: pointer;
 }
 
 .menu ul li {
-  margin-right: 20px; /* Add margin between menu items */
+  padding: 2px 10px;
+}
+
+.menu ul :hover {
+  background-color: #333;
+  border-radius: 5px;
 }
 
 .menu ul li:last-child {
@@ -30,7 +37,7 @@
 }
 
 .menu ul li a:hover {
-  text-decoration: underline; /* Add underline on hover */
+  text-decoration: none;
 }
 
 a {
@@ -223,5 +230,58 @@ form button {
 
 /* to toggle connect options : connect & leave */
 #leave-btn {
+  display: none;
+}
+
+.pop {
+  display: none;
+  justify-content: flex-start;
+  align-items: center;
+  position: fixed;
+  transition: 0.5s;
+  top: 82%;
+  left: 73%;
+  z-index: 6;
+  border-radius: 10px;
+  width: 25%;
+  height: 100px;
+  padding: 10px 30px;
+  /* background: linear-gradient(145deg, #f0f0f0, #e6e7ee); */
+  background-color: #fff;
+  box-shadow: 20px 20px 63px #b8b8b8, -20px -20px 63px #ffffff;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+    Liberation Mono, monospace;
+  border-color: #d1d9e6;
+  border-style: solid;
+  border-width: 1px;
+  animation: slideInFromRight 5s ease-in-out;
+}
+
+.pop img {
+  width: 11%;
+  margin-right: 20px;
+}
+
+.pop p {
+  margin: 0;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(+100%);
+  }
+  20% {
+    transform: translateX(0);
+  }
+  80% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(+150%);
+  }
+}
+
+#error {
+  color: red;
   display: none;
 }

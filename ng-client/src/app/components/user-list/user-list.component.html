@@ -1,0 +1,11 @@
+<div class="cont">
+  <p class="head">People</p>
+  <button><img src="assets/add-friend.png" alt="" />Add People</button>
+  <p class="head2">IN ROOM</p>
+  <div class="user-list">
+    <div *ngFor="let member of members" class="user">
+      <img src="assets/user.png" alt="" />
+      <p>{{ member }}</p>
+    </div>
+  </div>
+</div>

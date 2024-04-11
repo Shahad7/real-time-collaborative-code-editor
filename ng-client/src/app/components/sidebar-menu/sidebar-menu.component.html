@@ -1,0 +1,26 @@
+<div class="body1">
+  <div
+    class="img-set"
+    [ngClass]="currentOption == 'explorer' ? 'sidebar-active' : ''"
+    (click)="selectOption('explorer')"
+  >
+    <img src="assets/clip.png" alt="files" />
+  </div>
+  <div
+    class="img-set"
+    [ngClass]="currentOption == 'chatbox' ? 'sidebar-active' : ''"
+    (click)="selectOption('chatbox')"
+  >
+    <img src="assets/chat.png" alt="" />
+  </div>
+  <div
+    class="img-set"
+    [ngClass]="currentOption == 'view-members' ? 'sidebar-active' : ''"
+    (click)="selectOption('view-members')"
+  >
+    <img src="assets/group.png" alt="" />
+  </div>
+  <!-- <div class="img-set">
+        <img src="assets/upload.png" alt="">
+    </div> -->
+</div>

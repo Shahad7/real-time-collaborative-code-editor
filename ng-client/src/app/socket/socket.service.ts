@@ -13,6 +13,8 @@ export class SocketService {
     });
   }
 
+  /********************* code sync part */
+
   //socket clients are set to not automatically connect
   //so that user info can be set on handshake after successful login
   //this function initiates the connection
@@ -20,8 +22,7 @@ export class SocketService {
   connect(roomID: string | null): void {
     this.socket.connect();
     //might have checked for '!roomID' in  the no-yjs branch
-    if (roomID && roomID != null && roomID != '')
-      this.socket.emit('join-room', roomID);
+    if (roomID && roomID != null && roomID != '') this.joinRoom(roomID);
   }
 
   setAuth(id: string, username: string) {
@@ -42,9 +43,18 @@ export class SocketService {
     sessionStorage.setItem('roomID', roomID);
   }
 
-  joinRoom(roomID: string): void {
-    this.socket.emit('join-room', roomID);
-    sessionStorage.setItem('roomID', roomID);
+  joinRoom(
+    roomID: string,
+    callback: Function = (response: { status: boolean }) => {
+      // console.log('someone rejoined');
+    }
+  ): void {
+    this.socket.emit('join-room', roomID, callback);
+    // sessionStorage.setItem('roomID', roomID);
+  }
+
+  leaveRoom(roomID: string) {
+    this.socket.emit('leave-room', roomID);
   }
 
   //sends yjs doc updates
@@ -59,5 +69,32 @@ export class SocketService {
     const roomID = sessionStorage.getItem('roomID');
     if (roomID) this.socket.emit('send-awareness', updates, roomID);
     else console.log('are you sure this client is in a room ?');
+  }
+
+  //send explorer updates i.e, when a new file or folder is created by the leader
+  sendExplorerUpdates(
+    name: string,
+    mode: 'file' | 'folder' | null,
+    path: string,
+    id: string | null
+  ) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID)
+      this.socket.emit('explorer-updates', name, mode, path, id, roomID);
+  }
+
+  //send clientID of disconnected client so that others
+  //can clean the respective awareness instance
+  purgeDeadAwareness(clientID: number) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('alert-purge', clientID, roomID);
+  }
+
+  /******************************chat service part */
+
+  sendMessage(message: string, sender: string, color: string) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID)
+      this.socket.emit('send-message', message, sender, color, roomID);
   }
 }
