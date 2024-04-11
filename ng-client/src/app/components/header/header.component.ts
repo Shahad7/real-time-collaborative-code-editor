@@ -26,7 +26,7 @@ export class HeaderComponent {
   @ViewChild('leaveButton')
   leaveButton: any;
 
-  //options could go back to normal ('connect') afte refresh
+  //options could go back to normal ('connect') after refresh
   @HostListener('document:DOMContentLoaded', ['$event'])
   handlePageRefresh(event: any) {
     this.toggleConnectOptions();
