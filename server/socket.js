@@ -78,7 +78,7 @@ const getIo = (server) => {
 
     //create room request
     socket.on("create-room", (roomID) => {
-      rooms[roomID] = 1;
+      rooms[roomID] = [socket.handshake.auth.username];
       socket.join(roomID);
       //making a ydoc for the respective room
       let ydoc = new Y.Doc();
@@ -97,8 +97,14 @@ const getIo = (server) => {
       if (rooms[roomID]) {
         socket.join(roomID);
         callback({ status: true });
-        console.log(`${socket.handshake.auth.username} joined ${roomID}`);
-        rooms[roomID]++;
+        let username = socket.handshake.auth.username;
+        console.log(`${username} joined ${roomID}`);
+        if (!rooms[roomID].includes(username)) {
+          rooms[roomID].push(username);
+
+          //alert everyone that someone joined
+          socket.to(roomID).emit("someone-joined", username);
+        }
 
         //sending updates to late-comer
         if (
@@ -133,6 +139,9 @@ const getIo = (server) => {
             console.error(e);
           }
 
+          //send members details
+          socket.emit("members", rooms[roomID]);
+
           //send awareness updates as well (doesn't seem necessary since it automatically gets updated)
           // try {
           //   if (awarenesses[roomID]) {
@@ -151,6 +160,23 @@ const getIo = (server) => {
       } else {
         //if the  room doesn't exist alert the client
         callback({ status: false });
+      }
+    });
+
+    //on leave room so that server can check if any members remain in the room/also update count
+    socket.on("leave-room", (roomID) => {
+      let username = socket.handshake.auth.username;
+      console.log(`${username} left ${roomID}`);
+      //alert everyone that someone left
+      socket.to(roomID).emit("someone-left", username);
+      if (rooms[roomID]) {
+        rooms[roomID].splice(1, rooms[roomID].indexOf(username));
+        if (rooms[roomID].length == 0) {
+          delete rooms[roomID];
+          console.log(
+            "room " + roomID + "was deleted cuz there's no members left"
+          );
+        }
       }
     });
 

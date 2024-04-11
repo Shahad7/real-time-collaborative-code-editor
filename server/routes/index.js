@@ -13,12 +13,16 @@ router.get("/", function (req, res, next) {
 
 //sign-up
 router.post("/signup", [
-  body("name")
+  body("username")
     .trim()
     .notEmpty()
-    .withMessage("name can't be empty")
+    .withMessage("username can't be empty")
     .isLength({ min: 3, max: 30 })
-    .withMessage("name should be of atleast length 3"),
+    .withMessage("username should be of atleast length 3")
+    .custom(async (value, { req }) => {
+      const user = await User.findOne({ username: req.body.username });
+      if (user) throw new Error("username is already taken");
+    }),
 
   body("email")
     .trim()
@@ -59,7 +63,7 @@ router.post("/signup", [
         } else {
           try {
             const user = new User({
-              name: req.body.name,
+              username: req.body.username,
               email: req.body.email,
               password: hashedPassword,
             });

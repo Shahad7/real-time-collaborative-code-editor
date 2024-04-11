@@ -35,6 +35,11 @@ export class HeaderComponent {
   }
 
   logout() {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) {
+      sessionStorage.removeItem('roomID');
+      this.socketService.leaveRoom(roomID);
+    }
     this.authService.logout();
   }
 
@@ -88,7 +93,11 @@ export class HeaderComponent {
 
   //to-be-implemented as wanted
   OnLeaveRoom() {
-    sessionStorage.removeItem('roomID');
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) {
+      sessionStorage.removeItem('roomID');
+      this.socketService.leaveRoom(roomID);
+    }
     window.location.reload();
   }
 

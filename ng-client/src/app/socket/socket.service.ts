@@ -53,6 +53,10 @@ export class SocketService {
     // sessionStorage.setItem('roomID', roomID);
   }
 
+  leaveRoom(roomID: string) {
+    this.socket.emit('leave-room', roomID);
+  }
+
   //sends yjs doc updates
   sendUpdates(updates: Uint8Array): void {
     const roomID = sessionStorage.getItem('roomID');
