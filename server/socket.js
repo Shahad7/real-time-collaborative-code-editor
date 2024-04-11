@@ -18,6 +18,8 @@ const getIo = (server) => {
   //stores awareness instances for each room as well
   let awarenesses = {};
 
+  //store existing roomIDs for validation
+  let rooms = {};
   //for configuring socket.io server cors
   let ip;
 
@@ -76,6 +78,7 @@ const getIo = (server) => {
 
     //create room request
     socket.on("create-room", (roomID) => {
+      rooms[roomID] = 1;
       socket.join(roomID);
       //making a ydoc for the respective room
       let ydoc = new Y.Doc();
@@ -91,57 +94,63 @@ const getIo = (server) => {
 
     //join room request
     socket.on("join-room", (roomID) => {
-      socket.join(roomID);
-      console.log(`${socket.handshake.auth.username} joined ${roomID}`);
+      if (rooms[roomID]) {
+        socket.join(roomID);
+        socket.emit("joined-room");
+        console.log(`${socket.handshake.auth.username} joined ${roomID}`);
+        rooms[roomID]++;
 
-      //sending updates to late-comer
-      if (
-        ydocs[roomID] /*&&
+        //sending updates to late-comer
+        if (
+          ydocs[roomID] /*&&
         ydocs[roomID].share &&
         ydocs[roomID].share.values().next().value.length > 0*/
-      ) {
-        try {
-          const ydoc = ydocs[roomID];
-          const updates = Y.encodeStateAsUpdate(ydoc);
-          socket.emit("receive-updates", new Uint8Array(updates));
-        } catch (e) {
-          console.log(
-            "should recreate the room as server copy is instantiated at the beginning only"
-          );
-        }
-
-        //send explorer updates as well
-        try {
-          if (explorerUpdates[roomID]) {
-            for (update of explorerUpdates[roomID])
-              socket.emit(
-                "receive-explorer-updates",
-                update.name,
-                update.mode,
-                update.path,
-                update.id
-              );
+        ) {
+          try {
+            const ydoc = ydocs[roomID];
+            const updates = Y.encodeStateAsUpdate(ydoc);
+            socket.emit("receive-updates", new Uint8Array(updates));
+          } catch (e) {
+            console.log(
+              "should recreate the room as server copy is instantiated at the beginning only"
+            );
           }
-        } catch (e) {
-          console.log("couldn't send explorer updates to late-comer");
-          console.error(e);
+
+          //send explorer updates as well
+          try {
+            if (explorerUpdates[roomID]) {
+              for (update of explorerUpdates[roomID])
+                socket.emit(
+                  "receive-explorer-updates",
+                  update.name,
+                  update.mode,
+                  update.path,
+                  update.id
+                );
+            }
+          } catch (e) {
+            console.log("couldn't send explorer updates to late-comer");
+            console.error(e);
+          }
+
+          //send awareness updates as well (doesn't seem necessary since it automatically gets updated)
+          // try {
+          //   if (awarenesses[roomID]) {
+          //     let awarenessUpdates = encodeAwarenessUpdate(
+          //       awarenesses[roomID],
+          //       Array.from(awarenesses[roomID].getStates().keys())
+          //     );
+          //     socket.emit("receive-awareness", new Uint8Array(awarenessUpdates));
+          //   }
+          // } catch (e) {
+          //   console.log("couldn't send awareness updates to late comer");
+          // }
         }
 
-        //send awareness updates as well (doesn't seem necessary since it automatically gets updated)
-        // try {
-        //   if (awarenesses[roomID]) {
-        //     let awarenessUpdates = encodeAwarenessUpdate(
-        //       awarenesses[roomID],
-        //       Array.from(awarenesses[roomID].getStates().keys())
-        //     );
-        //     socket.emit("receive-awareness", new Uint8Array(awarenessUpdates));
-        //   }
-        // } catch (e) {
-        //   console.log("couldn't send awareness updates to late comer");
-        // }
+        // logRooms(socket);
       }
-
-      // logRooms(socket);
+      //if the  room doesn't exist alert the client
+      socket.emit("no-such-room", roomID);
     });
 
     //client sends updates which have to be send to all clients in the same room as him

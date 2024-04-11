@@ -12,6 +12,12 @@
         currentSidebarOption == 'chatbox' ? 'sidebar-visible' : 'sidebar-hidden'
       "
     ></app-chatbox>
-    <!-- <app-members></app-members> -->
+    <app-user-list
+      [ngClass]="
+        currentSidebarOption == 'view-members'
+          ? 'sidebar-visible'
+          : 'sidebar-hidden'
+      "
+    ></app-user-list>
   </div>
 </aside>

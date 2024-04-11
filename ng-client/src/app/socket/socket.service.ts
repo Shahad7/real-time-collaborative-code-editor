@@ -46,7 +46,7 @@ export class SocketService {
 
   joinRoom(roomID: string): void {
     this.socket.emit('join-room', roomID);
-    sessionStorage.setItem('roomID', roomID);
+    // sessionStorage.setItem('roomID', roomID);
   }
 
   //sends yjs doc updates

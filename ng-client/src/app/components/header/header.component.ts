@@ -13,7 +13,18 @@ export class HeaderComponent {
   constructor(
     private authService: AuthService,
     private socketService: SocketService
-  ) {}
+  ) {
+    this.socketService.socket.on('joined-room', (roomID) => {
+      //closing popup + displaying leave button
+      sessionStorage.setItem('roomID', roomID);
+      this.toggle();
+      this.toggleConnectOptions();
+    });
+
+    this.socketService.socket.on('no-such-room', () => {
+      this.errorDiv.nativeElement.style.display = 'block';
+    });
+  }
 
   @ViewChild('roomID')
   roomID: any;
@@ -25,6 +36,8 @@ export class HeaderComponent {
   connectButton: any;
   @ViewChild('leaveButton')
   leaveButton: any;
+  @ViewChild('error')
+  errorDiv: any;
 
   //options could go back to normal ('connect') afte refresh
   @HostListener('document:DOMContentLoaded', ['$event'])
@@ -74,6 +87,8 @@ export class HeaderComponent {
   }
 
   OnJoinRoom() {
+    this.errorDiv.nativeElement.style.display = 'none';
+    this.roomIDInput.nativeElement.value = '';
     var buttons = document.getElementById('buttons');
     buttons?.classList.add('dis');
     var joinRoom = document.getElementById('join-room');
@@ -142,9 +157,5 @@ export class HeaderComponent {
   //admits to the requested room
   joinRoom() {
     this.socketService.joinRoom(this.roomIDInput.nativeElement.value);
-
-    //closing popup + displaying leave button
-    this.toggle();
-    this.toggleConnectOptions();
   }
 }
