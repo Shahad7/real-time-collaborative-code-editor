@@ -98,12 +98,11 @@ const getIo = (server) => {
         socket.join(roomID);
         callback({ status: true });
         let username = socket.handshake.auth.username;
+        //alert everyone that someone joined
+        socket.to(roomID).emit("someone-joined", username);
         console.log(`${username} joined ${roomID}`);
         if (!rooms[roomID].includes(username)) {
           rooms[roomID].push(username);
-
-          //alert everyone that someone joined
-          socket.to(roomID).emit("someone-joined", username);
         }
 
         //sending updates to late-comer

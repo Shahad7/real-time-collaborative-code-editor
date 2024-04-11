@@ -234,7 +234,7 @@ form button {
 }
 
 .pop {
-  display: flex;
+  display: none;
   justify-content: flex-start;
   align-items: center;
   position: fixed;

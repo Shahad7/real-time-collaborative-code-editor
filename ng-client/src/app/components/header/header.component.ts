@@ -4,6 +4,9 @@ import { ViewChild } from '@angular/core';
 import { SocketService } from 'src/app/socket/socket.service';
 import { v4 as uuidv4 } from 'uuid';
 import { HostListener } from '@angular/core';
+import { UserListComponent } from '../user-list/user-list.component';
+import { UrlSegment } from '@angular/router';
+import { UserListService } from '../user-list/user-list.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -12,8 +15,27 @@ import { HostListener } from '@angular/core';
 export class HeaderComponent {
   constructor(
     private authService: AuthService,
-    private socketService: SocketService
-  ) {}
+    private socketService: SocketService,
+    private userListService: UserListService
+  ) {
+    this.userListService.joinedUser$.subscribe((username) => {
+      this.notification.nativeElement.textContent = `${username} joined the room`;
+      this.notificationDiv.nativeElement.style.display = 'flex';
+      setTimeout(() => {
+        this.notificationDiv.nativeElement.style.display = 'none';
+      }, 5500);
+      // alert(`${username} joined the room`);
+    });
+
+    this.userListService.leftUser$.subscribe((username) => {
+      this.notification.nativeElement.textContent = `${username} left the room`;
+      this.notificationDiv.nativeElement.style.display = 'flex';
+      setTimeout(() => {
+        this.notificationDiv.nativeElement.style.display = 'none';
+      }, 5500);
+      // alert(`${username} left the room`);
+    });
+  }
 
   @ViewChild('roomID')
   roomID: any;
@@ -27,6 +49,10 @@ export class HeaderComponent {
   leaveButton: any;
   @ViewChild('error')
   errorDiv: any;
+  @ViewChild('notification')
+  notification: any;
+  @ViewChild('notificationDiv')
+  notificationDiv: any;
 
   //options could go back to normal ('connect') afte refresh
   @HostListener('document:DOMContentLoaded', ['$event'])

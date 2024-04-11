@@ -46,7 +46,7 @@ export class SocketService {
   joinRoom(
     roomID: string,
     callback: Function = (response: { status: boolean }) => {
-      console.log('someone rejoined');
+      // console.log('someone rejoined');
     }
   ): void {
     this.socket.emit('join-room', roomID, callback);
