@@ -13,8 +13,10 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SocketService } from './socket/socket.service';
 import { FolderComponent } from './components/folder/folder.component';
 import { FileComponent } from './components/file/file.component';
+import { ExplorerComponent } from './components/explorer/explorer.component';
 import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
 import { ChatboxComponent } from './components/chatbox/chatbox.component';
+import { MessageComponent } from './components/chatbox/message/message.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 @NgModule({
   declarations: [
@@ -27,8 +29,10 @@ import { UserListComponent } from './components/user-list/user-list.component';
     SignUpComponent,
     FolderComponent,
     FileComponent,
+    ExplorerComponent,
     SidebarMenuComponent,
     ChatboxComponent,
+    MessageComponent,
     UserListComponent,
   ],
   imports: [

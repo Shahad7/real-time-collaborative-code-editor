@@ -1,6 +1,6 @@
 <div
   class="folder"
-  (click)="[toggleFolder(folderContents, arrow), activate(folderDetails)]"
+  (click)="[toggleFolder(), activate(folderDetails), selectFolder()]"
 >
   <div class="folder-det" #folderDetails>
     <img class="i1" #arrow src="assets/arrow-right.png" />
@@ -8,24 +8,30 @@
     <p>{{ foldername }}</p>
   </div>
   <div class="folder-contents" #folderContents (click)="cancelClosing($event)">
-    <!-- <app-folder
+    <input
+      type="text"
+      #input
+      [ngClass]="inputVisibility ? 'input-visible' : ''"
+      (keyup.enter)="create()"
+      (input)="resetBorder()"
+    />
+    <app-folder
+      *ngFor="let folder of folders"
+      [foldername]="folder.name"
+      [path]="folder.path"
+    ></app-folder>
+
+    <app-file
+      *ngFor="let file of files"
+      [filename]="file.name"
+      [path]="file.path"
+      [id]="file.id"
+    ></app-file>
+  </div>
+</div>
+
+<!-- <app-folder
       *ngIf="foldername == 'Test'"
       [foldername]="'test2'"
       [files]="['hehe.js', 'evil.ts']"
     ></app-folder> -->
-    <app-file *ngFor="let file of files" [filename]="file"></app-file>
-
-    <!-- <div class="file">
-        <img src="assets/file-icon.png" alt="" class="i3" />
-        <p>contact.html</p>
-      </div>
-      <div class="file">
-        <img src="assets/file-icon.png" alt="" class="i3" />
-        <p>about-us.html</p>
-      </div>
-      <div class="file">
-        <img src="assets/file-icon.png" alt="" class="i3" />
-        <p>services.html</p>
-      </div> -->
-  </div>
-</div>

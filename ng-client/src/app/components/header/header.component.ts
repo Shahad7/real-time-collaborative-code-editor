@@ -4,6 +4,9 @@ import { ViewChild } from '@angular/core';
 import { SocketService } from 'src/app/socket/socket.service';
 import { v4 as uuidv4 } from 'uuid';
 import { HostListener } from '@angular/core';
+import { UserListComponent } from '../user-list/user-list.component';
+import { UrlSegment } from '@angular/router';
+import { UserListService } from '../user-list/user-list.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -12,8 +15,27 @@ import { HostListener } from '@angular/core';
 export class HeaderComponent {
   constructor(
     private authService: AuthService,
-    private socketService: SocketService
-  ) {}
+    private socketService: SocketService,
+    private userListService: UserListService
+  ) {
+    this.userListService.joinedUser$.subscribe((username) => {
+      this.notification.nativeElement.textContent = `${username} joined the room`;
+      this.notificationDiv.nativeElement.style.display = 'flex';
+      setTimeout(() => {
+        this.notificationDiv.nativeElement.style.display = 'none';
+      }, 5500);
+      // alert(`${username} joined the room`);
+    });
+
+    this.userListService.leftUser$.subscribe((username) => {
+      this.notification.nativeElement.textContent = `${username} left the room`;
+      this.notificationDiv.nativeElement.style.display = 'flex';
+      setTimeout(() => {
+        this.notificationDiv.nativeElement.style.display = 'none';
+      }, 5500);
+      // alert(`${username} left the room`);
+    });
+  }
 
   @ViewChild('roomID')
   roomID: any;
@@ -25,6 +47,12 @@ export class HeaderComponent {
   connectButton: any;
   @ViewChild('leaveButton')
   leaveButton: any;
+  @ViewChild('error')
+  errorDiv: any;
+  @ViewChild('notification')
+  notification: any;
+  @ViewChild('notificationDiv')
+  notificationDiv: any;
 
   //options could go back to normal ('connect') after refresh
   @HostListener('document:DOMContentLoaded', ['$event'])
@@ -33,6 +61,11 @@ export class HeaderComponent {
   }
 
   logout() {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) {
+      sessionStorage.removeItem('roomID');
+      this.socketService.leaveRoom(roomID);
+    }
     this.authService.logout();
   }
 
@@ -74,6 +107,8 @@ export class HeaderComponent {
   }
 
   OnJoinRoom() {
+    this.errorDiv.nativeElement.style.display = 'none';
+    this.roomIDInput.nativeElement.value = '';
     var buttons = document.getElementById('buttons');
     buttons?.classList.add('dis');
     var joinRoom = document.getElementById('join-room');
@@ -84,7 +119,11 @@ export class HeaderComponent {
 
   //to-be-implemented as wanted
   OnLeaveRoom() {
-    sessionStorage.removeItem('roomID');
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) {
+      sessionStorage.removeItem('roomID');
+      this.socketService.leaveRoom(roomID);
+    }
     window.location.reload();
   }
 
@@ -141,10 +180,19 @@ export class HeaderComponent {
 
   //admits to the requested room
   joinRoom() {
-    this.socketService.joinRoom(this.roomIDInput.nativeElement.value);
-
-    //closing popup + displaying leave button
-    this.toggle();
-    this.toggleConnectOptions();
+    this.socketService.joinRoom(
+      this.roomIDInput.nativeElement.value,
+      (response: { status: boolean }) => {
+        if (response.status) {
+          //closing popup + displaying leave button
+          sessionStorage.setItem(
+            'roomID',
+            this.roomIDInput.nativeElement.value
+          );
+          this.toggle();
+          this.toggleConnectOptions();
+        } else this.errorDiv.nativeElement.style.display = 'block';
+      }
+    );
   }
 }

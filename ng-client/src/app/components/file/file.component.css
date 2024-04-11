@@ -1,8 +1,7 @@
 .file:hover {
-  background-color: dimgray;
+  background-color: #c0c4c1;
 }
 .file {
-  padding-left: 10px;
   display: flex;
   align-items: center;
   margin-bottom: 3px;

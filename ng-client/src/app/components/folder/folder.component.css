@@ -14,7 +14,7 @@ img {
   flex-direction: column;
 }
 .folder-det:hover {
-  background-color: dimgray;
+  background-color: #c0c4c1;
 }
 .folder-det.active {
   background-color: #c0c4c1;
@@ -24,6 +24,7 @@ img {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
+  padding-left: 3px;
 }
 .folder .i1 {
   width: 6px;
@@ -55,8 +56,24 @@ img {
 
 .folder-contents {
   display: none;
+  padding-left: 5px;
 }
 
 .expanded {
+  display: block;
+}
+
+input {
+  max-width: 100%;
+  max-height: 24px;
+  margin-bottom: 8px;
+  margin-top: 4px;
+  display: none;
+  border-style: solid;
+  border-color: black;
+  outline: none;
+  border-radius: 3px;
+}
+.input-visible {
   display: block;
 }

@@ -27,12 +27,18 @@
     <button #copyButton (click)="copyID()">Copy ID</button>
   </div>
   <div class="join-room" id="join-room">
-    <input #roomIDInput type="text" placeholder="Enter the Room ID" />
+    <input
+      #roomIDInput
+      type="text"
+      (keydown.enter)="joinRoom()"
+      placeholder="Enter the Room ID"
+    />
     <button (click)="joinRoom()">Join Room</button>
+    <div #error id="error">No such room exists</div>
   </div>
 </div>
 
-<div class="pop">
-  <img src="assets/user.png" alt="">
-  <p>Eva has joined the room!!</p>
+<div #notificationDiv class="pop">
+  <img src="assets/user.png" alt="" />
+  <p #notification></p>
 </div>
