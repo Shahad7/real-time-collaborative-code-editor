@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { FileExplorerService } from 'src/app/file-explorer.service';
+import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
+import { DataStoreService } from '../explorer/data-store.service';
 
 @Component({
   selector: 'app-file',
@@ -11,7 +12,39 @@ export class FileComponent {
   @Input() path: string = '';
   @Input() id: string = '';
 
-  constructor(private explorerService: FileExplorerService) {}
+  constructor(
+    private explorerService: FileExplorerService,
+    private dataStoreService: DataStoreService
+  ) {
+    //save file to db on triggerUpload : dataStoreService
+    const uploadFile = async () => {
+      try {
+        if (!sessionStorage.getItem('roomID')) {
+          throw new Error('user not in a room');
+        }
+        fetch(`http://${window.location.hostname}:3000/file/upload`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            filename: this.filename,
+            fileID: this.id,
+            roomID: sessionStorage.getItem('roomID'),
+          }),
+        });
+      } catch (e) {
+        console.log("couldn't save file : " + this.filename);
+        console.error(e);
+      }
+    };
+    this.dataStoreService.uploadAnnouncement$.subscribe((value) => {
+      if (value == 'ready') {
+        uploadFile();
+      }
+    });
+  }
 
   activate(file: HTMLElement) {
     document.querySelectorAll('.active').forEach((elt) => {

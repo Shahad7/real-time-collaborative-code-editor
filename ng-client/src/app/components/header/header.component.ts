@@ -7,6 +7,8 @@ import { HostListener } from '@angular/core';
 import { UserListComponent } from '../user-list/user-list.component';
 import { UrlSegment } from '@angular/router';
 import { UserListService } from '../user-list/user-list.service';
+import { DataStoreService } from '../explorer/data-store.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -16,7 +18,8 @@ export class HeaderComponent {
   constructor(
     private authService: AuthService,
     private socketService: SocketService,
-    private userListService: UserListService
+    private userListService: UserListService,
+    private dataStoreService: DataStoreService
   ) {
     this.userListService.joinedUser$.subscribe((username) => {
       this.notification.nativeElement.textContent = `${username} joined the room`;
@@ -197,5 +200,7 @@ export class HeaderComponent {
   }
 
   //save file test
-  saveFile() {}
+  saveFile() {
+    this.dataStoreService.triggerUpload();
+  }
 }

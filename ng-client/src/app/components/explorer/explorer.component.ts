@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FileExplorerService } from 'src/app/file-explorer.service';
+import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { ViewChild } from '@angular/core';
 import { SocketService } from 'src/app/socket/socket.service';
 import { v4 as uuidv4 } from 'uuid';

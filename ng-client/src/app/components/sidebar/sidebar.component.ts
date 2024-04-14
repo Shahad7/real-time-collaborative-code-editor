@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FileExplorerService } from 'src/app/file-explorer.service';
+import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({

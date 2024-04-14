@@ -7,7 +7,7 @@ import { SocketService } from 'src/app/socket/socket.service';
 import { ViewEncapsulation } from '@angular/core';
 import { state } from '@angular/animations';
 import * as monaco from 'monaco-editor';
-import { FileExplorerService } from 'src/app/file-explorer.service';
+import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { HostListener } from '@angular/core';
 
 @Component({

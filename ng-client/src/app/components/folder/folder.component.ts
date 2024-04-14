@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ViewChild } from '@angular/core';
-import { FileExplorerService } from 'src/app/file-explorer.service';
+import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { SocketService } from 'src/app/socket/socket.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -126,7 +126,7 @@ export class FolderComponent {
         path: `${this.path}/${filename}`,
         id: id,
       });
-      console.log(this.files);
+
       //letting other clients know a new file is created
       this.socketService.sendExplorerUpdates(filename, 'file', this.path, id);
       this.setInputVisibility(false);
