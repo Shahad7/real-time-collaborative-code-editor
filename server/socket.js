@@ -8,6 +8,9 @@ const {
   applyAwarenessUpdate,
 } = require("y-protocols/awareness");
 
+const mongoose = require("mongoose");
+const Room = require("./models/room");
+
 const getIo = (server) => {
   //stores ydocs of all rooms in memory
   let ydocs = {};
@@ -78,7 +81,8 @@ const getIo = (server) => {
 
     //create room request
     socket.on("create-room", (roomID) => {
-      rooms[roomID] = [socket.handshake.auth.username];
+      let username = socket.handshake.auth.username;
+      rooms[roomID] = [username];
       socket.join(roomID);
       //making a ydoc for the respective room
       let ydoc = new Y.Doc();
@@ -89,7 +93,21 @@ const getIo = (server) => {
       let awareness = new Awareness(ydoc);
       awarenesses[roomID] = awareness;
 
-      console.log(`${socket.handshake.auth.username} created ${roomID}`);
+      console.log(`${username} created ${roomID}`);
+      //create the new room document + adding the user to members array
+      (async () => {
+        try {
+          const room = new Room({
+            roomID: roomID,
+            date: new Date().toDateString(),
+            members: [username],
+          });
+          await room.save();
+        } catch (e) {
+          console.log("couldn't store new room details to db");
+          console.error(e);
+        }
+      })();
     });
 
     //join room request
@@ -154,6 +172,23 @@ const getIo = (server) => {
           //   console.log("couldn't send awareness updates to late comer");
           // }
         }
+
+        //adding the joined user to the members array of the respective room in db
+        (async () => {
+          try {
+            let username = socket.handshake.auth.username;
+            const room = await Room.findOne({ roomID: roomID });
+            if (!room.members.includes(username)) {
+              room.members.push(username);
+            }
+            await room.save();
+          } catch (e) {
+            console.log(
+              "couldn't save joined user to members array of respective room"
+            );
+            console.error(e);
+          }
+        })();
 
         // logRooms(socket);
       } else {
