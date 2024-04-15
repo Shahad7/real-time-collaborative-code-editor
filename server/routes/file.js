@@ -10,10 +10,15 @@ router.post(
   asyncHandler(async (req, res, next) => {
     try {
       const { filename, fileID, roomID, value } = req.body;
+      const duplicate = await File.findOne({ fileID: fileID });
+
+      if (duplicate) {
+        throw new Error("duplicate file found : can't save");
+      }
       const file = new File({ filename, fileID, roomID, value });
       await file.save();
     } catch (e) {
-      console.log("couldn't upload file " + filename + "to db");
+      console.log("couldn't upload file to db");
       console.error(e);
     }
   })
