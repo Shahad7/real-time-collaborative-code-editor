@@ -10,6 +10,7 @@ const {
 
 const mongoose = require("mongoose");
 const Room = require("./models/room");
+const User = require("./models/user");
 
 const getIo = (server) => {
   //stores ydocs of all rooms in memory
@@ -102,7 +103,9 @@ const getIo = (server) => {
             date: new Date().toDateString(),
             members: [username],
           });
-          await room.save();
+          const user = await User.findOne({ username: username });
+          user.rooms.push(roomID);
+          await Promise.all([room.save(), user.save()]);
         } catch (e) {
           console.log("couldn't store new room details to db");
           console.error(e);
@@ -177,11 +180,16 @@ const getIo = (server) => {
         (async () => {
           try {
             let username = socket.handshake.auth.username;
-            const room = await Room.findOne({ roomID: roomID });
+            const [user, room] = await Promise.all([
+              User.findOne({ username: username }),
+              await Room.findOne({ roomID: roomID }),
+            ]);
+
             if (!room.members.includes(username)) {
               room.members.push(username);
+              user.rooms.push(roomID);
             }
-            await room.save();
+            await Promise.all([room.save(), user.save()]);
           } catch (e) {
             console.log(
               "couldn't save joined user to members array of respective room"
