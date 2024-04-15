@@ -9,8 +9,8 @@ router.post(
   "/upload",
   asyncHandler(async (req, res, next) => {
     try {
-      const { filename, fileID, roomID } = req.body;
-      const file = new File({ filename, fileID, roomID });
+      const { filename, fileID, roomID, value } = req.body;
+      const file = new File({ filename, fileID, roomID, value });
       await file.save();
     } catch (e) {
       console.log("couldn't upload file " + filename + "to db");

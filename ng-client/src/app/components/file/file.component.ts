@@ -11,14 +11,15 @@ export class FileComponent {
   @Input() filename: string = '';
   @Input() path: string = '';
   @Input() id: string = '';
+  value: string = '';
 
   constructor(
     private explorerService: FileExplorerService,
     private dataStoreService: DataStoreService
   ) {
-    //save file to db on triggerUpload : dataStoreService
     const uploadFile = async () => {
       try {
+        this.dataStoreService.fetchFileContent(this.id);
         if (!sessionStorage.getItem('roomID')) {
           throw new Error('user not in a room');
         }
@@ -32,6 +33,7 @@ export class FileComponent {
             filename: this.filename,
             fileID: this.id,
             roomID: sessionStorage.getItem('roomID'),
+            value: this.value,
           }),
         });
       } catch (e) {
@@ -39,10 +41,17 @@ export class FileComponent {
         console.error(e);
       }
     };
+
+    //save file to db on triggerUpload : dataStoreService
     this.dataStoreService.uploadAnnouncement$.subscribe((value) => {
       if (value == 'ready') {
         uploadFile();
       }
+    });
+
+    //store file-to-be-uploaded's content on class variable value
+    this.dataStoreService.fileContent$.subscribe((value) => {
+      this.value = value;
     });
   }
 

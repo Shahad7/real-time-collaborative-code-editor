@@ -9,6 +9,7 @@ import { state } from '@angular/animations';
 import * as monaco from 'monaco-editor';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { HostListener } from '@angular/core';
+import { DataStoreService } from '../explorer/data-store.service';
 
 @Component({
   selector: 'app-editing-field',
@@ -63,7 +64,8 @@ export class EditingFieldComponent {
 
   constructor(
     private socketService: SocketService,
-    private explorerService: FileExplorerService
+    private explorerService: FileExplorerService,
+    private dataStoreService: DataStoreService
   ) {
     //listens for events on the ydoc and sends to other clients
     this.ydoc.on('update', (updates) => {
@@ -171,6 +173,17 @@ export class EditingFieldComponent {
         this.awareness
       );
       this.editor.focus();
+    });
+
+    //dataStoreService : publishing the file's content when demanded
+    this.dataStoreService.fileToUpload$.subscribe((fileID) => {
+      if (!this.models[fileID]) {
+        throw new Error('no model found for file with id : ' + fileID);
+      } else {
+        this.dataStoreService.publishFileContent(
+          this.models[fileID].getValue()
+        );
+      }
     });
   }
 
