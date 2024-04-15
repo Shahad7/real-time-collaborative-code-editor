@@ -4,6 +4,7 @@ const mognoose = require("mongoose");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const File = require("../models/file");
+const Room = require("../models/room");
 
 router.post(
   "/upload",

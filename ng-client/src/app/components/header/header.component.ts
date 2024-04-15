@@ -7,7 +7,7 @@ import { HostListener } from '@angular/core';
 import { UserListComponent } from '../user-list/user-list.component';
 import { UrlSegment } from '@angular/router';
 import { UserListService } from '../user-list/user-list.service';
-import { DataStoreService } from '../explorer/data-store.service';
+import { DataStoreService } from '../data-store/data-store.service';
 
 @Component({
   selector: 'app-header',

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
-import { DataStoreService } from '../explorer/data-store.service';
+import { DataStoreService } from '../data-store/data-store.service';
 
 @Component({
   selector: 'app-file',

@@ -18,6 +18,7 @@ try {
 
 var indexRouter = require("./routes/index");
 var fileRouter = require("./routes/file");
+var roomRouter = require("./routes/room");
 var app = express();
 
 app.use(cors());
@@ -29,5 +30,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/file", fileRouter);
+app.use("/room", roomRouter);
 
 module.exports = app;

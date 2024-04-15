@@ -6,9 +6,11 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { authGuard } from './auth/auth.guard';
+import { DataStoreComponent } from './components/data-store/data-store.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'code-editor', pathMatch: 'full' }, // Redirect to index guarded by login
+  // Redirect to index guarded by login
+  { path: '', redirectTo: 'code-editor', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   {
     path: 'code-editor',
@@ -17,6 +19,7 @@ const routes: Routes = [
   },
   { path: 'sign-up', component: SignUpComponent },
   // Add more routes for other pages as needed
+  { path: 'data-store/:roomID', component: DataStoreComponent },
 ];
 
 @NgModule({

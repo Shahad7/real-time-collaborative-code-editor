@@ -9,7 +9,7 @@ import { state } from '@angular/animations';
 import * as monaco from 'monaco-editor';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { HostListener } from '@angular/core';
-import { DataStoreService } from '../explorer/data-store.service';
+import { DataStoreService } from '../data-store/data-store.service';
 
 @Component({
   selector: 'app-editing-field',
