@@ -15,11 +15,21 @@ export class DataStoreComponent implements OnInit {
 
   async fetchData() {
     const response = await fetch(
-      `http://${window.location.hostname}:3000/room/${this.roomID}`
+      `http://${window.location.hostname}:3000/room/${this.roomID}`,
+      {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: sessionStorage.getItem('username') ?? '',
+        }),
+      }
     );
 
     const data = await response.json();
-    if (response.status == 400) {
+    if (response.status == 400 || response.status == 403) {
       this.error = true;
       this.errorMsg = data;
     } else {

@@ -7,16 +7,20 @@ const File = require("../models/file");
 const Room = require("../models/room");
 
 //sends files and data to data-store component
-router.get(
+router.post(
   "/:roomID",
   asyncHandler(async (req, res, next) => {
     try {
       const roomID = req.params.roomID;
       const room = await Room.findOne({ roomID: roomID });
+      const username = req.body.username;
 
       if (!room) {
         res.status(400).json("No such room");
-      } else {
+      }
+      if (!room.members.includes(username))
+        res.status(403).json("You are not authorized to access this data");
+      else {
         const files = await File.find({ roomID: roomID });
         if (files.length == 0) {
           res.json("no files found for requested session");
