@@ -1,2 +1,6 @@
-<p>data-store works!</p>
-<p>{{ roomID }}</p>
+<p>{{ "roomID: " + roomID }}</p>
+<h2 *ngIf="files.length == 0 && !error">loading....</h2>
+<h2 *ngIf="error">{{ errorMsg }}</h2>
+<div *ngFor="let file of files">
+  <p>{{ file.filename }}</p>
+</div>
