@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const fileSchema = new Schema({
   filename: { type: String, required: true },
   fileID: { type: Schema.Types.UUID, required: true },
+  path: { type: String, required: true },
   roomID: { type: String, required: true },
   value: { type: String, required: true },
 });

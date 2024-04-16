@@ -23,9 +23,8 @@ router.post(
       else {
         const files = await File.find({ roomID: roomID });
         if (files.length == 0) {
-          res.json("no files found for requested session");
-        }
-        res.json({ files });
+          res.status(404).json("no files found for requested session");
+        } else res.json({ files });
       }
     } catch (e) {
       console.log("couldn't fetch room details or content");

@@ -29,7 +29,11 @@ export class DataStoreComponent implements OnInit {
     );
 
     const data = await response.json();
-    if (response.status == 400 || response.status == 403) {
+    if (
+      response.status == 400 ||
+      response.status == 403 ||
+      response.status == 404
+    ) {
       this.error = true;
       this.errorMsg = data;
     } else {

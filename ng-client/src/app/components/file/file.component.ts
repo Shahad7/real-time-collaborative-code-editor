@@ -34,6 +34,7 @@ export class FileComponent {
             fileID: this.id,
             roomID: sessionStorage.getItem('roomID'),
             value: this.value,
+            path: this.path,
           }),
         });
       } catch (e) {
@@ -45,6 +46,7 @@ export class FileComponent {
     //save file to db on triggerUpload : dataStoreService
     this.dataStoreService.uploadAnnouncement$.subscribe((value) => {
       if (value == 'ready') {
+        console.log('tryna upload ' + this.filename);
         uploadFile();
       }
     });
