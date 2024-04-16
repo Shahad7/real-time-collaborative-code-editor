@@ -19,6 +19,7 @@ import { ChatboxComponent } from './components/chatbox/chatbox.component';
 import { MessageComponent } from './components/chatbox/message/message.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { DataStoreComponent } from './components/data-store/data-store.component';
+import { FileContentComponent } from './components/file-content/file-content.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +37,7 @@ import { DataStoreComponent } from './components/data-store/data-store.component
     MessageComponent,
     UserListComponent,
     DataStoreComponent,
+    FileContentComponent,
   ],
   imports: [
     BrowserModule,

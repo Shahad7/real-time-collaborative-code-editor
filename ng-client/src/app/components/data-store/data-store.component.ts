@@ -10,50 +10,65 @@ export class DataStoreComponent implements OnInit {
   roomID: string = '';
   error: boolean = false;
   errorMsg: string = '';
-  allFiles: Array<{ filename: string; path: string; fileID: string }> = [];
-  files: Array<{ filename: string; path: string; fileID: string }> = [];
+  allFiles: Array<{
+    filename: string;
+    path: string;
+    fileID: { data: Buffer; type: string };
+  }> = [];
+  files: Array<{
+    filename: string;
+    path: string;
+    fileID: string;
+  }> = [];
   folders: Array<{ foldername: string; path: string }> = [];
   currentPWD: string = '';
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   async fetchData() {
-    const response = await fetch(
-      `http://${window.location.hostname}:3000/room/${this.roomID}`,
-      {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: sessionStorage.getItem('username') ?? '',
-        }),
-      }
-    );
+    try {
+      const response = await fetch(
+        `http://${window.location.hostname}:3000/room/${this.roomID}`,
+        {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: sessionStorage.getItem('username') ?? '',
+          }),
+        }
+      );
 
-    const data = await response.json();
-    if (
-      response.status == 400 ||
-      response.status == 403 ||
-      response.status == 404
-    ) {
-      this.error = true;
-      this.errorMsg = data;
-    } else {
-      data.files.forEach((elt: any) => {
-        this.allFiles.push({
-          filename: elt.filename,
-          path: elt.path,
-          fileID: elt.fileID,
+      const data = await response.json();
+      if (
+        response.status == 400 ||
+        response.status == 403 ||
+        response.status == 404
+      ) {
+        this.error = true;
+        this.errorMsg = data;
+      } else {
+        data.files.forEach((elt: any) => {
+          this.allFiles.push({
+            filename: elt.filename,
+            path: elt.path,
+            fileID: elt.fileID,
+          });
         });
-      });
-      this.displayFiles();
+        this.displayFiles();
+      }
+    } catch (e) {
+      console.log("couldn't fetch room contents");
+      console.error(e);
     }
   }
 
   setRootFolder(folder_path: string) {
     this.currentPWD = folder_path;
+    console.log(this.files);
+
     this.displayFiles();
   }
 

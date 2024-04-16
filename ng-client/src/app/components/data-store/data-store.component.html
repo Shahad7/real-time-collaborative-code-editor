@@ -12,5 +12,5 @@
   <p>{{ folder.foldername }}</p>
 </div>
 <div class="file" *ngFor="let file of files">
-  <p>{{ file.filename }}</p>
+  <a [routerLink]="['file', file.fileID]">{{ file.filename }}</a>
 </div>
