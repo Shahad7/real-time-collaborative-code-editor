@@ -1,6 +1,16 @@
 <p>{{ "roomID: " + roomID }}</p>
-<h2 *ngIf="files.length == 0 && !error">loading....</h2>
+<h2 *ngIf="allFiles.length == 0 && !error">loading....</h2>
 <h2 *ngIf="error">{{ errorMsg }}</h2>
-<div *ngFor="let file of files">
+<button *ngIf="allFiles.length > 0 && currentPWD != ''" (click)="changePWD()">
+  prev
+</button>
+<div
+  class="folder"
+  *ngFor="let folder of folders"
+  (click)="setRootFolder(folder.path)"
+>
+  <p>{{ folder.foldername }}</p>
+</div>
+<div class="file" *ngFor="let file of files">
   <p>{{ file.filename }}</p>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
@@ -10,7 +10,11 @@ export class DataStoreComponent implements OnInit {
   roomID: string = '';
   error: boolean = false;
   errorMsg: string = '';
-  files: Array<{ filename: string; path: string }> = [];
+  allFiles: Array<{ filename: string; path: string; fileID: string }> = [];
+  files: Array<{ filename: string; path: string; fileID: string }> = [];
+  folders: Array<{ foldername: string; path: string }> = [];
+  currentPWD: string = '';
+
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   async fetchData() {
@@ -38,7 +42,95 @@ export class DataStoreComponent implements OnInit {
       this.errorMsg = data;
     } else {
       data.files.forEach((elt: any) => {
-        this.files.push({ filename: elt.filename, path: elt.path });
+        this.allFiles.push({
+          filename: elt.filename,
+          path: elt.path,
+          fileID: elt.fileID,
+        });
+      });
+      this.displayFiles();
+    }
+  }
+
+  setRootFolder(folder_path: string) {
+    this.currentPWD = folder_path;
+    this.displayFiles();
+  }
+
+  //change present working directory to previous
+  changePWD() {
+    if (!this.currentPWD.includes('/')) this.currentPWD = '';
+    else {
+      let folders = this.currentPWD.split('/');
+      let last_folder = folders[folders.length - 1];
+      let new_path = this.currentPWD.replace(`/${last_folder}`, '');
+      this.currentPWD = new_path;
+    }
+    this.displayFiles();
+  }
+
+  displayFiles() {
+    //clearing current data
+    this.files = [];
+    this.folders = [];
+
+    //initial case : listing default root folder contents
+    if (this.currentPWD == '') {
+      this.allFiles.forEach((elt: any) => {
+        if (!elt.path.includes('/')) {
+          if (
+            !this.files.some((file) => {
+              return JSON.stringify(file) == JSON.stringify(elt);
+            })
+          ) {
+            this.files.push(elt);
+          }
+        } else {
+          let foldername = elt.path.split('/')[0];
+          let folder = { foldername: foldername, path: '' + foldername };
+          if (
+            !this.folders.some((item) => {
+              return JSON.stringify(item) == JSON.stringify(folder);
+            })
+          ) {
+            this.folders.push(folder);
+          }
+        }
+      });
+    }
+    //when navigating to other folders
+    else {
+      this.allFiles.forEach((elt: any) => {
+        if (elt.path == this.currentPWD + '/' + elt.filename) {
+          if (
+            !this.files.some((file) => {
+              return JSON.stringify(file) == JSON.stringify(elt);
+            })
+          ) {
+            this.files.push(elt);
+          }
+        } else {
+          //shouldn't match a file with the same name as a folder in the path
+          //Eg:- models/path.txt == models/path (shouldn't be true)
+          if (
+            elt.path.startsWith(this.currentPWD) &&
+            elt.path[this.currentPWD.length] != '.'
+          ) {
+            let new_path = elt.path.replace(this.currentPWD + '/', '');
+            let foldername = new_path.split('/')[0];
+            let folder = {
+              foldername: foldername,
+              path: this.currentPWD + '/' + foldername,
+            };
+            if (
+              !this.folders.some((item) => {
+                return JSON.stringify(item) == JSON.stringify(folder);
+              })
+            ) {
+              this.folders.push(folder);
+            }
+          }
+        }
       });
     }
   }
