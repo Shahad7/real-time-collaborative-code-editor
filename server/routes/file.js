@@ -27,4 +27,34 @@ router.post(
   })
 );
 
+router.post(
+  "/:fileID",
+  asyncHandler(async (req, res, next) => {
+    try {
+      const roomID = req.body.roomID;
+      const fileID = req.params.fileID;
+
+      const room = await Room.findOne({ roomID: roomID });
+      const username = req.body.username;
+
+      if (!room) {
+        res.status(400).json("No such room");
+      }
+      if (!room.members.includes(username))
+        res.status(403).json("You are not authorized to access this data");
+      else {
+        const file = await File.findOne({ fileID: fileID });
+
+        if (!file) {
+          res.status(404).json("no such file");
+        } else {
+          res.json({ value: file.value });
+        }
+      }
+    } catch (e) {
+      console.log("couldn't fetch file content");
+      console.error(e);
+    }
+  })
+);
 module.exports = router;

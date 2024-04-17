@@ -1,4 +1,5 @@
 .folder {
+  cursor: pointer;
   color: orange;
   border: solid black 1px;
   width: 50vw;

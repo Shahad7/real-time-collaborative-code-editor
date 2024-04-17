@@ -67,8 +67,6 @@ export class DataStoreComponent implements OnInit {
 
   setRootFolder(folder_path: string) {
     this.currentPWD = folder_path;
-    console.log(this.files);
-
     this.displayFiles();
   }
 

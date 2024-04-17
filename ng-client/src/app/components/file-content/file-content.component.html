@@ -1,5 +1,8 @@
-<p>{{ fileID }}</p>
-<button (click)="copyValue()">copy</button>
-<pre><code>
+<p>{{ "file: " + fileID }}</p>
+<p>{{ "room: " + roomID }}</p>
+<button (click)="copyValue()" *ngIf="value != ''">copy</button>
+<p *ngIf="loading && !error">loading...</p>
+<p *ngIf="error">{{ errorMsg }}</p>
+<pre *ngIf="!loading && !error"><code>
     {{value}}
 </code></pre>

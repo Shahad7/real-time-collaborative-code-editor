@@ -8,7 +8,11 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 })
 export class FileContentComponent implements OnInit {
   fileID: string = '';
+  roomID: string = '';
   value: string = '';
+  error: boolean = false;
+  errorMsg: string = '';
+  loading: boolean = true;
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   async fetchValue() {
@@ -22,11 +26,23 @@ export class FileContentComponent implements OnInit {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            roomID: sessionStorage.getItem('roomID') ?? '',
+            roomID: this.roomID,
+            username: sessionStorage.getItem('username') ?? '',
           }),
         }
       );
-      const data = response.json();
+      const data = await response.json();
+      if (
+        response.status == 400 ||
+        response.status == 403 ||
+        response.status == 404
+      ) {
+        this.errorMsg = data;
+        this.error = true;
+      } else {
+        this.loading = false;
+        this.value = data.value;
+      }
     } catch (e) {
       console.log("couldn't fetch file content");
       console.error(e);
@@ -36,6 +52,8 @@ export class FileContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.fileID = this.route.snapshot.paramMap.get('fileID')!;
+    this.roomID = this.route.snapshot.paramMap.get('roomID')!;
+
     this.fetchValue();
   }
 }
