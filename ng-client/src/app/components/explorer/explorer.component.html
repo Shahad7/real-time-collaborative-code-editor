@@ -1,51 +1,53 @@
-<div
-  class="explorer-head"
-  #root
-  [ngClass]="rootSelected ? 'active' : ''"
-  (click)="[selectRootFolder($event), activateRoot()]"
->
-  <h5 class="explorer-head-identifier">EXPLORER</h5>
-  <div class="create-btns">
-    <img
-      src="assets/file-plus.svg"
-      class="explorer-head-identifier create-btns-identifier"
-      alt=""
-      (click)="initializeFileCreation()"
-    />
-    <img
-      src="assets/folder-plus.svg"
-      class="explorer-head-identifier create-btns-identifier"
-      alt=""
-      (click)="initializeFolderCreation()"
-    />
+<div class="pad">
+  <div
+    class="explorer-head"
+    #root
+    [ngClass]="rootSelected ? 'active' : ''"
+    (click)="[selectRootFolder($event), activateRoot()]"
+  >
+    <h5 class="explorer-head-identifier">EXPLORER</h5>
+    <div class="create-btns">
+      <img
+        src="assets/file-plus.svg"
+        class="explorer-head-identifier create-btns-identifier"
+        alt=""
+        (click)="initializeFileCreation()"
+      />
+      <img
+        src="assets/folder-plus.svg"
+        class="explorer-head-identifier create-btns-identifier"
+        alt=""
+        (click)="initializeFolderCreation()"
+      />
+    </div>
   </div>
-</div>
-<div class="explorer">
-  <input
-    type="text"
-    #input
-    [ngClass]="inputVisibility ? 'input-visible' : ''"
-    (keyup.enter)="create()"
-    (input)="resetBorder()"
-  />
-  <app-folder
-    *ngFor="let folder of folders"
-    [foldername]="folder.name"
-    [path]="folder.path"
-  ></app-folder>
+  <div class="explorer">
+    <input
+      type="text"
+      #input
+      [ngClass]="inputVisibility ? 'input-visible' : ''"
+      (keyup.enter)="create()"
+      (input)="resetBorder()"
+    />
+    <app-folder
+      *ngFor="let folder of folders"
+      [foldername]="folder.name"
+      [path]="folder.path"
+    ></app-folder>
 
-  <app-file
-    *ngFor="let file of files"
-    [filename]="file.name"
-    [path]="file.path"
-    [id]="file.id"
-  ></app-file>
-  <!-- <app-folder
-    [foldername]="'Default'"
-    [files]="['index.js', 'core.js']"
-  ></app-folder> -->
-  <!-- <app-folder
-        [foldername]="'Test'"
-        [files]="['test.js', 'test.spec.js']"
-      ></app-folder> -->
+    <app-file
+      *ngFor="let file of files"
+      [filename]="file.name"
+      [path]="file.path"
+      [id]="file.id"
+    ></app-file>
+    <!-- <app-folder
+      [foldername]="'Default'"
+      [files]="['index.js', 'core.js']"
+    ></app-folder> -->
+    <!-- <app-folder
+          [foldername]="'Test'"
+          [files]="['test.js', 'test.spec.js']"
+        ></app-folder> -->
+  </div>
 </div>
