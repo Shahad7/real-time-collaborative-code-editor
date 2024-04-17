@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-file-content',
@@ -13,7 +14,11 @@ export class FileContentComponent implements OnInit {
   error: boolean = false;
   errorMsg: string = '';
   loading: boolean = true;
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location
+  ) {}
 
   async fetchValue() {
     try {
@@ -48,6 +53,11 @@ export class FileContentComponent implements OnInit {
       console.error(e);
     }
   }
+
+  goBack() {
+    this.location.back();
+  }
+
   copyValue() {}
 
   ngOnInit(): void {

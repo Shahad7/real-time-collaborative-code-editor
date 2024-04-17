@@ -20,8 +20,15 @@ const routes: Routes = [
   },
   { path: 'sign-up', component: SignUpComponent },
   // Add more routes for other pages as needed
-  { path: 'data-store/:roomID', component: DataStoreComponent },
-  { path: 'data-store/:roomID/file/:fileID', component: FileContentComponent },
+  {
+    path: 'data-store/:roomID/file/:fileID',
+    component: FileContentComponent,
+  },
+  {
+    path: 'data-store/:roomID',
+    component: DataStoreComponent,
+    children: [{ path: '**', component: DataStoreComponent }],
+  },
 ];
 
 @NgModule({

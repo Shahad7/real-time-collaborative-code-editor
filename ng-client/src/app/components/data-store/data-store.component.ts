@@ -1,5 +1,11 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {
+  Router,
+  ActivatedRoute,
+  ParamMap,
+  NavigationEnd,
+} from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-data-store',
@@ -23,7 +29,25 @@ export class DataStoreComponent implements OnInit {
   folders: Array<{ foldername: string; path: string }> = [];
   currentPWD: string = '';
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router) {
+    this.roomID = this.route.snapshot.paramMap.get('roomID')!;
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        let current_path = this.router.url;
+
+        if (current_path == '/data-store/' + this.roomID) {
+          this.currentPWD = '';
+        } else {
+          let new_path = current_path.replace(
+            '/data-store/' + this.roomID + '/',
+            ''
+          );
+          this.currentPWD = new_path;
+        }
+        this.displayFiles();
+      }
+    });
+  }
 
   async fetchData() {
     try {
@@ -57,36 +81,37 @@ export class DataStoreComponent implements OnInit {
             fileID: elt.fileID,
           });
         });
-        this.displayFiles();
       }
-    } catch (e) {
-      console.log("couldn't fetch room contents");
-      console.error(e);
-    }
+    } catch (e) {}
+    this.displayFiles();
   }
 
   setRootFolder(folder_path: string) {
     this.currentPWD = folder_path;
-    this.displayFiles();
+    this.router.navigate([...folder_path.split('/')], {
+      relativeTo: this.route,
+    });
   }
 
   //change present working directory to previous
   changePWD() {
-    if (!this.currentPWD.includes('/')) this.currentPWD = '';
-    else {
+    if (!this.currentPWD.includes('/')) {
+      console.log(this.currentPWD);
+      this.router.navigateByUrl(`/data-store/${this.roomID}`);
+    } else {
       let folders = this.currentPWD.split('/');
       let last_folder = folders[folders.length - 1];
       let new_path = this.currentPWD.replace(`/${last_folder}`, '');
-      this.currentPWD = new_path;
+      this.router.navigate([...new_path.split('/')], {
+        relativeTo: this.route,
+      });
     }
-    this.displayFiles();
   }
 
   displayFiles() {
     //clearing current data
     this.files = [];
     this.folders = [];
-
     //initial case : listing default root folder contents
     if (this.currentPWD == '') {
       this.allFiles.forEach((elt: any) => {
