@@ -4,6 +4,6 @@
 <button (click)="copyValue()" *ngIf="value != ''">copy</button>
 <p *ngIf="loading && !error">loading...</p>
 <p *ngIf="error">{{ errorMsg }}</p>
-<pre *ngIf="!loading && !error"><code>
+<pre *ngIf="!loading && !error"><code #code>
     {{value}}
 </code></pre>

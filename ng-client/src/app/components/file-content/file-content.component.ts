@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -14,6 +14,9 @@ export class FileContentComponent implements OnInit {
   error: boolean = false;
   errorMsg: string = '';
   loading: boolean = true;
+  @ViewChild('code')
+  code: any;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -58,7 +61,33 @@ export class FileContentComponent implements OnInit {
     this.location.back();
   }
 
-  copyValue() {}
+  async copyValue(): Promise<void> {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(
+          this.code.nativeElement.textContent
+        );
+      } else {
+        // Use the 'out of viewport hidden text area' trick
+        const textArea = document.createElement('textarea');
+        textArea.value = this.code.nativeElement.textContent;
+
+        // Move textarea out of the viewport so it's not visible
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-999999px';
+
+        document.body.prepend(textArea);
+        textArea.select();
+
+        document.execCommand('copy');
+
+        textArea.remove();
+      }
+    } catch (e) {
+      console.log(e);
+      alert('error: you have to manually copy');
+    }
+  }
 
   ngOnInit(): void {
     this.fileID = this.route.snapshot.paramMap.get('fileID')!;
