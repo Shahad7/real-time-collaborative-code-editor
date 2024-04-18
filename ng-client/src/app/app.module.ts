@@ -19,6 +19,7 @@ import { ChatboxComponent } from './components/chatbox/chatbox.component';
 import { MessageComponent } from './components/chatbox/message/message.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { RoomLogComponent } from './components/room-log/room-log.component';
+import { RepositoryComponent } from './components/repository/repository.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +37,7 @@ import { RoomLogComponent } from './components/room-log/room-log.component';
     MessageComponent,
     UserListComponent,
     RoomLogComponent,
+    RepositoryComponent,
   ],
   imports: [
     BrowserModule,

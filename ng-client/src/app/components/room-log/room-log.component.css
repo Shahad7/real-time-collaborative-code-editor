@@ -27,6 +27,7 @@
     background-color: #fff;
     padding: 10px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .room-list .room .room-id{

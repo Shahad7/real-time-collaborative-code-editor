@@ -6,6 +6,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { authGuard } from './auth/auth.guard';
+import { RepositoryComponent } from './components/repository/repository.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'code-editor', pathMatch: 'full' }, // Redirect to index guarded by login
@@ -16,6 +17,7 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
   { path: 'sign-up', component: SignUpComponent },
+  { path: 'repository', component: RepositoryComponent },
   // Add more routes for other pages as needed
 ];
 
