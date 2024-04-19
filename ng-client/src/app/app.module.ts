@@ -38,13 +38,10 @@ import { RepositoryComponent } from './components/repository/repository.componen
     ChatboxComponent,
     MessageComponent,
     UserListComponent,
-<<<<<<< HEAD
     DataStoreComponent,
     FileContentComponent,
-=======
     RoomLogComponent,
     RepositoryComponent,
->>>>>>> acffa182c9badb07ae6e5ccf19cd000dfa166349
   ],
   imports: [
     BrowserModule,
