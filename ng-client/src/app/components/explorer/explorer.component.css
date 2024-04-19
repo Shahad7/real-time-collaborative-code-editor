@@ -70,6 +70,7 @@ input {
   display: block;
 }
 
-.pad{
+.pad {
   padding: 2% 4%;
+  height: calc(100vh - 70px);
 }

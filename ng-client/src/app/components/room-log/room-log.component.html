@@ -1,18 +1,23 @@
 <div class="cont">
-  <p class="head">Room Log</p>
+  <p class="head">Session Log</p>
   <div class="room-list">
-    <div class="room">
-        <p class="room-id">Session-1868</p>
-        <div class="flex-btw">
-            <div class="room-date">
-                <img src="assets/calendar.png" alt="">
-                <p class="det">17-04-2024</p>
-            </div>
-            <div class="room-time">
-                <img src="assets/clock.png" alt="">
-                <p class="det">11:45</p>
-            </div>
+    <p *ngIf="rooms.length == 0" style="color: purple">
+      You have no session yet
+    </p>
+    <div *ngFor="let room of rooms" class="room">
+      <a class="room-id" [routerLink]="['/data-store', room.roomID]">{{
+        "Session-" + room.roomID.substring(0, 5)
+      }}</a>
+      <div class="flex-btw">
+        <div class="room-date">
+          <img src="assets/calendar.png" alt="" />
+          <p class="det">{{ room.date }}</p>
         </div>
+        <div class="room-time">
+          <img src="assets/clock.png" alt="" />
+          <p class="det">{{ room.time }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -98,9 +98,12 @@ const getIo = (server) => {
       //create the new room document + adding the user to members array
       (async () => {
         try {
+          let time = new Date().toLocaleTimeString("en-GB");
+          time = time[4] == ":" ? time.substring(0, 4) : time.substring(0, 5);
           const room = new Room({
             roomID: roomID,
-            date: new Date().toDateString(),
+            date: new Date().toLocaleDateString(),
+            time: time,
             members: [username],
           });
           const user = await User.findOne({ username: username });

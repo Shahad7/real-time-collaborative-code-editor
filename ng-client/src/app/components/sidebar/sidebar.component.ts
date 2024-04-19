@@ -8,7 +8,8 @@ import { SidebarService } from '../sidebar/sidebar.service';
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent {
-  currentSidebarOption: 'explorer' | 'chatbox' | 'view-members' = 'explorer';
+  currentSidebarOption: 'explorer' | 'chatbox' | 'view-members' | 'room-log' =
+    'explorer';
 
   constructor(
     private explorerService: FileExplorerService,

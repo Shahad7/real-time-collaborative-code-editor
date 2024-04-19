@@ -19,9 +19,6 @@ const routes: Routes = [
     component: CodeEditorComponent,
     canActivate: [authGuard],
   },
-  { path: 'sign-up', component: SignUpComponent },
-  { path: 'repository', component: RepositoryComponent },
-  // Add more routes for other pages as needed
   {
     path: 'data-store/:roomID/file/:fileID',
     component: FileContentComponent,
@@ -31,6 +28,15 @@ const routes: Routes = [
     component: DataStoreComponent,
     children: [{ path: '**', component: DataStoreComponent }],
   },
+  {
+    path: 'code-editor/:option',
+    component: CodeEditorComponent,
+    canActivate: [authGuard],
+  },
+
+  { path: 'sign-up', component: SignUpComponent },
+  { path: 'repository', component: RepositoryComponent },
+  // Add more routes for other pages as needed
 ];
 
 @NgModule({

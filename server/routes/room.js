@@ -6,6 +6,21 @@ const { body, validationResult } = require("express-validator");
 const File = require("../models/file");
 const Room = require("../models/room");
 
+//send all room details
+router.post(
+  "/all-rooms",
+  asyncHandler(async (req, res, next) => {
+    try {
+      const username = req.body.username;
+      const rooms = await Room.find({ members: username });
+      res.json({ rooms });
+    } catch (e) {
+      console.log("couldn't fetch all rooms' details");
+      console.error(e);
+    }
+  })
+);
+
 //sends files and data to data-store component
 router.post(
   "/:roomID",
@@ -18,7 +33,7 @@ router.post(
       if (!room) {
         res.status(400).json("No such room");
       }
-      if (!room.members.includes(username))
+      if (room && !room.members.includes(username))
         res.status(403).json("You are not authorized to access this data");
       else {
         const files = await File.find({ roomID: roomID });

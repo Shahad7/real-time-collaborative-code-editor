@@ -6,12 +6,12 @@ import { Subject } from 'rxjs';
 })
 export class SidebarService {
   private currentSidebarOptionSource = new Subject<
-    'explorer' | 'chatbox' | 'view-members'
+    'explorer' | 'chatbox' | 'view-members' | 'room-log'
   >();
 
   currentSidebarOption$ = this.currentSidebarOptionSource.asObservable();
 
-  selectOption(option: 'explorer' | 'chatbox' | 'view-members') {
+  selectOption(option: 'explorer' | 'chatbox' | 'view-members' | 'room-log') {
     this.currentSidebarOptionSource.next(option);
   }
 

@@ -1,64 +1,75 @@
-.cont{
-    padding: 2% 4%;
-    width: 100%;
-    height: calc(100vh - 70px);
-    /* background: linear-gradient(145deg, #f0f0f0, #e6e7ee); */
-    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
-      Liberation Mono, monospace;
-    border-radius: 15px;
-    /* box-shadow: 20px 20px 63px #b8b8b8; */
-    display: flex;
-    flex-direction: column;
+.cont {
+  padding: 2% 4%;
+  width: 100%;
+  height: calc(100vh - 70px);
+  /* background: linear-gradient(145deg, #f0f0f0, #e6e7ee); */
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+    Liberation Mono, monospace;
+  border-radius: 15px;
+  /* box-shadow: 20px 20px 63px #b8b8b8; */
+  display: flex;
+  flex-direction: column;
 }
 
-.cont .head{
-    font-size: 18px;
-    margin-bottom: 8px;
+.cont .head {
+  font-size: 18px;
+  margin-bottom: 8px;
 }
 
-.room-list{
-    display: flex;
-    flex-direction: column;
+.room-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 70%;
+  overflow-y: scroll;
 }
 
-.room-list .room{
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
+.room-list .room {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 14px;
 }
 
-.room-list .room .room-id{
-    font-size: 14px;
-    margin-bottom: 0;
-    color: purple;
-    font-weight: 600;
+.room-list .room .room-id {
+  font-size: 14px;
+  margin-bottom: 0;
+  color: purple;
+  font-weight: 600;
 }
 
-.room-list .room .flex-btw{
-    display: flex;
-    justify-content: space-between;
+.room-list .room .flex-btw {
+  display: flex;
+  justify-content: space-between;
 }
 
-.room-list .room .flex-btw .room-date{
-    display: flex;
-    align-items: center;
+.room-list .room .flex-btw .room-date {
+  display: flex;
+  align-items: center;
 }
 
-.room-list .room .flex-btw .room-time{
-    display: flex;
-    align-items: center;
+.room-list .room .flex-btw .room-time {
+  display: flex;
+  align-items: center;
 }
 
-.room-list .room .flex-btw img{
-    width: 14px;
-    height: 14px;
-    margin-right: 5px;
+.room-list .room .flex-btw img {
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
 }
 
-.room-list .room .det{
-    font-size: 14px;
-    margin-bottom: 0;
+.room-list .room .det {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
