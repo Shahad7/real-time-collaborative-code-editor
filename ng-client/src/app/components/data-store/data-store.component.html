@@ -1,16 +1,92 @@
-<p>{{ "roomID: " + roomID }}</p>
-<h2 *ngIf="allFiles.length == 0 && !error">loading....</h2>
-<h2 *ngIf="error">{{ errorMsg }}</h2>
-<button *ngIf="allFiles.length > 0 && currentPWD != ''" (click)="changePWD()">
-  prev
-</button>
-<div
-  class="folder"
-  *ngFor="let folder of folders"
-  (click)="setRootFolder(folder.path)"
->
-  <p>{{ folder.foldername }}</p>
-</div>
-<div class="file" *ngFor="let file of files">
-  <a [routerLink]="['file', file.fileID]">{{ file.filename }}</a>
+<div class="container">
+  <p class="head">Repository</p>
+  <div class="flex mar">
+    <button
+      [ngClass]="
+        allFiles.length > 0 && currentPWD != '' ? 'b1-visible b1' : 'b1'
+      "
+      (click)="changePWD()"
+    >
+      <img src="assets/arrow-right.png" alt="" />
+      Prev
+    </button>
+    <!-- <button class="b2">
+      Next
+      <img src="assets/arrow-right.png" alt="" />
+    </button> -->
+  </div>
+  <h2 *ngIf="allFiles.length == 0 && !error">loading....</h2>
+  <h2 *ngIf="error">{{ errorMsg }}</h2>
+  <div *ngIf="allFiles.length > 0 && !error" class="row">
+    <div class="col-md-8">
+      <div class="wrapper">
+        <table>
+          <tr>
+            <th>Session-7a75</th>
+          </tr>
+          <tr
+            *ngFor="let folder of folders"
+            (click)="setRootFolder(folder.path)"
+          >
+            <td>
+              <div class="flex">
+                <img id="folder-icon" src="assets/folder-icon.png" alt="" />
+                <p class="file-name">{{ folder.foldername }}</p>
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let file of files">
+            <td>
+              <div class="flex">
+                <img id="file-icon" src="assets/file-icon.png" alt="" />
+                <a class="file-name" [routerLink]="['file', file.fileID]">{{
+                  file.filename
+                }}</a>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-4 scroll">
+      <p class="head2">About</p>
+      <div class="flex block">
+        <img class="img1" src="assets/calendar.png" alt="" />
+        <p class="text">{{ room.date }}</p>
+      </div>
+      <div class="flex">
+        <img class="img1" src="assets/clock.png" alt="" />
+        <p class="text">{{ room.time }}</p>
+      </div>
+      <p class="head3">Users-list</p>
+      <div *ngFor="let member of room.members" class="flex block">
+        <img class="img2" src="assets/user.png" alt="" />
+        <p class="text">{{ member.username }} : {{ member.email }}</p>
+      </div>
+    </div>
+  </div>
 </div>

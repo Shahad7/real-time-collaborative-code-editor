@@ -8,10 +8,12 @@ import { OnInit } from '@angular/core';
 })
 export class RoomLogComponent implements OnInit {
   rooms: Array<{ roomID: string; date: string; time: string }> = [];
+  loading: boolean = false;
   constructor() {}
 
   async fetchAllRoomDetails() {
     try {
+      this.loading = true;
       const response = await fetch(
         `http://${window.location.hostname}:3000/room/all-rooms`,
         {
@@ -29,6 +31,7 @@ export class RoomLogComponent implements OnInit {
       data.rooms.forEach((elt: any) => {
         this.rooms.push({ roomID: elt.roomID, date: elt.date, time: elt.time });
       });
+      this.loading = false;
     } catch (e) {
       console.log("couldn't room details : room log");
       console.error(e);

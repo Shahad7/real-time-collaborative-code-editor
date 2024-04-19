@@ -40,7 +40,11 @@ router.post(
       if (!room) {
         res.status(400).json("No such room");
       }
-      if (!room.members.includes(username))
+      let includes = false;
+      room.members.forEach((elt) => {
+        if (elt.username == username) includes = true;
+      });
+      if (room && !includes)
         res.status(403).json("You are not authorized to access this data");
       else {
         const file = await File.findOne({ fileID: fileID });

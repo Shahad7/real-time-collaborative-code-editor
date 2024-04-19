@@ -16,6 +16,12 @@ export class DataStoreComponent implements OnInit {
   roomID: string = '';
   error: boolean = false;
   errorMsg: string = '';
+  room: {
+    roomID: string;
+    members: Array<{ username: string; email: string }>;
+    date: string;
+    time: string;
+  } = { roomID: '', members: [], date: '', time: '' };
   allFiles: Array<{
     filename: string;
     path: string;
@@ -81,6 +87,7 @@ export class DataStoreComponent implements OnInit {
             fileID: elt.fileID,
           });
         });
+        this.room = { ...data.room };
       }
     } catch (e) {}
     this.displayFiles();

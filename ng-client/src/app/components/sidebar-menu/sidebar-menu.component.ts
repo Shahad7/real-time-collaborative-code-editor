@@ -25,6 +25,7 @@ export class SidebarMenuComponent implements OnInit {
 
   ngOnInit(): void {
     let option = this.route.snapshot.paramMap.get('option');
-    this.selectOption(option as any);
+    if (option) this.selectOption(option as any);
+    else this.selectOption('explorer');
   }
 }

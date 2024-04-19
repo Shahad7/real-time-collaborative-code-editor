@@ -1,9 +1,10 @@
 <div class="cont">
   <p class="head">Session Log</p>
   <div class="room-list">
-    <p *ngIf="rooms.length == 0" style="color: purple">
+    <p *ngIf="rooms.length == 0 && !loading" style="color: purple">
       You have no session yet
     </p>
+    <p *ngIf="rooms.length == 0 && loading" style="color: purple">loading...</p>
     <div *ngFor="let room of rooms" class="room">
       <a class="room-id" [routerLink]="['/data-store', room.roomID]">{{
         "Session-" + room.roomID.substring(0, 5)

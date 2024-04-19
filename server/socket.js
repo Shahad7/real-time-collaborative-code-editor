@@ -100,15 +100,16 @@ const getIo = (server) => {
         try {
           let time = new Date().toLocaleTimeString("en-GB");
           time = time[4] == ":" ? time.substring(0, 4) : time.substring(0, 5);
+          const user = await User.findOne({ username: username });
+
           const room = new Room({
             roomID: roomID,
             date: new Date().toLocaleDateString(),
             time: time,
-            members: [username],
+            members: [{ username: user.username, email: user.email }],
           });
-          const user = await User.findOne({ username: username });
-          user.rooms.push(roomID);
-          await Promise.all([room.save(), user.save()]);
+
+          await room.save();
         } catch (e) {
           console.log("couldn't store new room details to db");
           console.error(e);
@@ -187,12 +188,17 @@ const getIo = (server) => {
               User.findOne({ username: username }),
               await Room.findOne({ roomID: roomID }),
             ]);
-
-            if (!room.members.includes(username)) {
-              room.members.push(username);
-              user.rooms.push(roomID);
+            let exists = false;
+            room.members.forEach((elt) => {
+              if (elt.username == username) exists = true;
+            });
+            if (!exists) {
+              let members = room.members;
+              members.push({ username: user.username, email: user.email });
+              room.members = members;
+              room.markModified("members");
             }
-            await Promise.all([room.save(), user.save()]);
+            await room.save();
           } catch (e) {
             console.log(
               "couldn't save joined user to members array of respective room"
