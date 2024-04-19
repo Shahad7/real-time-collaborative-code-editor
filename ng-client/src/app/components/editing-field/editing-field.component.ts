@@ -177,11 +177,17 @@ export class EditingFieldComponent {
 
     //dataStoreService : publishing the file's content when demanded
     this.dataStoreService.fileToUpload$.subscribe((fileID) => {
-      if (!this.models[fileID]) {
-        throw new Error('no model found for file with id : ' + fileID);
-      } else {
+      if (this.models[fileID]) {
         this.dataStoreService.publishFileContent(
           this.models[fileID].getValue()
+        );
+      } else if (this.ymap.has(fileID)) {
+        this.dataStoreService.publishFileContent(
+          this.ymap.get(fileID).toString()
+        );
+      } else {
+        throw new Error(
+          'no model or ytext instance found for file with id : ' + fileID
         );
       }
     });

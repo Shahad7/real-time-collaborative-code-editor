@@ -8,6 +8,7 @@ import { UserListComponent } from '../user-list/user-list.component';
 import { UrlSegment } from '@angular/router';
 import { UserListService } from '../user-list/user-list.service';
 import { DataStoreService } from '../data-store/data-store.service';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +20,9 @@ export class HeaderComponent {
     private authService: AuthService,
     private socketService: SocketService,
     private userListService: UserListService,
-    private dataStoreService: DataStoreService
+    private dataStoreService: DataStoreService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.userListService.joinedUser$.subscribe((username) => {
       this.notification.nativeElement.textContent = `${username} joined the room`;
@@ -37,6 +40,17 @@ export class HeaderComponent {
         this.notificationDiv.nativeElement.style.display = 'none';
       }, 5500);
       // alert(`${username} left the room`);
+    });
+
+    //when navigating back to code-editor from repo, it should remain 'leave'
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        let current_path = this.router.url;
+
+        if (current_path == '/code-editor/room-log') {
+          this.recursiveWrapper();
+        }
+      }
     });
   }
 
@@ -61,6 +75,21 @@ export class HeaderComponent {
   @HostListener('document:DOMContentLoaded', ['$event'])
   handlePageRefresh(event: any) {
     this.toggleConnectOptions();
+  }
+
+  //recursive function wrapper for toggleConnectOptions on navigation back
+  //to code editor so that connectButton is rendered before toggleConnectOptions is called
+  recursiveWrapper() {
+    setTimeout(() => {
+      if (
+        !this.connectButton.nativeElement ||
+        !this.leaveButton.nativeElement
+      ) {
+        this.recursiveWrapper();
+      } else {
+        this.toggleConnectOptions();
+      }
+    }, 0);
   }
 
   logout() {
