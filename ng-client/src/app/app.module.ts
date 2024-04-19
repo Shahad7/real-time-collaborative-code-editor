@@ -20,6 +20,8 @@ import { MessageComponent } from './components/chatbox/message/message.component
 import { UserListComponent } from './components/user-list/user-list.component';
 import { DataStoreComponent } from './components/data-store/data-store.component';
 import { FileContentComponent } from './components/file-content/file-content.component';
+import { RoomLogComponent } from './components/room-log/room-log.component';
+import { RepositoryComponent } from './components/repository/repository.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,8 +38,13 @@ import { FileContentComponent } from './components/file-content/file-content.com
     ChatboxComponent,
     MessageComponent,
     UserListComponent,
+<<<<<<< HEAD
     DataStoreComponent,
     FileContentComponent,
+=======
+    RoomLogComponent,
+    RepositoryComponent,
+>>>>>>> acffa182c9badb07ae6e5ccf19cd000dfa166349
   ],
   imports: [
     BrowserModule,

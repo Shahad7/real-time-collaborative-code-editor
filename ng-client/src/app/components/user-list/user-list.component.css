@@ -1,13 +1,12 @@
 .cont{
-    padding: 6% 8%;
-    margin: 10px;
+    padding: 2% 4%;
     width: 100%;
     height: calc(100vh - 70px);
     /* background: linear-gradient(145deg, #f0f0f0, #e6e7ee); */
     font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
       Liberation Mono, monospace;
     border-radius: 15px;
-    box-shadow: 20px 20px 63px #b8b8b8;
+    /* box-shadow: 20px 20px 63px #b8b8b8; */
     display: flex;
     flex-direction: column;
 }
@@ -17,7 +16,7 @@
     margin-bottom: 8px;
 }
 
-.cont button{
+.cont .b1{
     width: 40%;
     font-style: normal;
     font-size: 14px;
@@ -32,9 +31,10 @@
     justify-content: flex-start;
     margin-bottom: 18px;
     padding: 7px;
+    background-color: #fff;
 }
 
-.cont button img{
+.cont .b1 img{
     width: 20%;
     margin-right: 6px;
 }
@@ -49,10 +49,36 @@
     font-family: Google Sans, Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
 }
 
+.cont .user{
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 .cont .user-list .user{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 15px;
+}
+
+.cont .user-list .user .flex{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.cont .user-list .user button{
+    width: 50%;
+    font-style: normal;
+    font-size: 13px;
+    font-family:  "Google Sans", Roboto, Arial, sans-serif;
+    height: 30px;
+    border-radius: 4px;
+    font-weight: 500;
+    color: #4294ff;
+    background-color: #e6ecff;
+    border-style: none;
 }
 
 .cont .user-list .user img{

@@ -1,12 +1,38 @@
 <header class="app-header">
   <div class="menu">
     <ul>
-      <li><a>File</a></li>
+      <!-- <li><a>File</a></li>
       <li><a>Edit</a></li>
       <li #connectButton id="connect-btn"><a (click)="toggle()">Connect</a></li>
       <li #leaveButton id="leave-btn"><a (click)="OnLeaveRoom()">Leave</a></li>
       <li><a (click)="logout()">Logout</a></li>
-      <li><a (click)="saveFile()">Save</a></li>
+      <li><a (click)="saveFile()">Save</a></li> -->
+      <li>RCCE</li>
+      <!-- <li #connectButton id="connect-btn"><a (click)="toggle()">Connect</a></li>
+      <li #leaveButton id="leave-btn"><a (click)="OnLeaveRoom()">Leave</a></li> -->
+      <li><a (click)="logout()">Logout</a></li>
+    </ul>
+    <ul>
+      <li class="padd" style="margin-right: 10px">
+        <a>
+          <img src="assets/pause.png" class="b2" alt="" />
+        </a>
+      </li>
+      <li class="padd" style="margin-right: 10px">
+        <a (click)="logout()">
+          <img src="assets/log-out.png" class="b2" alt="" />
+        </a>
+      </li>
+      <li #connectButton id="connect-btn" class="padd">
+        <a (click)="toggle()">
+          <button class="b1">Connect</button>
+        </a>
+      </li>
+      <li #leaveButton id="leave-btn" class="padd">
+        <a (click)="OnLeaveRoom()">
+          <button class="b1">Leave</button>
+        </a>
+      </li>
     </ul>
   </div>
 </header>
@@ -36,6 +62,15 @@
     />
     <button (click)="joinRoom()">Join Room</button>
     <div #error id="error">No such room exists</div>
+  </div>
+</div>
+
+<div class="popup1">
+  <img src="assets/close.png" alt="" class="cus-img" />
+  <p>Do you want to save the files?</p>
+  <div class="flex">
+    <button class="b2">Yes</button>
+    <button class="b3">No</button>
   </div>
 </div>
 

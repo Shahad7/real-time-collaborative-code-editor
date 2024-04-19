@@ -6,8 +6,12 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { authGuard } from './auth/auth.guard';
+<<<<<<< HEAD
 import { DataStoreComponent } from './components/data-store/data-store.component';
 import { FileContentComponent } from './components/file-content/file-content.component';
+=======
+import { RepositoryComponent } from './components/repository/repository.component';
+>>>>>>> acffa182c9badb07ae6e5ccf19cd000dfa166349
 
 const routes: Routes = [
   // Redirect to index guarded by login
@@ -19,6 +23,7 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
   { path: 'sign-up', component: SignUpComponent },
+  { path: 'repository', component: RepositoryComponent },
   // Add more routes for other pages as needed
   {
     path: 'data-store/:roomID/file/:fileID',

@@ -7,23 +7,22 @@
 .chatbox {
   width: 100%;
   height: 100%;
-  margin: 10px;
   border-radius: 15px;
-  background: linear-gradient(145deg, #f0f0f0, #e6e7ee);
+  /* background: linear-gradient(145deg, #f0f0f0, #e6e7ee); */
   font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
     Liberation Mono, monospace;
-  padding: 5% 8%;
+  padding: 2% 4%;
   font-weight: 500;
 }
 
 .chatbox .heading {
-  height: 10%;
+  height: 7%;
   display: flex;
   align-items: center;
 }
 
 .chatbox .chat-sec {
-  height: 80%;
+  height: 83%;
   background-color: #ffff;
   border-radius: 10px;
   font-size: 13px;

@@ -69,3 +69,7 @@ input {
 .input-visible {
   display: block;
 }
+
+.pad{
+  padding: 2% 4%;
+}
