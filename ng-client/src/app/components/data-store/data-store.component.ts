@@ -1,10 +1,11 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, ViewChild } from '@angular/core';
 import {
   Router,
   ActivatedRoute,
   ParamMap,
   NavigationEnd,
 } from '@angular/router';
+
 import { Location } from '@angular/common';
 
 @Component({
@@ -35,22 +36,44 @@ export class DataStoreComponent implements OnInit {
   folders: Array<{ foldername: string; path: string }> = [];
   currentPWD: string = '';
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  //file-content variables
+  fileMode: boolean = false;
+  fileID: string = '';
+  filePath: string = '';
+  fileValue: string = '';
+  loading: boolean = true;
+  copied: boolean = false;
+  @ViewChild('code')
+  code: any;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location
+  ) {
     this.roomID = this.route.snapshot.paramMap.get('roomID')!;
+    this.fileID = this.route.snapshot.paramMap.get('fileID')!;
+
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        let current_path = this.router.url;
+        if (!this.fileID) {
+          let current_path = this.router.url;
 
-        if (current_path == '/data-store/' + this.roomID) {
-          this.currentPWD = '';
+          if (current_path == '/data-store/' + this.roomID) {
+            this.currentPWD = '';
+          } else {
+            let new_path = current_path.replace(
+              '/data-store/' + this.roomID + '/',
+              ''
+            );
+            this.currentPWD = new_path;
+          }
+          this.displayFiles();
         } else {
-          let new_path = current_path.replace(
-            '/data-store/' + this.roomID + '/',
-            ''
-          );
-          this.currentPWD = new_path;
+          this.fileMode = true;
+          this.copied = false;
+          this.fetchValue();
         }
-        this.displayFiles();
       }
     });
   }
@@ -103,7 +126,6 @@ export class DataStoreComponent implements OnInit {
   //change present working directory to previous
   changePWD() {
     if (!this.currentPWD.includes('/')) {
-      console.log(this.currentPWD);
       this.router.navigateByUrl(`/data-store/${this.roomID}`);
     } else {
       let folders = this.currentPWD.split('/');
@@ -113,6 +135,11 @@ export class DataStoreComponent implements OnInit {
         relativeTo: this.route,
       });
     }
+  }
+
+  //navigate back to code-editor
+  goBackToEditor() {
+    this.router.navigateByUrl(`/code-editor/room-log`);
   }
 
   displayFiles() {
@@ -183,5 +210,82 @@ export class DataStoreComponent implements OnInit {
   ngOnInit() {
     this.roomID = this.route.snapshot.paramMap.get('roomID')!;
     this.fetchData();
+  }
+
+  //file-content component functions
+  async fetchValue() {
+    try {
+      const response = await fetch(
+        `http://${window.location.hostname}:3000/file/${this.fileID}`,
+        {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            roomID: this.roomID,
+            username: sessionStorage.getItem('username') ?? '',
+          }),
+        }
+      );
+      const data = await response.json();
+      if (
+        response.status == 400 ||
+        response.status == 403 ||
+        response.status == 404
+      ) {
+        this.errorMsg = data;
+        this.error = true;
+      } else {
+        this.loading = false;
+        this.fileValue = data.value;
+        this.filePath = data.path;
+        console.log(this.fileValue);
+      }
+    } catch (e) {
+      console.log("couldn't fetch file content");
+      console.error(e);
+    }
+  }
+
+  goBack() {
+    this.location.back();
+  }
+
+  async copyValue(): Promise<void> {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(
+          this.code.nativeElement.textContent
+        );
+        this.copied = true;
+      } else {
+        // Use the 'out of viewport hidden text area' trick
+        const textArea = document.createElement('textarea');
+        textArea.value = this.code.nativeElement.textContent;
+
+        // Move textarea out of the viewport so it's not visible
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-999999px';
+
+        document.body.prepend(textArea);
+        textArea.select();
+
+        document.execCommand('copy');
+        this.copied = true;
+
+        textArea.remove();
+      }
+    } catch (e) {
+      console.log(e);
+      alert('error: you have to manually copy');
+    }
+  }
+
+  viewFile(fileID: string) {
+    this.router.navigate(['file', fileID], {
+      relativeTo: this.route,
+    });
   }
 }

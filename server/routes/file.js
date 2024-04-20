@@ -52,7 +52,7 @@ router.post(
         if (!file) {
           res.status(404).json("no such file");
         } else {
-          res.json({ value: file.value });
+          res.json({ value: file.value, path: file.path });
         }
       }
     } catch (e) {

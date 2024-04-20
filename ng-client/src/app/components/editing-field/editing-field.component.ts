@@ -55,11 +55,11 @@ export class EditingFieldComponent {
     this.socketService.purgeDeadAwareness(this.awareness.clientID);
     // console.log('purge req sent');
 
-    // awarenessProtocol.removeAwarenessStates(
-    //   this.awareness,
-    //   [this.awareness.clientID],
-    //   'window unload'
-    // );
+    awarenessProtocol.removeAwarenessStates(
+      this.awareness,
+      [this.awareness.clientID],
+      'window unload'
+    );
   }
 
   constructor(

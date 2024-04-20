@@ -1,28 +1,44 @@
 <div class="container">
   <p class="head">Repository</p>
   <div class="flex mar">
-    <button
-      [ngClass]="
-        allFiles.length > 0 && currentPWD != '' ? 'b1-visible b1' : 'b1'
-      "
-      (click)="changePWD()"
-    >
+    <button (click)="goBackToEditor()" *ngIf="!fileMode" class="b1">
       <img src="assets/arrow-right.png" alt="" />
-      Prev
+      Go to Editor
     </button>
-    <!-- <button class="b2">
-      Next
+    <button class="b1" *ngIf="fileMode" (click)="goBack()">
       <img src="assets/arrow-right.png" alt="" />
-    </button> -->
+      Back
+    </button>
   </div>
-  <h2 *ngIf="allFiles.length == 0 && !error">loading....</h2>
-  <h2 *ngIf="error">{{ errorMsg }}</h2>
+  <p class="head" *ngIf="allFiles.length == 0 && !error">loading....</p>
+  <p class="head" *ngIf="error">{{ errorMsg }}</p>
   <div *ngIf="allFiles.length > 0 && !error" class="row">
     <div class="col-md-8">
       <div class="wrapper">
-        <table>
+        <table *ngIf="!fileMode">
           <tr>
             <th>Session-7a75</th>
+          </tr>
+          <tr
+            *ngIf="allFiles.length > 0 && currentPWD != ''"
+            (click)="changePWD()"
+          >
+            <td>
+              <div class="flex">
+                <img id="folder-icon" src="assets/folder-icon.png" alt="" />
+                <p
+                  class="file-name"
+                  style="
+                    margin-left: -2px;
+                    font-size: 18px;
+                    letter-spacing: -4px;
+                    max-height: 21px;
+                  "
+                >
+                  ..
+                </p>
+              </div>
+            </td>
           </tr>
           <tr
             *ngFor="let folder of folders"
@@ -35,13 +51,13 @@
               </div>
             </td>
           </tr>
-          <tr *ngFor="let file of files">
+          <tr *ngFor="let file of files" (click)="viewFile(file.fileID)">
             <td>
               <div class="flex">
                 <img id="file-icon" src="assets/file-icon.png" alt="" />
-                <a class="file-name" [routerLink]="['file', file.fileID]">{{
-                  file.filename
-                }}</a>
+                <p class="file-name">
+                  {{ file.filename }}
+                </p>
               </div>
             </td>
           </tr>
@@ -68,6 +84,60 @@
           </tr>
           <tr>
             <td></td>
+          </tr>
+        </table>
+        <!--file-content-->
+        <table *ngIf="fileMode">
+          <tr>
+            <th>Session-7a75</th>
+          </tr>
+          <tr *ngIf="loading && !error">
+            <td>
+              <p>loading...</p>
+            </td>
+          </tr>
+          <tr *ngIf="error">
+            <td>
+              <p>{{ errorMsg }}</p>
+            </td>
+          </tr>
+          <tr *ngIf="!loading">
+            <td>
+              <div class="flex">
+                <img id="folder-icon" src="assets/folder-icon.png" alt="" />
+                <p class="file-name">
+                  {{ "/" + filePath }}
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="!loading">
+            <td>
+              <div class="grid">
+                <button
+                  id="copy-btn"
+                  (click)="copyValue()"
+                  *ngIf="fileValue != ''"
+                >
+                  <img
+                    *ngIf="!copied"
+                    src="assets/content-copy.svg"
+                    style="margin-right: 0"
+                    alt=""
+                  />
+                  <img
+                    *ngIf="copied"
+                    src="assets/check.svg"
+                    alt=""
+                    style="margin-right: 0"
+                  />
+                </button>
+              </div>
+              <pre *ngIf="!loading && !error"><code #code>
+                {{fileValue}}
+            </code></pre>
+            </td>
           </tr>
         </table>
       </div>

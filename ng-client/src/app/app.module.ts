@@ -21,7 +21,6 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { DataStoreComponent } from './components/data-store/data-store.component';
 import { FileContentComponent } from './components/file-content/file-content.component';
 import { RoomLogComponent } from './components/room-log/room-log.component';
-import { RepositoryComponent } from './components/repository/repository.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +40,6 @@ import { RepositoryComponent } from './components/repository/repository.componen
     DataStoreComponent,
     FileContentComponent,
     RoomLogComponent,
-    RepositoryComponent,
   ],
   imports: [
     BrowserModule,

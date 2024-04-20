@@ -8,7 +8,6 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { authGuard } from './auth/auth.guard';
 import { DataStoreComponent } from './components/data-store/data-store.component';
 import { FileContentComponent } from './components/file-content/file-content.component';
-import { RepositoryComponent } from './components/repository/repository.component';
 
 const routes: Routes = [
   // Redirect to index guarded by login
@@ -21,7 +20,7 @@ const routes: Routes = [
   },
   {
     path: 'data-store/:roomID/file/:fileID',
-    component: FileContentComponent,
+    component: DataStoreComponent,
   },
   {
     path: 'data-store/:roomID',
@@ -35,7 +34,6 @@ const routes: Routes = [
   },
 
   { path: 'sign-up', component: SignUpComponent },
-  { path: 'repository', component: RepositoryComponent },
   // Add more routes for other pages as needed
 ];
 

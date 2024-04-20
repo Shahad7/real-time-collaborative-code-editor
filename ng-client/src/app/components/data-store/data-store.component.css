@@ -112,7 +112,6 @@ a {
 }
 
 .container .b1 {
-  visibility: hidden;
   font-size: 14px;
   font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
     Liberation Mono, monospace;
@@ -121,10 +120,6 @@ a {
   align-items: center;
   border-style: none;
   border-radius: 5px;
-}
-
-.container .b1-visible {
-  visibility: visible;
 }
 
 .container .b1 img {
@@ -159,4 +154,12 @@ a {
 .container .scroll {
   max-height: 500px;
   overflow-y: auto;
+}
+
+.grid {
+  display: grid;
+  margin-bottom: 0;
+}
+#copy-btn {
+  justify-self: end;
 }

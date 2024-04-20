@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -50,6 +50,7 @@ export class FileContentComponent implements OnInit {
       } else {
         this.loading = false;
         this.value = data.value;
+        console.log(this.value);
       }
     } catch (e) {
       console.log("couldn't fetch file content");
