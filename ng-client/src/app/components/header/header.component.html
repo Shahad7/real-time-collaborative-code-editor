@@ -69,10 +69,30 @@
     class="cus-img"
     (click)="closeSaveWarning()"
   />
-  <p>Do you want to save the files?</p>
-  <div class="flex">
-    <button class="b2">Yes</button>
+  <p *ngIf="saveProgress == 'initial'">Do you want to save the files?</p>
+  <p *ngIf="saveProgress == 'saving'">saving...</p>
+  <p *ngIf="saveProgress == 'saved'" style="color: green">
+    files saved successfully
+  </p>
+  <p *ngIf="saveProgress == 'error'" style="color: red">couldn't save files</p>
+  <div *ngIf="saveProgress == 'initial'" class="flex">
+    <button class="b2" (click)="endProperly()">Yes</button>
     <button class="b3" (click)="endAbruptly()">No</button>
+  </div>
+  <div class="flex">
+    <button
+      *ngIf="saveProgress == 'error'"
+      (click)="endProperly()"
+      style="margin-right: 8px"
+    >
+      Retry
+    </button>
+    <button
+      *ngIf="saveProgress == 'saved' || saveProgress == 'error'"
+      (click)="OnLeaveRoom()"
+    >
+      Quit
+    </button>
   </div>
 </div>
 

@@ -241,7 +241,6 @@ export class DataStoreComponent implements OnInit {
         this.loading = false;
         this.fileValue = data.value;
         this.filePath = data.path;
-        console.log(this.fileValue);
       }
     } catch (e) {
       console.log("couldn't fetch file content");

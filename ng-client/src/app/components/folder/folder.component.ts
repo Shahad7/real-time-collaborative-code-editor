@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
+import { DataStoreService } from '../data-store/data-store.service';
 import { SocketService } from 'src/app/socket/socket.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -27,7 +28,8 @@ export class FolderComponent {
 
   constructor(
     private explorerService: FileExplorerService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private dataStoreService: DataStoreService
   ) {
     //to know if clicked outside on sidebar to hide input
     this.explorerService.clickedOutside$.subscribe((value) => {
@@ -63,6 +65,13 @@ export class FolderComponent {
         }
       }
     );
+
+    //publish files count for saving
+    this.dataStoreService.fileCountAnnouncement$.subscribe((value) => {
+      if (value == 'ready') {
+        this.dataStoreService.publishCount(this.files.length);
+      }
+    });
   }
 
   toggleFolder(): void {

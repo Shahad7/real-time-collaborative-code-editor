@@ -31,7 +31,7 @@ export class AppComponent {
   }
 
   @HostListener('document:DOMContentLoaded', ['$event'])
-  handlePageRefresh(event: any) {
+  handlePageRefresh(event: any): void {
     const token = sessionStorage.getItem('token');
     const userID = sessionStorage.getItem('userID') ?? '';
     const username = sessionStorage.getItem('username') ?? '';

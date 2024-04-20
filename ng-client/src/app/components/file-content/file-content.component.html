@@ -1,9 +1,0 @@
-<p>{{ "file: " + fileID }}</p>
-<p>{{ "room: " + roomID }}</p>
-<button (click)="goBack()">prev</button>
-<button (click)="copyValue()" *ngIf="value != ''">copy</button>
-<p *ngIf="loading && !error">loading...</p>
-<p *ngIf="error">{{ errorMsg }}</p>
-<pre *ngIf="!loading && !error"><code #code>
-    {{value}}
-</code></pre>

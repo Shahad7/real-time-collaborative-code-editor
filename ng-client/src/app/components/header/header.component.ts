@@ -18,6 +18,8 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 export class HeaderComponent {
   isAdmin: boolean = false;
   membersCount: number = 0;
+  filesCount: number = 0;
+  saveProgress: 'saving' | 'saved' | 'initial' | 'error' = 'initial';
 
   constructor(
     private authService: AuthService,
@@ -53,6 +55,23 @@ export class HeaderComponent {
     //keep membersCount up to date
     this.userListService.membersCount$.subscribe((count) => {
       this.membersCount = count;
+    });
+
+    //track files count to save
+    this.dataStoreService.fileCount$.subscribe((increment) => {
+      this.filesCount += increment;
+    });
+
+    //know when each each file upload is completed
+    this.dataStoreService.fileUploadCompleteAnnouncement$.subscribe((value) => {
+      if (value == 'done') {
+        this.filesCount -= 1;
+        if (this.filesCount == 0) this.saveProgress = 'saved';
+      }
+    });
+
+    this.dataStoreService.fileUploadError$.subscribe((value) => {
+      if (value == 'error') this.saveProgress = 'error';
     });
 
     this.userListService.joinedUser$.subscribe((username) => {
@@ -281,8 +300,8 @@ export class HeaderComponent {
     );
   }
 
-  //save file test
-  saveFile() {
+  //save files test
+  saveFiles() {
     this.dataStoreService.triggerUpload();
   }
 
@@ -322,5 +341,13 @@ export class HeaderComponent {
   endAbruptly() {
     this.socketService.endSession();
     this.OnLeaveRoom();
+  }
+
+  endProperly() {
+    this.socketService.endSession();
+    this.saveProgress = 'saving';
+    this.dataStoreService.queryCount();
+
+    this.saveFiles();
   }
 }

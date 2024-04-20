@@ -23,21 +23,31 @@ export class FileComponent {
         if (!sessionStorage.getItem('roomID')) {
           throw new Error('user not in a room');
         }
-        fetch(`http://${window.location.hostname}:3000/file/upload`, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            filename: this.filename,
-            fileID: this.id,
-            roomID: sessionStorage.getItem('roomID'),
-            value: this.value,
-            path: this.path,
-          }),
-        });
-      } catch (e) {
+        const response = await fetch(
+          `http://${window.location.hostname}:3000/file/upload`,
+          {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              filename: this.filename,
+              fileID: this.id,
+              roomID: sessionStorage.getItem('roomID'),
+              value: this.value,
+              path: this.path,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        if (data.success) {
+          this.dataStoreService.alertCompletion();
+        } else if (data.error) {
+          this.dataStoreService.alertError();
+        }
+      } catch (e: any) {
         console.log("couldn't save file : " + this.filename);
         console.error(e);
       }

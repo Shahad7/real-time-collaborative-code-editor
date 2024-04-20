@@ -14,15 +14,17 @@ router.post(
       const duplicate = await File.findOne({ fileID: fileID });
 
       if (duplicate) {
-        throw new Error("duplicate file found : can't save");
+        // throw new Error("duplicate file found : can't save");
+        res.json({ success: true, duplicate: true });
+      } else {
+        const file = new File({ filename, fileID, roomID, value, path });
+        await file.save();
+        res.json({ success: true, duplicate: false });
       }
-      const file = new File({ filename, fileID, roomID, value, path });
-      await file.save();
-    } catch (e) {
+    } catch (error) {
       console.log("couldn't upload file to db");
-      console.error(e);
-    } finally {
-      res.end();
+      res.json({ success: false, error: true });
+      console.error(error);
     }
   })
 );

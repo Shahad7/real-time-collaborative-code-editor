@@ -7,7 +7,6 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { authGuard } from './auth/auth.guard';
 import { DataStoreComponent } from './components/data-store/data-store.component';
-import { FileContentComponent } from './components/file-content/file-content.component';
 
 const routes: Routes = [
   // Redirect to index guarded by login
