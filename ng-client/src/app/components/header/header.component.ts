@@ -17,6 +17,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 })
 export class HeaderComponent {
   isAdmin: boolean = false;
+  membersCount: number = 0;
 
   constructor(
     private authService: AuthService,
@@ -40,6 +41,18 @@ export class HeaderComponent {
         this.isAdmin = true;
         sessionStorage.setItem('isAdmin', 'true');
       } else this.isAdmin = false;
+    });
+
+    //when admin stops the session
+    this.socketService.socket.on('session-end', () => {
+      if (!this.isAdmin) {
+        this.OnLeaveRoom();
+      }
+    });
+
+    //keep membersCount up to date
+    this.userListService.membersCount$.subscribe((count) => {
+      this.membersCount = count;
     });
 
     this.userListService.joinedUser$.subscribe((username) => {
@@ -103,6 +116,8 @@ export class HeaderComponent {
   notificationDiv: any;
   @ViewChild('successorWarning')
   successorWarning: any;
+  @ViewChild('saveWarning')
+  saveWarning: any;
 
   //options could go back to normal ('connect') after refresh
   @HostListener('document:DOMContentLoaded', ['$event'])
@@ -271,6 +286,14 @@ export class HeaderComponent {
     this.dataStoreService.triggerUpload();
   }
 
+  PickOrSaveWrapper(option: string) {
+    if (this.membersCount > 1 && (option == 'leave' || option == 'logout')) {
+      this.forceToPick(option);
+    } else {
+      this.remindToSave();
+    }
+  }
+
   forceToPick(option: string) {
     if (this.isAdmin) {
       this.successorWarning.nativeElement.style.display = 'flex';
@@ -287,5 +310,17 @@ export class HeaderComponent {
   showMembers() {
     this.successorWarning.nativeElement.style.display = 'none';
     this.router.navigateByUrl('code-editor/view-members');
+  }
+
+  remindToSave() {
+    this.saveWarning.nativeElement.style.display = 'flex';
+  }
+  closeSaveWarning() {
+    this.saveWarning.nativeElement.style.display = 'none';
+  }
+
+  endAbruptly() {
+    this.socketService.endSession();
+    this.OnLeaveRoom();
   }
 }

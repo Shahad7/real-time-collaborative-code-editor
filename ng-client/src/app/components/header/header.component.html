@@ -16,17 +16,17 @@
         </a>
       </li>
       <li #leaveButton id="leave-btn" class="padd" style="margin-right: 10px">
-        <a (click)="forceToPick('leave')">
+        <a (click)="PickOrSaveWrapper('leave')">
           <button class="b1">Leave</button>
         </a>
       </li>
       <li *ngIf="isAdmin" #stopButton class="padd" style="margin-right: 10px">
-        <a>
+        <a (click)="PickOrSaveWrapper('stop')">
           <img src="assets/pause.png" class="b2" alt="" />
         </a>
       </li>
       <li class="padd" style="margin-right: 10px">
-        <a (click)="forceToPick('logout')">
+        <a (click)="PickOrSaveWrapper('logout')">
           <img src="assets/log-out.png" class="b2" alt="" />
         </a>
       </li>
@@ -62,12 +62,17 @@
   </div>
 </div>
 
-<div class="popup1">
-  <img src="assets/close.png" alt="" class="cus-img" />
+<div #saveWarning class="popup1">
+  <img
+    src="assets/close.png"
+    alt=""
+    class="cus-img"
+    (click)="closeSaveWarning()"
+  />
   <p>Do you want to save the files?</p>
   <div class="flex">
     <button class="b2">Yes</button>
-    <button class="b3">No</button>
+    <button class="b3" (click)="endAbruptly()">No</button>
   </div>
 </div>
 

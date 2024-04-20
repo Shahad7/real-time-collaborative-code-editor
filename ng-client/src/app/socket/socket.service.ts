@@ -68,7 +68,6 @@ export class SocketService {
   sendAwareness(updates: Uint8Array): void {
     const roomID = sessionStorage.getItem('roomID');
     if (roomID) this.socket.emit('send-awareness', updates, roomID);
-    else console.log('are you sure this client is in a room ?');
   }
 
   //send explorer updates i.e, when a new file or folder is created by the leader
@@ -102,5 +101,11 @@ export class SocketService {
   changeAdmin(admin: string) {
     const roomID = sessionStorage.getItem('roomID');
     if (roomID) this.socket.emit('change-admin', admin, roomID);
+  }
+
+  /******************************stop session */
+  endSession() {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('signal-end', roomID);
   }
 }

@@ -75,10 +75,12 @@ export class UserListComponent {
 
   addMember(member: string) {
     this.members.push(member);
+    this.userListService.alertCount(this.members.length);
   }
 
   removeMember(member: string) {
     this.members.splice(this.members.indexOf(member), 1);
+    this.userListService.alertCount(this.members.length);
   }
 
   makeAdmin(admin: string) {

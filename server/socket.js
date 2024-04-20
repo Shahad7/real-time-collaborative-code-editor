@@ -313,6 +313,11 @@ const getIo = (server) => {
       else console.log("Couldn't update admin");
       io.to(roomID).emit("new-admin", admin);
     });
+
+    //signal everyone to leave
+    socket.on("signal-end", (roomID) => {
+      io.to(roomID).emit("session-end");
+    });
   });
 };
 
