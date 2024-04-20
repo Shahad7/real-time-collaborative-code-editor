@@ -16,6 +16,8 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
+  isAdmin: boolean = false;
+
   constructor(
     private authService: AuthService,
     private socketService: SocketService,
@@ -24,6 +26,22 @@ export class HeaderComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    //listen to admin event
+    this.socketService.socket.on('admin', () => {
+      this.isAdmin = true;
+      sessionStorage.setItem('isAdmin', 'true');
+      this.userListService.adminCheck();
+    });
+
+    //know when admin changes
+    this.socketService.socket.on('new-admin', (admin) => {
+      let currentUser = sessionStorage.getItem('username');
+      if (currentUser && currentUser == admin) {
+        this.isAdmin = true;
+        sessionStorage.setItem('isAdmin', 'true');
+      }
+    });
+
     this.userListService.joinedUser$.subscribe((username) => {
       this.notification.nativeElement.textContent = `${username} joined the room`;
       this.notificationDiv.nativeElement.style.display = 'flex';
@@ -42,12 +60,25 @@ export class HeaderComponent {
       // alert(`${username} left the room`);
     });
 
+    this.userListService.newAdmin$.subscribe((admin) => {
+      let message;
+      if (admin == 'You') message = 'You are now an admin';
+      else message = admin + ' is now an admin';
+      this.notification.nativeElement.textContent = message;
+      this.notificationDiv.nativeElement.style.display = 'flex';
+      setTimeout(() => {
+        this.notificationDiv.nativeElement.style.display = 'none';
+      }, 5500);
+    });
+
     //when navigating back to code-editor from repo, it should remain 'leave'
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         let current_path = this.router.url;
 
         if (current_path == '/code-editor/room-log') {
+          let isAdmin = sessionStorage.getItem('isAdmin');
+          if (isAdmin && isAdmin == 'true') this.isAdmin = true;
           this.recursiveWrapper();
         }
       }
@@ -75,6 +106,8 @@ export class HeaderComponent {
   @HostListener('document:DOMContentLoaded', ['$event'])
   handlePageRefresh(event: any) {
     this.toggleConnectOptions();
+    let isAdmin = sessionStorage.getItem('isAdmin');
+    if (isAdmin && isAdmin == 'true') this.isAdmin = true;
   }
 
   //recursive function wrapper for toggleConnectOptions on navigation back
@@ -152,6 +185,9 @@ export class HeaderComponent {
   //to-be-implemented as wanted
   OnLeaveRoom() {
     const roomID = sessionStorage.getItem('roomID');
+    const isAdmin = sessionStorage.getItem('isAdmin');
+    if (isAdmin) sessionStorage.setItem('isAdmin', 'false');
+
     if (roomID) {
       sessionStorage.removeItem('roomID');
       this.socketService.leaveRoom(roomID);

@@ -1,7 +1,7 @@
 <header class="app-header">
   <div class="menu">
     <ul>
-      <li><a (click)="saveFile()">Save</a></li>
+      <!-- <li><a (click)="saveFile()">Save</a></li> -->
       <li>RCCE</li>
     </ul>
     <ul>
@@ -20,7 +20,7 @@
           <button class="b1">Leave</button>
         </a>
       </li>
-      <li #stopButton class="padd" style="margin-right: 10px">
+      <li *ngIf="isAdmin" #stopButton class="padd" style="margin-right: 10px">
         <a>
           <img src="assets/pause.png" class="b2" alt="" />
         </a>

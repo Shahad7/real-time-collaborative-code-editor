@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { SocketService } from 'src/app/socket/socket.service';
 
 @Component({
   selector: 'app-room-log',
@@ -9,7 +10,7 @@ import { OnInit } from '@angular/core';
 export class RoomLogComponent implements OnInit {
   rooms: Array<{ roomID: string; date: string; time: string }> = [];
   loading: boolean = false;
-  constructor() {}
+  constructor(private socketService: SocketService) {}
 
   async fetchAllRoomDetails() {
     try {

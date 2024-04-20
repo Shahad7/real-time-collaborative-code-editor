@@ -24,6 +24,9 @@ const getIo = (server) => {
 
   //store existing roomIDs for validation
   let rooms = {};
+
+  //keep track of admins of  each room
+  let admins = {};
   //for configuring socket.io server cors
   let ip;
 
@@ -85,6 +88,10 @@ const getIo = (server) => {
       let username = socket.handshake.auth.username;
       rooms[roomID] = [username];
       socket.join(roomID);
+
+      //make the client admin
+      admins[roomID] = username;
+      socket.emit("admin");
       //making a ydoc for the respective room
       let ydoc = new Y.Doc();
       ydoc.getText("monaco");
@@ -126,6 +133,8 @@ const getIo = (server) => {
         //alert everyone that someone joined
         socket.to(roomID).emit("someone-joined", username);
         console.log(`${username} joined ${roomID}`);
+        //let him know current admin
+        if (admins[roomID]) socket.emit("know-admin", admins[roomID]);
         if (!rooms[roomID].includes(username)) {
           rooms[roomID].push(username);
         }
@@ -296,6 +305,13 @@ const getIo = (server) => {
     /************chat service part */
     socket.on("send-message", (message, sender, color, roomID) => {
       io.to(roomID).emit("receive-message", message, sender, color);
+    });
+
+    //change admin
+    socket.on("change-admin", (admin, roomID) => {
+      if (admins[roomID]) admins[roomID] = admin;
+      else console.log("Couldn't update admin");
+      io.to(roomID).emit("new-admin", admin);
     });
   });
 };

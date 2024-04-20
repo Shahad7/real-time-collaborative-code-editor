@@ -97,4 +97,10 @@ export class SocketService {
     if (roomID)
       this.socket.emit('send-message', message, sender, color, roomID);
   }
+
+  /*********************************************user-list part */
+  changeAdmin(admin: string) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('change-admin', admin, roomID);
+  }
 }

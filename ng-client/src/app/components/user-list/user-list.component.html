@@ -1,6 +1,8 @@
 <div class="cont">
   <p class="head">People</p>
-  <button class="b1"><img src="assets/add-friend.png" alt="" />Add People</button>
+  <button class="b1">
+    <img src="assets/add-friend.png" alt="" />Add People
+  </button>
   <p class="head2">IN ROOM</p>
   <div class="user-list">
     <div *ngFor="let member of members" class="user">
@@ -8,7 +10,22 @@
         <img src="assets/user.png" alt="" />
         <p>{{ member }}</p>
       </div>
-      <button>Make Admin</button>
+      <button
+        style="cursor: auto"
+        *ngIf="member == admin || (isAdmin && member == 'You')"
+      >
+        Admin
+      </button>
+      <button
+        *ngIf="isAdmin && member != admin && member != 'You'"
+        (click)="makeAdmin(member)"
+      >
+        Make Admin
+      </button>
+      <button
+        style="background-color: transparent; cursor: auto"
+        *ngIf="!isAdmin && member != admin"
+      ></button>
     </div>
   </div>
 </div>

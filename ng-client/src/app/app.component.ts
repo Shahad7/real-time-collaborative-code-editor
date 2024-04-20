@@ -18,7 +18,6 @@ export class AppComponent {
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         let current_path = this.router.url;
-
         if (current_path == '/code-editor/room-log') {
           const token = sessionStorage.getItem('token');
           const userID = sessionStorage.getItem('userID') ?? '';

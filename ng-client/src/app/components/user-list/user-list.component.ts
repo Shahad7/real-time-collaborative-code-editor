@@ -8,23 +8,57 @@ import { UserListService } from './user-list.service';
   styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent {
-  members: Array<string> = ['You' /*,  'Max', 'Eva'*/];
+  members: Array<string> = [
+    'You',
+    /*,  'Max', 'Eva'*/
+  ];
+  currentUser: string = '';
+  admin: string = '';
+  isAdmin: boolean = false;
 
   constructor(
     private socketService: SocketService,
     private userListService: UserListService
   ) {
-    this.socketService.socket.on('members', (members) => {
-      let currentUser: string | null = '';
-      if (sessionStorage.getItem('username')) {
-        currentUser = sessionStorage.getItem('username');
+    if (sessionStorage.getItem('username')) {
+      this.currentUser = sessionStorage.getItem('username') ?? '';
+    }
+    let isAdmin = sessionStorage.getItem('isAdmin');
+    if (isAdmin && isAdmin == 'true') {
+      this.isAdmin = true;
+    }
+
+    this.userListService.adminCheck$.subscribe((val) => {
+      if (val == 'check') {
+        let isAdmin = sessionStorage.getItem('isAdmin');
+        if (isAdmin && isAdmin == 'true') {
+          this.isAdmin = true;
+        }
       }
+    });
+
+    //know current admin
+    this.socketService.socket.on('know-admin', (admin) => {
+      this.admin = admin;
+    });
+
+    //know when admin changes
+    this.socketService.socket.on('new-admin', (admin) => {
+      this.admin = admin;
+      if (this.currentUser == admin) {
+        this.isAdmin = true;
+        this.userListService.alertNewAdmin('You');
+      } else {
+        this.isAdmin = false;
+        sessionStorage.setItem('isAdmin', 'false');
+        this.userListService.alertNewAdmin(admin);
+      }
+    });
+    this.socketService.socket.on('members', (members) => {
       // console.log(members);
 
       members.forEach((elt: string) => {
-        if (elt != currentUser) {
-          this.addMember(elt);
-        }
+        if (elt != this.currentUser) this.addMember(elt);
       });
     });
 
@@ -45,5 +79,11 @@ export class UserListComponent {
 
   removeMember(member: string) {
     this.members.splice(this.members.indexOf(member), 1);
+  }
+
+  makeAdmin(admin: string) {
+    this.isAdmin = false;
+    sessionStorage.setItem('isAdmin', 'false');
+    this.socketService.changeAdmin(admin);
   }
 }
