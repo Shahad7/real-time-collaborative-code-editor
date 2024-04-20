@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { SidebarService } from '../sidebar/sidebar.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OnInit } from '@angular/core';
 @Component({
   selector: 'app-sidebar-menu',
@@ -13,7 +13,18 @@ export class SidebarMenuComponent implements OnInit {
     private sidebarService: SidebarService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        let current_path = this.router.url;
+
+        if (current_path.startsWith('/code-editor')) {
+          let extracts = current_path.split('/');
+          this.selectOption(extracts[2] as any);
+        }
+      }
+    });
+  }
   currentOption: 'explorer' | 'chatbox' | 'view-members' | 'room-log' =
     'explorer';
 

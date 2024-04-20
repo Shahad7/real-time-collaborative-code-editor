@@ -16,7 +16,7 @@
         </a>
       </li>
       <li #leaveButton id="leave-btn" class="padd" style="margin-right: 10px">
-        <a (click)="OnLeaveRoom()">
+        <a (click)="forceToPick('leave')">
           <button class="b1">Leave</button>
         </a>
       </li>
@@ -26,7 +26,7 @@
         </a>
       </li>
       <li class="padd" style="margin-right: 10px">
-        <a (click)="logout()">
+        <a (click)="forceToPick('logout')">
           <img src="assets/log-out.png" class="b2" alt="" />
         </a>
       </li>
@@ -68,6 +68,19 @@
   <div class="flex">
     <button class="b2">Yes</button>
     <button class="b3">No</button>
+  </div>
+</div>
+
+<div #successorWarning class="popup1">
+  <img
+    src="assets/close.png"
+    alt=""
+    class="cus-img"
+    (click)="closeSuccessorWarning()"
+  />
+  <p style="color: red">You must make someone else admin before you leave</p>
+  <div class="flex">
+    <button id="view-members-btn" (click)="showMembers()">View members</button>
   </div>
 </div>
 

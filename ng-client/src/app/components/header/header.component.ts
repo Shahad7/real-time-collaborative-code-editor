@@ -39,7 +39,7 @@ export class HeaderComponent {
       if (currentUser && currentUser == admin) {
         this.isAdmin = true;
         sessionStorage.setItem('isAdmin', 'true');
-      }
+      } else this.isAdmin = false;
     });
 
     this.userListService.joinedUser$.subscribe((username) => {
@@ -101,6 +101,8 @@ export class HeaderComponent {
   notification: any;
   @ViewChild('notificationDiv')
   notificationDiv: any;
+  @ViewChild('successorWarning')
+  successorWarning: any;
 
   //options could go back to normal ('connect') after refresh
   @HostListener('document:DOMContentLoaded', ['$event'])
@@ -267,5 +269,23 @@ export class HeaderComponent {
   //save file test
   saveFile() {
     this.dataStoreService.triggerUpload();
+  }
+
+  forceToPick(option: string) {
+    if (this.isAdmin) {
+      this.successorWarning.nativeElement.style.display = 'flex';
+    } else {
+      if (option == 'leave') this.OnLeaveRoom();
+      else if (option == 'logout') this.logout();
+    }
+  }
+
+  closeSuccessorWarning() {
+    this.successorWarning.nativeElement.style.display = 'none';
+  }
+
+  showMembers() {
+    this.successorWarning.nativeElement.style.display = 'none';
+    this.router.navigateByUrl('code-editor/view-members');
   }
 }
