@@ -186,8 +186,10 @@ export class EditingFieldComponent {
           this.ymap.get(fileID).toString()
         );
       } else {
-        throw new Error(
-          'no model or ytext instance found for file with id : ' + fileID
+        this.dataStoreService.publishFileContent(' ');
+        console.warn(
+          'warning : no model or ytext instance found for file with id : ' +
+            fileID
         );
       }
     });

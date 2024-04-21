@@ -347,7 +347,7 @@ export class HeaderComponent {
     this.socketService.endSession();
     this.saveProgress = 'saving';
     this.dataStoreService.queryCount();
-
-    this.saveFiles();
+    if (this.filesCount == 0) this.OnLeaveRoom();
+    else this.saveFiles();
   }
 }
