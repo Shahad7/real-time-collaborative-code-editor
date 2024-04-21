@@ -87,6 +87,7 @@ const getIo = (server) => {
     socket.on("create-room", (roomID) => {
       let username = socket.handshake.auth.username;
       rooms[roomID] = [username];
+
       socket.join(roomID);
 
       //make the client admin
@@ -130,6 +131,7 @@ const getIo = (server) => {
         socket.join(roomID);
         callback({ status: true });
         let username = socket.handshake.auth.username;
+
         //alert everyone that someone joined
         socket.to(roomID).emit("someone-joined", username);
         console.log(`${username} joined ${roomID}`);
@@ -138,6 +140,8 @@ const getIo = (server) => {
         if (!rooms[roomID].includes(username)) {
           rooms[roomID].push(username);
         }
+        //send members details
+        socket.emit("members", rooms[roomID]);
 
         //sending updates to late-comer
         if (
@@ -171,9 +175,6 @@ const getIo = (server) => {
             console.log("couldn't send explorer updates to late-comer");
             console.error(e);
           }
-
-          //send members details
-          socket.emit("members", rooms[roomID]);
 
           //send awareness updates as well (doesn't seem necessary since it automatically gets updated)
           // try {

@@ -47,7 +47,7 @@
     </div>
   </div>
   <div class="copy-id" id="copy-id">
-    <h5 #roomID></h5>
+    <h5 #roomID style="color: darkcyan"></h5>
     <button #copyButton (click)="copyID()">Copy ID</button>
   </div>
   <div class="join-room" id="join-room">
@@ -110,7 +110,12 @@
 </div>
 
 <div #sessionEndDiv class="popup1" style="max-height: 220px">
-  <img src="assets/close.png" alt="" class="cus-img" (click)="OnLeaveRoom()" />
+  <img
+    src="assets/close.png"
+    alt=""
+    class="cus-img"
+    (click)="closeSessionEndDiv()"
+  />
   <p>the session was ended by admin</p>
 </div>
 

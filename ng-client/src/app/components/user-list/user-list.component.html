@@ -1,6 +1,6 @@
 <div class="cont">
   <p class="head">People</p>
-  <button class="b1">
+  <button class="b1" (click)="invitePPL()">
     <img src="assets/add-friend.png" alt="" />Add People
   </button>
   <p class="head2">IN ROOM</p>
@@ -27,5 +27,20 @@
         *ngIf="!isAdmin && member != admin"
       ></button>
     </div>
+  </div>
+</div>
+
+<div #inviteDivContainer class="popup1" style="display: none">
+  <div class="copy-id">
+    <img
+      src="assets/close.png"
+      alt=""
+      class="cus-img"
+      (click)="closeInviteDiv()"
+    />
+    <p *ngIf="!inRoom">You are not in any room yet</p>
+    <p *ngIf="inRoom">Share this code to invite people</p>
+    <h5 style="color: darkcyan" #inviteDiv *ngIf="inRoom"></h5>
+    <button #copyButton2 (click)="onCopy()" *ngIf="inRoom">Copy ID</button>
   </div>
 </div>

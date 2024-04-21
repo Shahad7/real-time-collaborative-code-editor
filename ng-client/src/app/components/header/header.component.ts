@@ -277,8 +277,6 @@ export class HeaderComponent {
         textArea.remove();
       }
       this.copyButton.nativeElement.textContent = 'copied';
-      //displays leave button
-      this.toggleConnectOptions();
     } catch (e) {
       console.log(e);
       alert('error: you have to manually copy');
@@ -301,6 +299,8 @@ export class HeaderComponent {
   createRoom() {
     this.roomID.nativeElement.textContent = uuidv4();
     this.socketService.createRoom(this.roomID.nativeElement.textContent);
+    //displays leave button
+    this.toggleConnectOptions();
   }
 
   //admits to the requested room
