@@ -316,7 +316,7 @@ const getIo = (server) => {
 
     //signal everyone to leave
     socket.on("signal-end", (roomID) => {
-      io.to(roomID).emit("session-end");
+      socket.to(roomID).emit("session-end");
     });
   });
 };

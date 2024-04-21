@@ -17,8 +17,7 @@ import { OnInit } from '@angular/core';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
-export class HeaderComponent implements OnInit {
-  restart: boolean = false;
+export class HeaderComponent {
   isAdmin: boolean = false;
   membersCount: number = 0;
   filesCount: number = 0;
@@ -27,6 +26,30 @@ export class HeaderComponent implements OnInit {
   private messageSource = new Subject<string>();
   message$ = this.messageSource.asObservable();
   messages: Array<string> = [];
+
+  //dom variables
+  @ViewChild('roomID')
+  roomID: any;
+  @ViewChild('copyButton')
+  copyButton: any;
+  @ViewChild('roomIDInput')
+  roomIDInput: any;
+  @ViewChild('connectButton')
+  connectButton: any;
+  @ViewChild('leaveButton')
+  leaveButton: any;
+  @ViewChild('error')
+  errorDiv: any;
+  @ViewChild('notification')
+  notification: any;
+  @ViewChild('notificationDiv')
+  notificationDiv: any;
+  @ViewChild('successorWarning')
+  successorWarning: any;
+  @ViewChild('saveWarning')
+  saveWarning: any;
+  @ViewChild('sessionEndDiv')
+  sessionEndDiv: any;
 
   constructor(
     private authService: AuthService,
@@ -55,8 +78,7 @@ export class HeaderComponent implements OnInit {
     //when admin stops the session
     this.socketService.socket.on('session-end', () => {
       if (!this.isAdmin) {
-        this.messageSource.next(`admin ended the session`);
-        this.OnLeaveRoom();
+        this.alertAndLeave();
       }
     });
 
@@ -117,27 +139,6 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
-
-  @ViewChild('roomID')
-  roomID: any;
-  @ViewChild('copyButton')
-  copyButton: any;
-  @ViewChild('roomIDInput')
-  roomIDInput: any;
-  @ViewChild('connectButton')
-  connectButton: any;
-  @ViewChild('leaveButton')
-  leaveButton: any;
-  @ViewChild('error')
-  errorDiv: any;
-  @ViewChild('notification')
-  notification: any;
-  @ViewChild('notificationDiv')
-  notificationDiv: any;
-  @ViewChild('successorWarning')
-  successorWarning: any;
-  @ViewChild('saveWarning')
-  saveWarning: any;
 
   //options could go back to normal ('connect') after refresh
   @HostListener('document:DOMContentLoaded', ['$event'])
@@ -247,6 +248,7 @@ export class HeaderComponent implements OnInit {
       sessionStorage.removeItem('roomID');
       this.socketService.leaveRoom(roomID);
     }
+    this.toggleConnectOptions();
     window.location.reload();
   }
 
@@ -289,11 +291,10 @@ export class HeaderComponent implements OnInit {
     if (roomID) {
       this.connectButton.nativeElement.style.display = 'none';
       this.leaveButton.nativeElement.style.display = 'block';
+    } else {
+      this.leaveButton.nativeElement.style.display = 'none';
+      this.connectButton.nativeElement.style.display = 'block';
     }
-    // else {
-    //   this.leaveButton.nativeElement.style.display = 'none';
-    //   this.connectButton.nativeElement.style.display = 'block';
-    // }
   }
 
   //admitting the requested socket to created room first
@@ -363,6 +364,7 @@ export class HeaderComponent implements OnInit {
   }
 
   endAbruptly() {
+    this.closeSaveWarning();
     this.socketService.endSession();
     this.OnLeaveRoom();
   }
@@ -379,7 +381,17 @@ export class HeaderComponent implements OnInit {
       this.saveFiles();
     }
   }
-  ngOnInit(): void {
-    this.restart = false;
+
+  alertAndLeave() {
+    this.sessionEndDiv.nativeElement.style.display = 'flex';
+    setTimeout(() => {
+      this.sessionEndDiv.nativeElement.style.display = 'none';
+      this.OnLeaveRoom();
+    }, 4000);
+  }
+
+  closeSessionEndDiv() {
+    this.sessionEndDiv.nativeElement.style.display = 'none';
+    this.OnLeaveRoom();
   }
 }

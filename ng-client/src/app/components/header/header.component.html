@@ -2,7 +2,7 @@
   <div class="menu">
     <ul>
       <!-- <li><a (click)="saveFile()">Save</a></li> -->
-      <li *ngIf="restart || !restart">RCCE</li>
+      <li>RCCE</li>
     </ul>
     <ul>
       <li
@@ -107,6 +107,11 @@
   <div class="flex">
     <button id="view-members-btn" (click)="showMembers()">View members</button>
   </div>
+</div>
+
+<div #sessionEndDiv class="popup1" style="max-height: 220px">
+  <img src="assets/close.png" alt="" class="cus-img" (click)="OnLeaveRoom()" />
+  <p>the session was ended by admin</p>
 </div>
 
 <div #notificationDiv class="pop">
