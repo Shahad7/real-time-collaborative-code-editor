@@ -20,6 +20,7 @@ export class HeaderComponent {
   membersCount: number = 0;
   filesCount: number = 0;
   saveProgress: 'saving' | 'saved' | 'initial' | 'error' = 'initial';
+  timeoutID: any = 0;
 
   constructor(
     private authService: AuthService,
@@ -66,7 +67,10 @@ export class HeaderComponent {
     this.dataStoreService.fileUploadCompleteAnnouncement$.subscribe((value) => {
       if (value == 'done') {
         this.filesCount -= 1;
-        if (this.filesCount == 0) this.saveProgress = 'saved';
+        if (this.filesCount == 0) {
+          this.saveProgress = 'saved';
+          clearTimeout(this.timeoutID);
+        }
       }
     });
 
@@ -348,6 +352,11 @@ export class HeaderComponent {
     this.saveProgress = 'saving';
     this.dataStoreService.queryCount();
     if (this.filesCount == 0) this.OnLeaveRoom();
-    else this.saveFiles();
+    else {
+      this.timeoutID = setTimeout(() => {
+        this.saveProgress = 'error';
+      }, 30000);
+      this.saveFiles();
+    }
   }
 }

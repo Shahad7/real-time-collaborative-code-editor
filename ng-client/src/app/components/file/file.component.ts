@@ -56,7 +56,6 @@ export class FileComponent {
     //save file to db on triggerUpload : dataStoreService
     this.dataStoreService.uploadAnnouncement$.subscribe((value) => {
       if (value == 'ready') {
-        console.log('tryna upload ' + this.filename);
         uploadFile();
       }
     });
