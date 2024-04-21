@@ -9,18 +9,24 @@ import { UrlSegment } from '@angular/router';
 import { UserListService } from '../user-list/user-list.service';
 import { DataStoreService } from '../data-store/data-store.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Subject } from 'rxjs';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  restart: boolean = false;
   isAdmin: boolean = false;
   membersCount: number = 0;
   filesCount: number = 0;
   saveProgress: 'saving' | 'saved' | 'initial' | 'error' = 'initial';
   timeoutID: any = 0;
+  private messageSource = new Subject<string>();
+  message$ = this.messageSource.asObservable();
+  messages: Array<string> = [];
 
   constructor(
     private authService: AuthService,
@@ -49,6 +55,7 @@ export class HeaderComponent {
     //when admin stops the session
     this.socketService.socket.on('session-end', () => {
       if (!this.isAdmin) {
+        this.messageSource.next(`admin ended the session`);
         this.OnLeaveRoom();
       }
     });
@@ -78,33 +85,23 @@ export class HeaderComponent {
       if (value == 'error') this.saveProgress = 'error';
     });
 
+    this.message$.subscribe((message) => {
+      this.messages.push(message);
+      this.checkAndNotify();
+    });
     this.userListService.joinedUser$.subscribe((username) => {
-      this.notification.nativeElement.textContent = `${username} joined the room`;
-      this.notificationDiv.nativeElement.style.display = 'flex';
-      setTimeout(() => {
-        this.notificationDiv.nativeElement.style.display = 'none';
-      }, 5500);
-      // alert(`${username} joined the room`);
+      this.messageSource.next(`${username} joined the room`);
     });
 
     this.userListService.leftUser$.subscribe((username) => {
-      this.notification.nativeElement.textContent = `${username} left the room`;
-      this.notificationDiv.nativeElement.style.display = 'flex';
-      setTimeout(() => {
-        this.notificationDiv.nativeElement.style.display = 'none';
-      }, 5500);
-      // alert(`${username} left the room`);
+      this.messageSource.next(`${username} left the room`);
     });
 
     this.userListService.newAdmin$.subscribe((admin) => {
       let message;
       if (admin == 'You') message = 'You are now an admin';
       else message = admin + ' is now an admin';
-      this.notification.nativeElement.textContent = message;
-      this.notificationDiv.nativeElement.style.display = 'flex';
-      setTimeout(() => {
-        this.notificationDiv.nativeElement.style.display = 'none';
-      }, 5500);
+      this.messageSource.next(message);
     });
 
     //when navigating back to code-editor from repo, it should remain 'leave'
@@ -163,6 +160,21 @@ export class HeaderComponent {
         this.toggleConnectOptions();
       }
     }, 0);
+  }
+
+  //to poll the message queue n notify
+  checkAndNotify() {
+    while (this.messages.length > 0) {
+      let msg = this.messages.shift();
+      if (msg) {
+        this.notification.nativeElement.textContent = msg;
+        this.notificationDiv.nativeElement.style.display = 'flex';
+        setTimeout(() => {
+          this.notificationDiv.nativeElement.style.display = 'none';
+        }, 5500);
+      }
+      this.checkAndNotify();
+    }
   }
 
   logout() {
@@ -226,7 +238,10 @@ export class HeaderComponent {
   OnLeaveRoom() {
     const roomID = sessionStorage.getItem('roomID');
     const isAdmin = sessionStorage.getItem('isAdmin');
-    if (isAdmin) sessionStorage.setItem('isAdmin', 'false');
+    if (isAdmin) {
+      sessionStorage.setItem('isAdmin', 'false');
+      this.isAdmin = false;
+    }
 
     if (roomID) {
       sessionStorage.removeItem('roomID');
@@ -274,10 +289,11 @@ export class HeaderComponent {
     if (roomID) {
       this.connectButton.nativeElement.style.display = 'none';
       this.leaveButton.nativeElement.style.display = 'block';
-    } /*else {
-      this.leaveButton.nativeElement.style.display = 'none';
-      this.connectButton.nativeElement.style.display = 'block';
-    }*/
+    }
+    // else {
+    //   this.leaveButton.nativeElement.style.display = 'none';
+    //   this.connectButton.nativeElement.style.display = 'block';
+    // }
   }
 
   //admitting the requested socket to created room first
@@ -312,8 +328,12 @@ export class HeaderComponent {
   PickOrSaveWrapper(option: string) {
     if (this.membersCount > 1 && (option == 'leave' || option == 'logout')) {
       this.forceToPick(option);
-    } else {
+    } else if (this.membersCount == 0 && sessionStorage.getItem('roomID')) {
       this.remindToSave();
+    } else {
+      if (option == 'leave') this.OnLeaveRoom();
+      else if (option == 'logout') this.logout();
+      else if (option == 'stop') this.remindToSave();
     }
   }
 
@@ -358,5 +378,8 @@ export class HeaderComponent {
       }, 30000);
       this.saveFiles();
     }
+  }
+  ngOnInit(): void {
+    this.restart = false;
   }
 }

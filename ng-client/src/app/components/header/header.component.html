@@ -2,7 +2,7 @@
   <div class="menu">
     <ul>
       <!-- <li><a (click)="saveFile()">Save</a></li> -->
-      <li>RCCE</li>
+      <li *ngIf="restart || !restart">RCCE</li>
     </ul>
     <ul>
       <li
