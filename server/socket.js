@@ -300,7 +300,7 @@ const getIo = (server) => {
     //send clientID of disconnected client so that others
     //can clean the respective awareness instance
     socket.on("alert-purge", (clientID, roomID) => {
-      socket.to(roomID).emit("purge-awareness", clientID);
+      io.to(roomID).emit("purge-awareness", clientID);
     });
 
     /************chat service part */

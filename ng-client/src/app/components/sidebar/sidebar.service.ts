@@ -8,11 +8,23 @@ export class SidebarService {
   private currentSidebarOptionSource = new Subject<
     'explorer' | 'chatbox' | 'view-members' | 'room-log'
   >();
+  private navigationAnnouncementSource = new Subject<string>();
+  private departureSource = new Subject<string>();
 
   currentSidebarOption$ = this.currentSidebarOptionSource.asObservable();
+  navigationAnnouncement$ = this.navigationAnnouncementSource.asObservable();
+  departure$ = this.departureSource.asObservable();
 
   selectOption(option: 'explorer' | 'chatbox' | 'view-members' | 'room-log') {
     this.currentSidebarOptionSource.next(option);
+  }
+
+  announceNavigation(option: string) {
+    this.navigationAnnouncementSource.next(option);
+  }
+
+  alertDeparture() {
+    this.departureSource.next('depart');
   }
 
   constructor() {}

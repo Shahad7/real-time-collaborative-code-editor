@@ -6,9 +6,10 @@
     </p>
     <p *ngIf="rooms.length == 0 && loading" style="color: purple">loading...</p>
     <div *ngFor="let room of rooms" class="room">
-      <a class="room-id" [routerLink]="['/data-store', room.roomID]">{{
-        "Session-" + room.roomID.substring(0, 5)
-      }}</a>
+      <!--[routerLink]="['/data-store', room.roomID]"-->
+      <p class="room-id" (click)="navigateToRoom(room.roomID)">
+        {{ "Session-" + room.roomID.substring(0, 5) }}
+      </p>
       <div class="flex-btw">
         <div class="room-date">
           <img src="assets/calendar.png" alt="" />

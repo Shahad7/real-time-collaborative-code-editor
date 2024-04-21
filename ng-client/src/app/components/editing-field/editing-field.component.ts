@@ -10,6 +10,7 @@ import * as monaco from 'monaco-editor';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { HostListener } from '@angular/core';
 import { DataStoreService } from '../data-store/data-store.service';
+import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({
   selector: 'app-editing-field',
@@ -50,11 +51,16 @@ export class EditingFieldComponent {
 
   //remove awareness instance of disconnected user
   @HostListener('window:beforeunload', ['$event'])
-  removeDisconnectedAwareness(e: BeforeUnloadEvent): void {
+  deadAwarenessHandler(e: BeforeUnloadEvent): void {
     e.preventDefault();
+    this.removeDisconnectedAwareness();
+  }
+
+  removeDisconnectedAwareness() {
     this.socketService.purgeDeadAwareness(this.awareness.clientID);
     // console.log('purge req sent');
 
+    //important:
     awarenessProtocol.removeAwarenessStates(
       this.awareness,
       [this.awareness.clientID],
@@ -65,7 +71,8 @@ export class EditingFieldComponent {
   constructor(
     private socketService: SocketService,
     private explorerService: FileExplorerService,
-    private dataStoreService: DataStoreService
+    private dataStoreService: DataStoreService,
+    private sidebarService: SidebarService
   ) {
     //listens for events on the ydoc and sends to other clients
     this.ydoc.on('update', (updates) => {
@@ -91,13 +98,25 @@ export class EditingFieldComponent {
     else console.log("couldn't instantiate awareness object with username");
 
     //sending awareness updates to server for relay
-    this.awareness.on('update', () => {
-      const updates = awarenessProtocol.encodeAwarenessUpdate(
-        this.awareness,
-        Array.from(this.awareness.getStates().keys())
-      );
-      this.socketService.sendAwareness(updates);
-    });
+    this.awareness.on(
+      'update',
+      ({
+        added,
+        updated,
+        removed,
+      }: {
+        added: any;
+        updated: any;
+        removed: any;
+      }) => {
+        const changedClients = added.concat(updated).concat(removed);
+        const updates = awarenessProtocol.encodeAwarenessUpdate(
+          this.awareness,
+          changedClients
+        );
+        this.socketService.sendAwareness(updates);
+      }
+    );
 
     //on receiving awareness updates from other clients
     this.socketService.socket.on('receive-awareness', (updates) => {
@@ -119,6 +138,11 @@ export class EditingFieldComponent {
         [clientID],
         'window unload'
       );
+    });
+
+    //before navigating to data-store let others know you are going offline
+    this.sidebarService.departure$.subscribe((val) => {
+      this.removeDisconnectedAwareness();
     });
 
     //subscribing to file switch events
@@ -172,6 +196,7 @@ export class EditingFieldComponent {
         new Set([this.editor]),
         this.awareness
       );
+
       this.editor.focus();
     });
 

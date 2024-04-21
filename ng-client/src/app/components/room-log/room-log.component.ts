@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { SocketService } from 'src/app/socket/socket.service';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({
   selector: 'app-room-log',
@@ -10,7 +12,25 @@ import { SocketService } from 'src/app/socket/socket.service';
 export class RoomLogComponent implements OnInit {
   rooms: Array<{ roomID: string; date: string; time: string }> = [];
   loading: boolean = false;
-  constructor(private socketService: SocketService) {}
+  constructor(
+    private socketService: SocketService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private sidebarService: SidebarService
+  ) {
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        let current_path = this.router.url;
+
+        if (current_path.startsWith('/code-editor')) {
+          let option = current_path.split('/')[2];
+
+          if (option && option == 'room-log' && this.loading)
+            this.fetchAllRoomDetails();
+        }
+      }
+    });
+  }
 
   async fetchAllRoomDetails() {
     try {
@@ -37,6 +57,11 @@ export class RoomLogComponent implements OnInit {
       console.log("couldn't room details : room log");
       console.error(e);
     }
+  }
+
+  navigateToRoom(roomID: string) {
+    this.sidebarService.alertDeparture();
+    this.router.navigateByUrl(`/data-store/${roomID}`);
   }
 
   ngOnInit(): void {

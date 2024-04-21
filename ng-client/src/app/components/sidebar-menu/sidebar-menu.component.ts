@@ -20,6 +20,7 @@ export class SidebarMenuComponent implements OnInit {
 
         if (current_path.startsWith('/code-editor')) {
           let extracts = current_path.split('/');
+          this.sidebarService.announceNavigation(extracts[2] as any);
           this.selectOption(extracts[2] as any);
         }
       }
