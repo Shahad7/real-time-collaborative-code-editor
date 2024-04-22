@@ -52,10 +52,9 @@ export class EditingFieldComponent {
   //remove awareness instance of disconnected user
   @HostListener('window:beforeunload', ['$event'])
   deadAwarenessHandler(e: BeforeUnloadEvent): void {
-    e.preventDefault();
+    // e.preventDefault();
     this.removeDisconnectedAwareness();
   }
-
   removeDisconnectedAwareness() {
     this.socketService.purgeDeadAwareness(this.awareness.clientID);
     // console.log('purge req sent');
