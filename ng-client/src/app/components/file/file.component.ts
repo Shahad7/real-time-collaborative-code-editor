@@ -45,6 +45,7 @@ export class FileComponent {
         if (data.success) {
           this.dataStoreService.alertCompletion();
         } else if (data.error) {
+          console.log("couldn't upload file " + this.filename);
           this.dataStoreService.alertError();
         }
       } catch (e: any) {

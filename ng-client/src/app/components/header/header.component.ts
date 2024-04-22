@@ -95,7 +95,9 @@ export class HeaderComponent {
     //know when each each file upload is completed
     this.dataStoreService.fileUploadCompleteAnnouncement$.subscribe((value) => {
       if (value == 'done') {
+        console.log('done');
         this.filesCount -= 1;
+        console.log(this.filesCount);
         if (this.filesCount == 0) {
           this.saveProgress = 'saved';
           clearTimeout(this.timeoutID);
@@ -323,7 +325,17 @@ export class HeaderComponent {
 
   //save files test
   saveFiles() {
-    this.dataStoreService.triggerUpload();
+    this.saveProgress = 'saving';
+    this.filesCount = 0;
+    this.dataStoreService.queryCount();
+    console.log('counted: ' + this.filesCount);
+    if (this.filesCount == 0) this.OnLeaveRoom();
+    else {
+      this.timeoutID = setTimeout(() => {
+        this.saveProgress = 'error';
+      }, 30000);
+      this.dataStoreService.triggerUpload();
+    }
   }
 
   PickOrSaveWrapper(option: string) {
@@ -371,15 +383,7 @@ export class HeaderComponent {
 
   endProperly() {
     this.socketService.endSession();
-    this.saveProgress = 'saving';
-    this.dataStoreService.queryCount();
-    if (this.filesCount == 0) this.OnLeaveRoom();
-    else {
-      this.timeoutID = setTimeout(() => {
-        this.saveProgress = 'error';
-      }, 30000);
-      this.saveFiles();
-    }
+    this.saveFiles();
   }
 
   alertAndLeave() {

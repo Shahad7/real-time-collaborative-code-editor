@@ -32,11 +32,7 @@ const getIo = (server) => {
 
   if (os.networkInterfaces()["wlo1"]) {
     for (interface of os.networkInterfaces()["wlo1"]) {
-      if (
-        interface &&
-        interface.address &&
-        interface.address.startsWith("192.168")
-      ) {
+      if (interface && interface.address && interface.family == "IPv4") {
         ip = interface.address;
       }
     }

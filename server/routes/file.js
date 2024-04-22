@@ -23,8 +23,8 @@ router.post(
       }
     } catch (error) {
       console.log("couldn't upload file to db");
-      res.json({ success: false, error: true });
       console.error(error);
+      res.json({ success: false, error: true });
     }
   })
 );
