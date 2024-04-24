@@ -1,11 +1,12 @@
 .msg {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .msg img {
-  width: 12%;
-  height: 12%;
+  width: 30px;
+  height: 30px;
   margin-right: 10px;
 }
 
@@ -17,4 +18,5 @@
 .msg .user {
   /* color: purple; */
   font-weight: 700;
+  margin-bottom: 4px;
 }
