@@ -50,12 +50,7 @@ export class ExplorerComponent {
         this.rootSelected = false;
       }
     });
-    //publish files count for saving
-    this.dataStoreService.fileCountAnnouncement$.subscribe((value) => {
-      if (value == 'ready') {
-        this.dataStoreService.publishCount(this.files.length);
-      }
-    });
+    
 
     //receiving explorer updates from other clients
     this.socketService.socket.on(

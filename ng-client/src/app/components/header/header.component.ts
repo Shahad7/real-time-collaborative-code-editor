@@ -21,6 +21,8 @@ export class HeaderComponent {
   isAdmin: boolean = false;
   membersCount: number = 0;
   filesCount: number = 0;
+  uploaded:Array<string> = []
+  counted:Array<string> = []
   saveProgress: 'saving' | 'saved' | 'initial' | 'error' = 'initial';
   timeoutID: any = 0;
   private messageSource = new Subject<string>();
@@ -88,14 +90,24 @@ export class HeaderComponent {
     });
 
     //track files count to save
-    this.dataStoreService.fileCount$.subscribe((increment) => {
-      this.filesCount += increment;
+    this.dataStoreService.fileCount$.subscribe((fileID) => {
+      if(!this.counted.includes(fileID)){
+        console.log("counted files : ")
+        console.log(this.counted)
+        this.counted.push(fileID)
+        this.filesCount += 1;
+      }
+      
     });
 
     //know when each each file upload is completed
-    this.dataStoreService.fileUploadCompleteAnnouncement$.subscribe((value) => {
-      if (value == 'done') {
-        console.log('done');
+    this.dataStoreService.fileUploadCompleteAnnouncement$.subscribe((fileID) => {
+      if (!this.uploaded.includes(fileID)) {
+        
+        this.uploaded.push(fileID)
+        console.log(fileID+' done');
+        console.log("counted files : ")
+        console.log(this.uploaded)
         this.filesCount -= 1;
         console.log(this.filesCount);
         if (this.filesCount == 0) {

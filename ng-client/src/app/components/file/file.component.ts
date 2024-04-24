@@ -43,7 +43,7 @@ export class FileComponent {
 
         const data = await response.json();
         if (data.success) {
-          this.dataStoreService.alertCompletion();
+          this.dataStoreService.alertCompletion(this.id);
         } else if (data.error) {
           console.log("couldn't upload file " + this.filename);
           this.dataStoreService.alertError();
@@ -53,6 +53,13 @@ export class FileComponent {
         console.error(e);
       }
     };
+
+    //announcing its existence
+    this.dataStoreService.fileCountAnnouncement$.subscribe((value) => {
+      if (value == 'ready') {
+        this.dataStoreService.publishCount(this.id);
+      }
+    });
 
     //save file to db on triggerUpload : dataStoreService
     this.dataStoreService.uploadAnnouncement$.subscribe((value) => {

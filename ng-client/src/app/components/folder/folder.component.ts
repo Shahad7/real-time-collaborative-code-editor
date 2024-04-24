@@ -66,12 +66,7 @@ export class FolderComponent {
       }
     );
 
-    //publish files count for saving
-    this.dataStoreService.fileCountAnnouncement$.subscribe((value) => {
-      if (value == 'ready') {
-        this.dataStoreService.publishCount(this.files.length);
-      }
-    });
+  
   }
 
   toggleFolder(): void {

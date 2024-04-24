@@ -8,9 +8,9 @@ export class DataStoreService {
   private uploadAnnouncementSource = new Subject<'ready' | 'not ready'>();
   private fileToUploadSource = new Subject<string>();
   private fileContentSource = new Subject<string>();
-  private fileCountSource = new Subject<number>();
+  private fileCountSource = new Subject<string>();
   private fileCountAnnouncementSource = new Subject<'ready' | 'not ready'>();
-  private fileUploadCompleteAnnouncementSource = new Subject<'done'>();
+  private fileUploadCompleteAnnouncementSource = new Subject<string>();
   private fileUploadErrorSource = new Subject<string>();
 
   uploadAnnouncement$ = this.uploadAnnouncementSource.asObservable();
@@ -37,12 +37,12 @@ export class DataStoreService {
     this.fileCountAnnouncementSource.next('ready');
   }
 
-  publishCount(count: number) {
-    this.fileCountSource.next(count);
+  publishCount(fileID: string) {
+    this.fileCountSource.next(fileID);
   }
 
-  alertCompletion() {
-    this.fileUploadCompleteAnnouncementSource.next('done');
+  alertCompletion(fileID:string) {
+    this.fileUploadCompleteAnnouncementSource.next(fileID);
   }
   alertError() {
     this.fileUploadErrorSource.next('error');
