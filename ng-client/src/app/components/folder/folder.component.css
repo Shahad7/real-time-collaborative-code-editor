@@ -77,3 +77,8 @@ input {
 .input-visible {
   display: block;
 }
+
+.del-icon {
+  height: 14px;
+  width: 15px;
+}

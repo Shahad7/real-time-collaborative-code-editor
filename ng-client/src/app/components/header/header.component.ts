@@ -145,7 +145,6 @@ export class HeaderComponent {
   //options could go back to normal ('connect') after refresh
   @HostListener('document:DOMContentLoaded', ['$event'])
   handlePageRefresh(event: any) {
-    event.preventDefault();
     this.toggleConnectOptions();
     let isAdmin = sessionStorage.getItem('isAdmin');
     if (isAdmin && isAdmin == 'true') this.isAdmin = true;

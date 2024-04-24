@@ -4,6 +4,7 @@
 .file {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 3px;
 }
 
@@ -26,4 +27,15 @@ img {
   max-width: 15px;
   max-height: 15px;
   margin-right: 7px;
+}
+
+.del-icon {
+  height: 15px;
+  width: 15px;
+  color: black;
+}
+
+.del-icon:hover {
+  filter: invert(14%) sepia(72%) saturate(6820%) hue-rotate(2deg)
+    brightness(111%) contrast(122%);
 }
