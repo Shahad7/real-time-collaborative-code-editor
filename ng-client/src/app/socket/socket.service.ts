@@ -43,14 +43,28 @@ export class SocketService {
     sessionStorage.setItem('roomID', roomID);
   }
 
-  joinRoom(
+  joinRoom(roomID: string) {
+    this.socket.emit('join-room', roomID);
+  }
+
+  askToJoin(
     roomID: string,
     callback: Function = (response: { status: boolean }) => {
       // console.log('someone rejoined');
     }
   ): void {
-    this.socket.emit('join-room', roomID, callback);
+    this.socket.emit('ask-to-join', roomID, callback);
     // sessionStorage.setItem('roomID', roomID);
+  }
+
+  admit(someone: string) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('admit', someone, roomID);
+  }
+
+  reject(someone: string) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('reject', someone);
   }
 
   leaveRoom(roomID: string) {

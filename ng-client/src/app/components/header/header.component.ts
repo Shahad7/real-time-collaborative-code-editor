@@ -21,9 +21,17 @@ export class HeaderComponent {
   isAdmin: boolean = false;
   membersCount: number = 0;
   filesCount: number = 0;
-  uploaded:Array<string> = []
-  counted:Array<string> = []
+  uploaded: Array<string> = [];
+  counted: Array<string> = [];
+  someone: string = '';
   saveProgress: 'saving' | 'saved' | 'initial' | 'error' = 'initial';
+  joinProgress:
+    | 'waiting'
+    | 'admitted'
+    | 'rejected'
+    | 'unavailable'
+    | 'initial' = 'initial';
+
   timeoutID: any = 0;
   private messageSource = new Subject<string>();
   message$ = this.messageSource.asObservable();
@@ -52,6 +60,10 @@ export class HeaderComponent {
   saveWarning: any;
   @ViewChild('sessionEndDiv')
   sessionEndDiv: any;
+  @ViewChild('joinRequestDIV')
+  joinRequestDIV: any;
+  @ViewChild('joinRequest')
+  joinRequest: any;
 
   constructor(
     private authService: AuthService,
@@ -61,6 +73,32 @@ export class HeaderComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    //let admin know someone wants to join
+    this.socketService.socket.on('ask-admin', (admin, someone) => {
+      const username = sessionStorage.getItem('username');
+      if (this.isAdmin && username && username == admin) {
+        this.showJoinReq(someone);
+      }
+    });
+
+    //when join req is accepted
+    this.socketService.socket.on('admitted', (someone, roomID) => {
+      const username = sessionStorage.getItem('username');
+      if (username == someone) {
+        this.joinProgress = 'admitted';
+        this.socketService.joinRoom(roomID);
+        sessionStorage.setItem('roomID', roomID);
+        this.toggle();
+        this.toggleConnectOptions();
+      }
+    });
+
+    //when join req is rejected
+    this.socketService.socket.on('rejected', (someone) => {
+      const username = sessionStorage.getItem('username');
+      if (username == someone) this.joinProgress = 'rejected';
+    });
+
     //listen to admin event
     this.socketService.socket.on('admin', () => {
       this.isAdmin = true;
@@ -91,31 +129,31 @@ export class HeaderComponent {
 
     //track files count to save
     this.dataStoreService.fileCount$.subscribe((fileID) => {
-      if(!this.counted.includes(fileID)){
-        console.log("counted files : ")
-        console.log(this.counted)
-        this.counted.push(fileID)
+      if (!this.counted.includes(fileID)) {
+        console.log('counted files : ');
+        console.log(this.counted);
+        this.counted.push(fileID);
         this.filesCount += 1;
       }
-      
     });
 
     //know when each each file upload is completed
-    this.dataStoreService.fileUploadCompleteAnnouncement$.subscribe((fileID) => {
-      if (!this.uploaded.includes(fileID)) {
-        
-        this.uploaded.push(fileID)
-        console.log(fileID+' done');
-        console.log("counted files : ")
-        console.log(this.uploaded)
-        this.filesCount -= 1;
-        console.log(this.filesCount);
-        if (this.filesCount == 0) {
-          this.saveProgress = 'saved';
-          clearTimeout(this.timeoutID);
+    this.dataStoreService.fileUploadCompleteAnnouncement$.subscribe(
+      (fileID) => {
+        if (!this.uploaded.includes(fileID)) {
+          this.uploaded.push(fileID);
+          console.log(fileID + ' done');
+          console.log('counted files : ');
+          console.log(this.uploaded);
+          this.filesCount -= 1;
+          console.log(this.filesCount);
+          if (this.filesCount == 0) {
+            this.saveProgress = 'saved';
+            clearTimeout(this.timeoutID);
+          }
         }
       }
-    });
+    );
 
     this.dataStoreService.fileUploadError$.subscribe((value) => {
       if (value == 'error') this.saveProgress = 'error';
@@ -239,8 +277,9 @@ export class HeaderComponent {
   }
 
   OnJoinRoom() {
-    this.errorDiv.nativeElement.style.display = 'none';
+    // this.errorDiv.nativeElement.style.display = 'none';
     this.roomIDInput.nativeElement.value = '';
+    this.joinProgress = 'initial';
     var buttons = document.getElementById('buttons');
     buttons?.classList.add('dis');
     var joinRoom = document.getElementById('join-room');
@@ -317,22 +356,38 @@ export class HeaderComponent {
     this.toggleConnectOptions();
   }
 
-  //admits to the requested room
-  joinRoom() {
-    this.socketService.joinRoom(
+  //ask admin to join the room
+  askToJoin() {
+    this.socketService.askToJoin(
       this.roomIDInput.nativeElement.value,
       (response: { status: boolean }) => {
         if (response.status) {
           //closing popup + displaying leave button
-          sessionStorage.setItem(
-            'roomID',
-            this.roomIDInput.nativeElement.value
-          );
-          this.toggle();
-          this.toggleConnectOptions();
-        } else this.errorDiv.nativeElement.style.display = 'block';
+
+          this.joinProgress = 'waiting';
+          // this.toggle();
+          // this.toggleConnectOptions();
+        } else {
+          // this.errorDiv.nativeElement.style.display = 'block'
+          this.joinProgress = 'unavailable';
+        }
       }
     );
+  }
+  showJoinReq(someone: string) {
+    this.joinRequestDIV.nativeElement.textContent = someone + ' wants to join';
+    this.joinRequest.nativeElement.style.display = 'flex';
+    this.someone = someone;
+  }
+
+  admit() {
+    this.joinRequest.nativeElement.style.display = 'none';
+    this.socketService.admit(this.someone);
+  }
+
+  reject() {
+    this.joinRequest.nativeElement.style.display = 'none';
+    this.socketService.reject(this.someone);
   }
 
   //save files test

@@ -54,11 +54,19 @@
     <input
       #roomIDInput
       type="text"
-      (keydown.enter)="joinRoom()"
+      (keydown.enter)="askToJoin()"
       placeholder="Enter the Room ID"
     />
-    <button (click)="joinRoom()">Join Room</button>
-    <div #error id="error">No such room exists</div>
+    <button (click)="askToJoin()">Join Room</button>
+    <div #error style="color: red" *ngIf="joinProgress == 'unavailable'">
+      No such room exists
+    </div>
+    <div #error style="color: black" *ngIf="joinProgress == 'waiting'">
+      waiting for approval...
+    </div>
+    <div #error style="color: red" *ngIf="joinProgress == 'rejected'">
+      your request was rejected
+    </div>
   </div>
 </div>
 
@@ -122,4 +130,14 @@
 <div #notificationDiv class="pop">
   <img src="assets/user.png" alt="" />
   <p #notification></p>
+</div>
+
+<div #joinRequest class="popup1" style="max-height: 220px">
+  <p #joinRequestDIV></p>
+  <div class="flex">
+    <button style="margin-right: 8px; color: green" (click)="admit()">
+      Admit
+    </button>
+    <button style="color: red" (click)="reject()">Reject</button>
+  </div>
 </div>

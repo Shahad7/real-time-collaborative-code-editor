@@ -121,11 +121,35 @@ const getIo = (server) => {
       })();
     });
 
+    //ask for permission to join
+    socket.on("ask-to-join", (roomID, callback) => {
+      if (rooms[roomID]) {
+        callback({ status: true });
+        let username = socket.handshake.auth.username;
+        if (admins[roomID]) {
+          socket.to(roomID).emit("ask-admin", admins[roomID], username);
+        } else {
+          console.log("couldn't send join request to admin");
+        }
+      } else {
+        callback({ status: false });
+      }
+    });
+
+    //on admin admit
+    socket.on("admit", (someone, roomID) => {
+      io.emit("admitted", someone, roomID);
+    });
+
+    //on admin reject
+    socket.on("reject", (someone) => {
+      io.emit("rejected", someone);
+    });
+
     //join room request
-    socket.on("join-room", (roomID, callback) => {
+    socket.on("join-room", (roomID) => {
       if (rooms[roomID]) {
         socket.join(roomID);
-        callback({ status: true });
         let username = socket.handshake.auth.username;
 
         //alert everyone that someone joined
@@ -216,7 +240,9 @@ const getIo = (server) => {
         // logRooms(socket);
       } else {
         //if the  room doesn't exist alert the client
-        callback({ status: false });
+        console.log(
+          "couldn't join the room, room doesn't exist or server restarted"
+        );
       }
     });
 
