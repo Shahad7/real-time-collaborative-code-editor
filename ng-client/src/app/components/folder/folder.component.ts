@@ -31,6 +31,19 @@ export class FolderComponent {
     private socketService: SocketService,
     private dataStoreService: DataStoreService
   ) {
+    //delete file
+    this.socketService.socket.on('to-delete', (fileID) => {
+      let index;
+      for (let i in this.files) {
+        if (this.files[i].id == fileID) {
+          index = i;
+        }
+      }
+      if (this.files[index as any]) {
+        this.files.splice(index as any, 1);
+      }
+    });
+
     //to know if clicked outside on sidebar to hide input
     this.explorerService.clickedOutside$.subscribe((value) => {
       if (value == true) {
@@ -65,8 +78,6 @@ export class FolderComponent {
         }
       }
     );
-
-  
   }
 
   toggleFolder(): void {

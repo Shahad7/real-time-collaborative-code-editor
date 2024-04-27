@@ -50,7 +50,19 @@ export class ExplorerComponent {
         this.rootSelected = false;
       }
     });
-    
+
+    //delete file
+    this.socketService.socket.on('to-delete', (fileID) => {
+      let index;
+      for (let i in this.files) {
+        if (this.files[i].id == fileID) {
+          index = i;
+        }
+      }
+      if (this.files[index as any]) {
+        this.files.splice(index as any, 1);
+      }
+    });
 
     //receiving explorer updates from other clients
     this.socketService.socket.on(

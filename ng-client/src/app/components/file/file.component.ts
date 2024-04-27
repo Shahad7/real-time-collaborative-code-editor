@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { DataStoreService } from '../data-store/data-store.service';
+import { SocketService } from 'src/app/socket/socket.service';
 
 @Component({
   selector: 'app-file',
@@ -15,7 +16,8 @@ export class FileComponent {
 
   constructor(
     private explorerService: FileExplorerService,
-    private dataStoreService: DataStoreService
+    private dataStoreService: DataStoreService,
+    private socketService: SocketService
   ) {
     const uploadFile = async () => {
       try {
@@ -87,5 +89,9 @@ export class FileComponent {
       path: this.path,
       id: this.id,
     });
+  }
+
+  deleteFile() {
+    this.socketService.deleteFile(this.id);
   }
 }

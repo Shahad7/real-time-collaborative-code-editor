@@ -341,6 +341,18 @@ const getIo = (server) => {
     socket.on("signal-end", (roomID) => {
       socket.to(roomID).emit("session-end");
     });
+
+    //relay deleted file's ID to everyone in the room
+    socket.on("delete-file", (fileID, roomID) => {
+      io.to(roomID).emit("to-delete", fileID);
+      if (explorerUpdates[roomID]) {
+        let updates = explorerUpdates[roomID];
+        console.log(updates);
+        let new_updates = updates.filter((elt) => elt.id != fileID);
+        console.log(new_updates);
+        explorerUpdates[roomID] = new_updates;
+      }
+    });
   });
 };
 
