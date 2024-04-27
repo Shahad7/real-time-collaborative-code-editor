@@ -1,5 +1,8 @@
 .file:hover {
   background-color: #c0c4c1;
+  .del-icon {
+    visibility: visible;
+  }
 }
 .file {
   display: flex;
@@ -30,6 +33,7 @@ img {
 }
 
 .del-icon {
+  visibility: hidden;
   height: 15px;
   width: 15px;
   color: black;

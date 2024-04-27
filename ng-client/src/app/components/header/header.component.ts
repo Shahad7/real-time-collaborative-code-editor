@@ -19,11 +19,13 @@ import { OnInit } from '@angular/core';
 })
 export class HeaderComponent {
   isAdmin: boolean = false;
+  isConsidering: boolean = false;
   membersCount: number = 0;
   filesCount: number = 0;
   uploaded: Array<string> = [];
   counted: Array<string> = [];
   someone: string = '';
+  joinQueue: Array<string> = [];
   saveProgress: 'saving' | 'saved' | 'initial' | 'error' = 'initial';
   joinProgress:
     | 'waiting'
@@ -36,6 +38,9 @@ export class HeaderComponent {
   private messageSource = new Subject<string>();
   message$ = this.messageSource.asObservable();
   messages: Array<string> = [];
+
+  private joinReqSource = new Subject<string>();
+  joinReq$ = this.joinReqSource.asObservable();
 
   //dom variables
   @ViewChild('roomID')
@@ -77,7 +82,15 @@ export class HeaderComponent {
     this.socketService.socket.on('ask-admin', (admin, someone) => {
       const username = sessionStorage.getItem('username');
       if (this.isAdmin && username && username == admin) {
-        this.showJoinReq(someone);
+        this.joinQueue.push(someone);
+        this.joinReqSource.next('new');
+      }
+    });
+
+    //to display the join req
+    this.joinReq$.subscribe((val) => {
+      if (val == 'new' && !this.isConsidering) {
+        this.showJoinReq();
       }
     });
 
@@ -374,25 +387,39 @@ export class HeaderComponent {
       }
     );
   }
-  showJoinReq(someone: string) {
-    this.joinRequestDIV.nativeElement.textContent = someone + ' wants to join';
-    this.joinRequest.nativeElement.style.display = 'flex';
-    this.someone = someone;
+  showJoinReq() {
+    this.isConsidering = true;
+    if (this.joinQueue.length > 0) {
+      this.someone = this.joinQueue.shift()!;
+      this.joinRequestDIV.nativeElement.textContent =
+        this.someone + ' wants to join';
+      this.joinRequest.nativeElement.style.display = 'flex';
+    }
   }
 
   admit() {
     this.joinRequest.nativeElement.style.display = 'none';
     this.socketService.admit(this.someone);
+    this.isConsidering = false;
+    if (this.joinQueue.length > 0) {
+      this.showJoinReq();
+    }
   }
 
   reject() {
     this.joinRequest.nativeElement.style.display = 'none';
     this.socketService.reject(this.someone);
+    this.isConsidering = false;
+    if (this.joinQueue.length > 0) {
+      this.showJoinReq();
+    }
   }
 
   //save files test
   saveFiles() {
     this.saveProgress = 'saving';
+    this.counted = [];
+    this.uploaded = [];
     this.filesCount = 0;
     this.dataStoreService.queryCount();
     console.log('counted: ' + this.filesCount);
