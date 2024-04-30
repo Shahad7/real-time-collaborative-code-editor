@@ -353,6 +353,20 @@ const getIo = (server) => {
         explorerUpdates[roomID] = new_updates;
       }
     });
+
+    //relay deleted folder's info to everyone in the room
+    socket.on("delete-folder", (foldername, path, roomID) => {
+      io.to(roomID).emit("folder-to-delete", foldername, path);
+      if (explorerUpdates[roomID]) {
+        let updates = explorerUpdates[roomID];
+        console.log(updates);
+        let new_updates = updates.filter(
+          (elt) => elt.name != foldername && elt.path != path
+        );
+        console.log(new_updates);
+        explorerUpdates[roomID] = new_updates;
+      }
+    });
   });
 };
 

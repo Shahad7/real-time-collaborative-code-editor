@@ -15,6 +15,9 @@ img {
 }
 .folder-det:hover {
   background-color: #c0c4c1;
+  .del-icon {
+    visibility: visible;
+  }
 }
 .folder-det.active {
   background-color: #c0c4c1;
@@ -23,6 +26,7 @@ img {
 .folder-det {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 5px;
   padding-left: 3px;
 }
@@ -79,6 +83,13 @@ input {
 }
 
 .del-icon {
-  height: 14px;
+  visibility: hidden;
+  height: 15px;
   width: 15px;
+  color: black;
+}
+
+.del-icon:hover {
+  filter: invert(14%) sepia(72%) saturate(6820%) hue-rotate(2deg)
+    brightness(111%) contrast(122%);
 }

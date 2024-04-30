@@ -2,11 +2,18 @@
   class="folder"
   (click)="[toggleFolder(), activate(folderDetails), selectFolder()]"
 >
-  <div class="folder-det" #folderDetails>
-    <img class="i1" #arrow src="assets/arrow-right.png" />
-    <img class="i2" src="assets/folder-icon.png" />
-    <p>{{ foldername }}</p>
-    <!-- <img src="assets/trash-can-outline.svg" alt="" class="del-icon" /> -->
+  <div #folderDetails class="folder-det">
+    <div style="display: flex; align-items: center">
+      <img class="i1" #arrow src="assets/arrow-right.png" />
+      <img class="i2" src="assets/folder-icon.png" />
+      <p>{{ foldername }}</p>
+    </div>
+    <img
+      src="assets/trash-can-outline.svg"
+      alt=""
+      class="del-icon"
+      (click)="deleteFolder()"
+    />
   </div>
   <div class="folder-contents" #folderContents (click)="cancelClosing($event)">
     <input

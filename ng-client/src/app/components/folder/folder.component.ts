@@ -44,6 +44,13 @@ export class FolderComponent {
       }
     });
 
+    //delete folder
+    this.socketService.socket.on('folder-to-delete', (foldername, path) => {
+      this.folders = this.folders.filter(
+        (elt) => elt.name != foldername && elt.path != path
+      );
+    });
+
     //to know if clicked outside on sidebar to hide input
     this.explorerService.clickedOutside$.subscribe((value) => {
       if (value == true) {
@@ -192,5 +199,9 @@ export class FolderComponent {
   setInputVisibility(value: boolean) {
     this.inputVisibility = value;
     this.input.nativeElement.value = '';
+  }
+
+  deleteFolder() {
+    this.socketService.deleteFolder(this.foldername, this.path);
   }
 }

@@ -127,4 +127,9 @@ export class SocketService {
     const roomID = sessionStorage.getItem('roomID');
     if (roomID) this.socket.emit('delete-file', fileID, roomID);
   }
+
+  deleteFolder(foldername: string, path: string) {
+    const roomID = sessionStorage.getItem('roomID');
+    if (roomID) this.socket.emit('delete-folder', foldername, path, roomID);
+  }
 }

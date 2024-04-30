@@ -64,6 +64,13 @@ export class ExplorerComponent {
       }
     });
 
+    //delete folder
+    this.socketService.socket.on('folder-to-delete', (foldername, path) => {
+      this.folders = this.folders.filter(
+        (elt) => elt.name != foldername && elt.path != path
+      );
+    });
+
     //receiving explorer updates from other clients
     this.socketService.socket.on(
       'receive-explorer-updates',
