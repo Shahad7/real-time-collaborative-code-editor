@@ -12,7 +12,7 @@
       src="assets/trash-can-outline.svg"
       alt=""
       class="del-icon"
-      (click)="deleteFolder()"
+      (click)="confirmDelete()"
     />
   </div>
   <div class="folder-contents" #folderContents (click)="cancelClosing($event)">
@@ -43,3 +43,12 @@
       [foldername]="'test2'"
       [files]="['hehe.js', 'evil.ts']"
     ></app-folder> -->
+<div #emptyFolderDIV class="popup1" style="max-height: 220px">
+  <img
+    src="assets/close.png"
+    alt=""
+    class="cus-img"
+    (click)="closeDeleteConfirmation()"
+  />
+  <p style="color: red">only empty folders can be deleted</p>
+</div>

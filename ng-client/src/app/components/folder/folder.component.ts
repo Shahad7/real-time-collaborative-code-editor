@@ -25,6 +25,8 @@ export class FolderComponent {
   folderContents: any;
   @ViewChild('arrow')
   arrow: any;
+  @ViewChild('emptyFolderDIV')
+  emptyFolderDIV: any;
 
   constructor(
     private explorerService: FileExplorerService,
@@ -202,7 +204,19 @@ export class FolderComponent {
     this.input.nativeElement.value = '';
   }
 
+  confirmDelete() {
+    if (this.files.length == 0 && this.folders.length == 0) {
+      this.deleteFolder();
+    } else {
+      this.emptyFolderDIV.nativeElement.style.display = 'flex';
+    }
+  }
+
   deleteFolder() {
     this.socketService.deleteFolder(this.foldername, this.path);
+  }
+
+  closeDeleteConfirmation() {
+    this.emptyFolderDIV.nativeElement.style.display = 'none';
   }
 }
