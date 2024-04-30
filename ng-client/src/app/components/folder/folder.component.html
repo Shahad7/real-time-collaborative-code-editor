@@ -48,7 +48,21 @@
     src="assets/close.png"
     alt=""
     class="cus-img"
-    (click)="closeDeleteConfirmation()"
+    (click)="closeEmptyDialog()"
   />
   <p style="color: red">only empty folders can be deleted</p>
+</div>
+
+<div #deleteWarningDIV class="popup1" style="max-height: 220px">
+  <img
+    src="assets/close.png"
+    alt=""
+    class="cus-img"
+    (click)="closeDeleteWarning()"
+  />
+  <p>Are you sure you want to delete the folder '{{ this.foldername }}' ?</p>
+  <div class="flex">
+    <button class="b2" (click)="deleteIfEmpty()">Yes</button>
+    <button class="b3" (click)="closeDeleteWarning()">No</button>
+  </div>
 </div>

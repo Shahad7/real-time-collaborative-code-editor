@@ -7,6 +7,20 @@
     src="assets/trash-can-outline.svg"
     alt=""
     class="del-icon"
-    (click)="deleteFile()"
+    (click)="confirmDelete()"
   />
+</div>
+
+<div #deleteWarningDIV class="popup1" style="max-height: 220px">
+  <img
+    src="assets/close.png"
+    alt=""
+    class="cus-img"
+    (click)="closeDeleteWarning()"
+  />
+  <p>Are you sure you want to delete the file '{{ this.filename }}' ?</p>
+  <div class="flex">
+    <button class="b2" (click)="deleteFile()">Yes</button>
+    <button class="b3" (click)="closeDeleteWarning()">No</button>
+  </div>
 </div>

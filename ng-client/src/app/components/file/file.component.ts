@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { DataStoreService } from '../data-store/data-store.service';
 import { SocketService } from 'src/app/socket/socket.service';
@@ -13,6 +13,8 @@ export class FileComponent {
   @Input() path: string = '';
   @Input() id: string = '';
   value: string = '';
+  @ViewChild('deleteWarningDIV')
+  deleteWarningDIV: any;
 
   constructor(
     private explorerService: FileExplorerService,
@@ -92,6 +94,15 @@ export class FileComponent {
   }
 
   deleteFile() {
+    this.closeDeleteWarning();
     this.socketService.deleteFile(this.id);
+  }
+
+  confirmDelete() {
+    this.deleteWarningDIV.nativeElement.style.display = 'flex';
+  }
+
+  closeDeleteWarning() {
+    this.deleteWarningDIV.nativeElement.style.display = 'none';
   }
 }

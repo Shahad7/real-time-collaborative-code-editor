@@ -27,6 +27,8 @@ export class FolderComponent {
   arrow: any;
   @ViewChild('emptyFolderDIV')
   emptyFolderDIV: any;
+  @ViewChild('deleteWarningDIV')
+  deleteWarningDIV: any;
 
   constructor(
     private explorerService: FileExplorerService,
@@ -205,6 +207,11 @@ export class FolderComponent {
   }
 
   confirmDelete() {
+    this.deleteWarningDIV.nativeElement.style.display = 'flex';
+  }
+
+  deleteIfEmpty() {
+    this.closeDeleteWarning();
     if (this.files.length == 0 && this.folders.length == 0) {
       this.deleteFolder();
     } else {
@@ -212,11 +219,15 @@ export class FolderComponent {
     }
   }
 
+  closeDeleteWarning() {
+    this.deleteWarningDIV.nativeElement.style.display = 'none';
+  }
+
   deleteFolder() {
     this.socketService.deleteFolder(this.foldername, this.path);
   }
 
-  closeDeleteConfirmation() {
+  closeEmptyDialog() {
     this.emptyFolderDIV.nativeElement.style.display = 'none';
   }
 }
