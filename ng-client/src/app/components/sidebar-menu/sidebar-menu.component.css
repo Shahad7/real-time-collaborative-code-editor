@@ -27,3 +27,20 @@ img {
   position: absolute;
   cursor: pointer;
 }
+
+.msg-count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-size: smaller;
+  width: 18px;
+  height: 18px;
+  font-weight: bold;
+  top: -15px;
+  right: -10px;
+  background-color: red;
+  border-radius: 40px;
+  padding: 3px;
+  z-index: 3;
+}

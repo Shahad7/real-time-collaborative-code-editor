@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SocketService } from 'src/app/socket/socket.service';
+import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({
   selector: 'app-chatbox',
@@ -10,11 +11,15 @@ export class ChatboxComponent {
   messages: Array<{ sender: string; message: string; color: string }> = [
     // { sender: 'Max', message: 'Lorem ipsum dolor sit amet',color:'red' },
   ];
-  constructor(private socketServive: SocketService) {
+  constructor(
+    private socketServive: SocketService,
+    private sidebarService: SidebarService
+  ) {
     //receiving message
     this.socketServive.socket.on(
       'receive-message',
       (message, sender, color) => {
+        this.sidebarService.updateMessageCount();
         let you = sessionStorage.getItem('username');
         if (sender == you)
           this.messages.push({ sender: 'you', message, color: 'black' });

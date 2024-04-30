@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { SidebarService } from '../sidebar/sidebar.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
@@ -9,6 +9,9 @@ import { OnInit } from '@angular/core';
   styleUrls: ['./sidebar-menu.component.css'],
 })
 export class SidebarMenuComponent implements OnInit {
+  @ViewChild('messageCount')
+  messageCount: any;
+  count: number = 0;
   constructor(
     private sidebarService: SidebarService,
     private router: Router,
@@ -20,9 +23,20 @@ export class SidebarMenuComponent implements OnInit {
 
         if (current_path.startsWith('/code-editor')) {
           let extracts = current_path.split('/');
-          this.sidebarService.announceNavigation(extracts[2] as any);
-          this.selectOption(extracts[2] as any);
+          let selectedOption = extracts[2] as any;
+          if (selectedOption == 'chatbox') {
+            this.count = 0;
+          }
+          this.sidebarService.announceNavigation(selectedOption);
+          this.selectOption(selectedOption);
         }
+      }
+    });
+
+    //updating new message count
+    this.sidebarService.messageCountUpdate$.subscribe((value) => {
+      if (value == 'new' && this.currentOption != 'chatbox') {
+        this.count++;
       }
     });
   }

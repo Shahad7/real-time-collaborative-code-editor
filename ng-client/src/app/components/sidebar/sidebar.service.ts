@@ -10,10 +10,12 @@ export class SidebarService {
   >();
   private navigationAnnouncementSource = new Subject<string>();
   private departureSource = new Subject<string>();
+  private messageCountUpdateSource = new Subject<string>();
 
   currentSidebarOption$ = this.currentSidebarOptionSource.asObservable();
   navigationAnnouncement$ = this.navigationAnnouncementSource.asObservable();
   departure$ = this.departureSource.asObservable();
+  messageCountUpdate$ = this.messageCountUpdateSource.asObservable();
 
   selectOption(option: 'explorer' | 'chatbox' | 'view-members' | 'room-log') {
     this.currentSidebarOptionSource.next(option);
@@ -25,6 +27,10 @@ export class SidebarService {
 
   alertDeparture() {
     this.departureSource.next('depart');
+  }
+
+  updateMessageCount() {
+    this.messageCountUpdateSource.next('new');
   }
 
   constructor() {}

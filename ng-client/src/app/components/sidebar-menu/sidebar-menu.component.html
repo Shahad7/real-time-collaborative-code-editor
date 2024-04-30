@@ -11,6 +11,13 @@
     [ngClass]="currentOption == 'chatbox' ? 'sidebar-active' : ''"
     (click)="selectOption('chatbox')"
   >
+    <div
+      #messageCount
+      class="msg-count"
+      *ngIf="count > 0 && currentOption != 'chatbox'"
+    >
+      {{ count }}
+    </div>
     <img src="assets/chat.png" alt="" />
   </div>
   <div
