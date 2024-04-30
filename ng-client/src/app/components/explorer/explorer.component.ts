@@ -57,6 +57,7 @@ export class ExplorerComponent {
       for (let i in this.files) {
         if (this.files[i].id == fileID) {
           index = i;
+          this.explorerService.alertDeletedFile(fileID);
         }
       }
       if (this.files[index as any]) {

@@ -347,9 +347,9 @@ const getIo = (server) => {
       io.to(roomID).emit("to-delete", fileID);
       if (explorerUpdates[roomID]) {
         let updates = explorerUpdates[roomID];
-        console.log(updates);
+        // console.log(updates);
         let new_updates = updates.filter((elt) => elt.id != fileID);
-        console.log(new_updates);
+        // console.log(new_updates);
         explorerUpdates[roomID] = new_updates;
       }
     });
@@ -359,11 +359,11 @@ const getIo = (server) => {
       io.to(roomID).emit("folder-to-delete", foldername, path);
       if (explorerUpdates[roomID]) {
         let updates = explorerUpdates[roomID];
-        console.log(updates);
+        // console.log(updates);
         let new_updates = updates.filter(
           (elt) => elt.name != foldername && elt.path != path
         );
-        console.log(new_updates);
+        // console.log(new_updates);
         explorerUpdates[roomID] = new_updates;
       }
     });

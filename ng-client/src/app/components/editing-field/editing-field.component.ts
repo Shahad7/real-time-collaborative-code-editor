@@ -144,6 +144,16 @@ export class EditingFieldComponent {
       this.removeDisconnectedAwareness();
     });
 
+    //dispose deleted file's model if that was the current active file
+    this.explorerService.deletedFile$.subscribe((fileID) => {
+      if (this.models[fileID]) {
+        if (this.models[fileID] == this.editor.getModel()) {
+          this.editor.setModel(null);
+          delete this.models[fileID];
+        }
+      }
+    });
+
     //subscribing to file switch events
     this.explorerService.selectedFile$.subscribe((file) => {
       //saving current model and state before switching

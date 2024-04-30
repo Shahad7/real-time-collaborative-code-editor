@@ -15,6 +15,7 @@ export class FileExplorerService {
   private chosenFolderSource = new Subject<{ name: string; path: string }>();
   private clickedOutsideSource = new Subject<boolean>();
   private createModeSource = new Subject<'folder' | 'file' | null>();
+  private deletedFileSource = new Subject<string>();
   private explorerUpdateRelaySource = new Subject<{
     name: string;
     path: string;
@@ -30,6 +31,7 @@ export class FileExplorerService {
   chosenFolder$ = this.chosenFolderSource.asObservable();
   createMode$ = this.createModeSource.asObservable();
   explorerUpdateRelay$ = this.explorerUpdateRelaySource.asObservable();
+  deletedFile$ = this.deletedFileSource.asObservable();
 
   //setting subject using next()
   selectFile(file: { name: string; path: string; id: string }) {
@@ -65,5 +67,10 @@ export class FileExplorerService {
     id: string | null;
   }) {
     this.explorerUpdateRelaySource.next(update);
+  }
+
+  //to dispose deleted file's model if it's active
+  alertDeletedFile(fileID: string) {
+    this.deletedFileSource.next(fileID);
   }
 }
