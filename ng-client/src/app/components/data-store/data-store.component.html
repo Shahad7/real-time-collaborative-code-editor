@@ -1,6 +1,7 @@
 <div class="container">
   <p class="head">Repository</p>
-  <div class="flex mar">
+
+  <div class="flex mar" style="width: 66%; justify-content: space-between">
     <button (click)="goBackToEditor()" *ngIf="!fileMode" class="b1">
       <img src="assets/arrow-right.png" alt="" />
       Go to Editor
@@ -8,6 +9,9 @@
     <button class="b1" *ngIf="fileMode" (click)="goBack()">
       <img src="assets/arrow-right.png" alt="" />
       Back
+    </button>
+    <button style="background-color: green; color: white" (click)="download()">
+      Download
     </button>
   </div>
   <p class="head" *ngIf="allFiles.length == 0 && !error">loading....</p>
@@ -17,7 +21,7 @@
       <div class="wrapper">
         <table *ngIf="!fileMode">
           <tr>
-            <th>Session-7a75</th>
+            <th>Session-{{ roomID.substring(0, 5) }}</th>
           </tr>
           <tr
             *ngIf="allFiles.length > 0 && currentPWD != ''"

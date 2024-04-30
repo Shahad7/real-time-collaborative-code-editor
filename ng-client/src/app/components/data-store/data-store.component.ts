@@ -7,6 +7,8 @@ import {
 } from '@angular/router';
 
 import { Location } from '@angular/common';
+import * as JSZip from 'jszip';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-data-store',
@@ -27,11 +29,13 @@ export class DataStoreComponent implements OnInit {
     filename: string;
     path: string;
     fileID: { data: Buffer; type: string };
+    value: string;
   }> = [];
   files: Array<{
     filename: string;
     path: string;
     fileID: string;
+    value: string;
   }> = [];
   folders: Array<{ foldername: string; path: string }> = [];
   currentPWD: string = '';
@@ -108,6 +112,7 @@ export class DataStoreComponent implements OnInit {
             filename: elt.filename,
             path: elt.path,
             fileID: elt.fileID,
+            value: elt.value,
           });
         });
         this.room = { ...data.room };
@@ -285,6 +290,18 @@ export class DataStoreComponent implements OnInit {
   viewFile(fileID: string) {
     this.router.navigate(['file', fileID], {
       relativeTo: this.route,
+    });
+  }
+
+  download() {
+    let zip = new JSZip();
+    this.allFiles.forEach((elt) => {
+      zip.file(elt.path, elt.value, { createFolders: true });
+    });
+
+    zip.generateAsync({ type: 'blob' }).then((content) => {
+      // see FileSaver.js
+      FileSaver.saveAs(content, `session-${this.roomID.substring(0, 5)}-data`);
     });
   }
 }
