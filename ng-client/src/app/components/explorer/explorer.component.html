@@ -12,15 +12,16 @@
         type="file"
         style="display: none"
         (change)="uploadFile($event)"
-        class="create-btns-identifier"
+        class="explorer-head-identifier create-btns-identifier"
       />
-      <button
+      <img
         #uploadButton
+        src="assets/file-upload-outline.svg"
+        class="explorer-head-identifier create-btns-identifier"
+        alt=""
         (click)="activateUpload()"
-        class="create-btns-identifier"
-      >
-        u
-      </button>
+      />
+
       <img
         src="assets/file-plus.svg"
         class="explorer-head-identifier create-btns-identifier"
