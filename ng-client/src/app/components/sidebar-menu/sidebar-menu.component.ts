@@ -12,6 +12,7 @@ export class SidebarMenuComponent implements OnInit {
   @ViewChild('messageCount')
   messageCount: any;
   count: number = 0;
+  notificationSound = new Audio('assets/notification1.mp3');
   constructor(
     private sidebarService: SidebarService,
     private router: Router,
@@ -37,6 +38,7 @@ export class SidebarMenuComponent implements OnInit {
     this.sidebarService.messageCountUpdate$.subscribe((value) => {
       if (value == 'new' && this.currentOption != 'chatbox') {
         this.count++;
+        this.notificationSound.play();
       }
     });
   }
