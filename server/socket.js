@@ -188,7 +188,8 @@ const getIo = (server) => {
                   update.name,
                   update.mode,
                   update.path,
-                  update.id
+                  update.id,
+                  update.value
                 );
             }
           } catch (e) {
@@ -307,16 +308,18 @@ const getIo = (server) => {
     });
 
     //relaying explorer updates
-    socket.on("explorer-updates", (name, mode, path, id, roomID) => {
+    socket.on("explorer-updates", (name, mode, path, id, roomID, value) => {
       //to store explorer updates on server in-memory
       if (!explorerUpdates[roomID]) explorerUpdates[roomID] = [];
       try {
-        explorerUpdates[roomID].push({ name, mode, path, id });
+        explorerUpdates[roomID].push({ name, mode, path, id, value });
       } catch (e) {
         console.log("couldn't store explorer updates on server side");
       }
 
-      socket.to(roomID).emit("receive-explorer-updates", name, mode, path, id);
+      socket
+        .to(roomID)
+        .emit("receive-explorer-updates", name, mode, path, id, value);
     });
 
     //send clientID of disconnected client so that others

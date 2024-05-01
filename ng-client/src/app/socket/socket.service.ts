@@ -89,11 +89,12 @@ export class SocketService {
     name: string,
     mode: 'file' | 'folder' | null,
     path: string,
-    id: string | null
+    id: string | null,
+    value: string | null
   ) {
     const roomID = sessionStorage.getItem('roomID');
     if (roomID)
-      this.socket.emit('explorer-updates', name, mode, path, id, roomID);
+      this.socket.emit('explorer-updates', name, mode, path, id, roomID, value);
   }
 
   //send clientID of disconnected client so that others

@@ -10,6 +10,7 @@ export class FileExplorerService {
     name: string;
     path: string;
     id: string;
+    value: string | null;
   }>();
   private selectedFolderSource = new Subject<{ name: string; path: string }>();
   private chosenFolderSource = new Subject<{ name: string; path: string }>();
@@ -22,6 +23,7 @@ export class FileExplorerService {
     parent: string;
     mode: 'file' | 'folder' | null;
     id: string | null;
+    value: string | null;
   }>();
 
   //observable stream
@@ -34,7 +36,12 @@ export class FileExplorerService {
   deletedFile$ = this.deletedFileSource.asObservable();
 
   //setting subject using next()
-  selectFile(file: { name: string; path: string; id: string }) {
+  selectFile(file: {
+    name: string;
+    path: string;
+    id: string;
+    value: string | null;
+  }) {
     this.selectedFileSource.next(file);
   }
 
@@ -65,6 +72,7 @@ export class FileExplorerService {
     parent: string;
     mode: 'file' | 'folder' | null;
     id: string | null;
+    value: string | null;
   }) {
     this.explorerUpdateRelaySource.next(update);
   }

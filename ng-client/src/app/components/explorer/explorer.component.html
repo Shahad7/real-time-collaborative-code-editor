@@ -7,6 +7,20 @@
   >
     <h5 class="explorer-head-identifier">EXPLORER</h5>
     <div class="create-btns">
+      <input
+        #fileInput
+        type="file"
+        style="display: none"
+        (change)="uploadFile($event)"
+        class="create-btns-identifier"
+      />
+      <button
+        #uploadButton
+        (click)="activateUpload()"
+        class="create-btns-identifier"
+      >
+        u
+      </button>
       <img
         src="assets/file-plus.svg"
         class="explorer-head-identifier create-btns-identifier"
@@ -40,6 +54,7 @@
       [filename]="file.name"
       [path]="file.path"
       [id]="file.id"
+      [initialValue]="file.value"
     ></app-file>
     <!-- <app-folder
       [foldername]="'Default'"

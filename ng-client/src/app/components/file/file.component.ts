@@ -12,6 +12,7 @@ export class FileComponent {
   @Input() filename: string = '';
   @Input() path: string = '';
   @Input() id: string = '';
+  @Input() initialValue: string | null = '';
   value: string = '';
   @ViewChild('deleteWarningDIV')
   deleteWarningDIV: any;
@@ -90,6 +91,7 @@ export class FileComponent {
       name: this.filename,
       path: this.path,
       id: this.id,
+      value: this.initialValue,
     });
   }
 

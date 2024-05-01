@@ -16,7 +16,12 @@ export class FolderComponent {
 
   inputVisibility: boolean = false;
   folders: Array<{ name: string; path: string }> = [];
-  files: Array<{ name: string; path: string; id: string }> = [];
+  files: Array<{
+    name: string;
+    path: string;
+    id: string;
+    value: string | null;
+  }> = [];
   createMode: 'folder' | 'file' | null = null;
 
   @ViewChild('input')
@@ -82,10 +87,10 @@ export class FolderComponent {
 
     //listen and see if this folder is the one which is being published for new file/folder creation
     this.explorerService.explorerUpdateRelay$.subscribe(
-      ({ name, parent, path, mode, id }) => {
+      ({ name, parent, path, mode, id, value }) => {
         if (this.foldername == parent && this.path == path) {
           if (mode == 'file') {
-            this.createFile(name, id);
+            this.createFile(name, id, value);
           } else if (mode == 'folder') this.createFolder(name);
         }
       }
@@ -129,7 +134,7 @@ export class FolderComponent {
       this.input.nativeElement.value.length != 0
     ) {
       if (this.createMode == 'file') {
-        this.createFile(this.input.nativeElement.value, null);
+        this.createFile(this.input.nativeElement.value, null, null);
       }
 
       if (this.createMode == 'folder') {
@@ -140,7 +145,7 @@ export class FolderComponent {
     }
   }
 
-  createFile(filename: string, id: string | null) {
+  createFile(filename: string, id: string | null, value: string | null) {
     if (!id) {
       id = uuidv4();
     }
@@ -152,10 +157,17 @@ export class FolderComponent {
         name: filename,
         path: `${this.path}/${filename}`,
         id: id,
+        value: value,
       });
 
       //letting other clients know a new file is created
-      this.socketService.sendExplorerUpdates(filename, 'file', this.path, id);
+      this.socketService.sendExplorerUpdates(
+        filename,
+        'file',
+        this.path,
+        id,
+        value
+      );
       this.setInputVisibility(false);
     } else {
       this.input.nativeElement.style.borderColor = 'red';
@@ -178,6 +190,7 @@ export class FolderComponent {
         foldername,
         'folder',
         this.path,
+        null,
         null
       );
 

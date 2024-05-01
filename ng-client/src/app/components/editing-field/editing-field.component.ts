@@ -183,15 +183,17 @@ export class EditingFieldComponent {
         let index: any = file.name.split('.').pop();
         let language = this.languages[index];
         // console.log('detected language as ' + language);
-        if (language != null && language != undefined)
+        if (language != null && language != undefined) {
           model = this.monaco.editor.createModel('', language);
-        else model = this.monaco.editor.createModel('');
+        } else {
+          model = this.monaco.editor.createModel('');
+        }
         this.models[file.id] = model;
       }
 
       //if the current file doesn't already have a YText instance, instantiate
       if (!this.ymap.has(file.id)) {
-        this.ymap.set(file.id, new Y.Text());
+        this.ymap.set(file.id, new Y.Text(file.value || ''));
       }
 
       //destroy current binding if any before new binding

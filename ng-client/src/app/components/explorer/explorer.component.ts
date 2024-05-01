@@ -16,7 +16,12 @@ export class ExplorerComponent {
     // { name: 'Default', path: 'Default' },
     // { name: 'root', path: 'root' },
   ];
-  files: Array<{ name: string; path: string; id: string }> = [
+  files: Array<{
+    name: string;
+    path: string;
+    id: string;
+    value: string | null;
+  }> = [
     // { name: 'main.js', path: 'main.js' },
     // { name: 'spec.ts', path: 'spec.ts' },
   ];
@@ -29,6 +34,8 @@ export class ExplorerComponent {
   input: any;
   @ViewChild('root')
   root: any;
+  @ViewChild('fileInput')
+  fileInput: any;
 
   constructor(
     private explorerService: FileExplorerService,
@@ -43,6 +50,7 @@ export class ExplorerComponent {
 
     this.explorerService.selectedFolder$.subscribe((folder) => {
       this.selectedFolder = folder;
+      console.log(folder);
     });
 
     this.explorerService.clickedOutside$.subscribe((value) => {
@@ -75,9 +83,9 @@ export class ExplorerComponent {
     //receiving explorer updates from other clients
     this.socketService.socket.on(
       'receive-explorer-updates',
-      (name, mode, path, id) => {
+      (name, mode, path, id, value) => {
         if (path == '') {
-          if (mode == 'file') this.createFile(name, id);
+          if (mode == 'file') this.createFile(name, id, value);
           else if (mode == 'folder') this.createFolder(name);
         } else {
           let extracts = path.split('/');
@@ -88,6 +96,7 @@ export class ExplorerComponent {
             path: path,
             mode: mode,
             id: id,
+            value: value,
           });
         }
       }
@@ -145,7 +154,7 @@ export class ExplorerComponent {
       this.input.nativeElement.value.length != 0
     ) {
       if (this.createMode == 'file') {
-        this.createFile(this.input.nativeElement.value, null);
+        this.createFile(this.input.nativeElement.value, null, null);
       }
 
       if (this.createMode == 'folder') {
@@ -154,7 +163,7 @@ export class ExplorerComponent {
     }
   }
 
-  createFile(filename: string, id: string | null) {
+  createFile(filename: string, id: string | null, value: string | null) {
     if (!id) {
       id = uuidv4();
     }
@@ -162,12 +171,19 @@ export class ExplorerComponent {
       /^[\w,-]+\.[A-Za-z]+$/.test(filename) &&
       !this.includes(this.files, filename)
     ) {
-      this.files.push({ name: filename, path: filename, id: id });
+      this.files.push({
+        name: filename,
+        path: filename,
+        id: id,
+        value: value,
+      });
 
       //letting other clients know a new file is created
-      this.socketService.sendExplorerUpdates(filename, 'file', '', id);
+      this.socketService.sendExplorerUpdates(filename, 'file', '', id, value);
       this.setInputVisibility(false);
     } else {
+      //caution : if files with invalid filename according to current regex is uploaded
+      // this could get triggered unwantedly
       this.input.nativeElement.style.borderColor = 'red';
     }
   }
@@ -181,7 +197,13 @@ export class ExplorerComponent {
     ) {
       this.folders.push({ name: foldername, path: foldername });
       //letting other clients know a new folder is created
-      this.socketService.sendExplorerUpdates(foldername, 'folder', '', null);
+      this.socketService.sendExplorerUpdates(
+        foldername,
+        'folder',
+        '',
+        null,
+        null
+      );
       this.setInputVisibility(false);
     } else {
       this.input.nativeElement.style.borderColor = 'red';
@@ -206,5 +228,33 @@ export class ExplorerComponent {
     this.inputVisibility = value;
     this.input.nativeElement.value = '';
     this.resetBorder();
+  }
+
+  activateUpload() {
+    this.fileInput.nativeElement.click();
+  }
+  uploadFile(e: any) {
+    try {
+      let file = e.target.files[0];
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        if (this.isRootFolder()) {
+          this.createFile(file.name, null, e.target?.result as any);
+        } else {
+          this.explorerService.relayExplorerUpdate({
+            name: file.name,
+            path: this.selectedFolder.path,
+            parent: this.selectedFolder.name,
+            mode: 'file',
+            id: null,
+            value: e.target?.result as any,
+          });
+        }
+      };
+      reader.readAsText(file);
+    } catch (e) {
+      console.log("couldn't upload file");
+      console.error(e);
+    }
   }
 }
