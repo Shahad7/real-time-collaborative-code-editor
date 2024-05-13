@@ -14,12 +14,13 @@ export class SidebarMenuComponent implements OnInit,OnDestroy {
   count: number = 0;
   notificationSound = new Audio('assets/notification1.mp3');
   subscription : any;
+  router_subscription : any;
   constructor(
     private sidebarService: SidebarService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    router.events.subscribe((val) => {
+    this.router_subscription=router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         let current_path = this.router.url;
 
@@ -61,6 +62,7 @@ export class SidebarMenuComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe()
+    this.subscription.unsubscribe();
+    this.router_subscription.unsubscribe()
   }
 }
