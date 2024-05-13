@@ -39,7 +39,8 @@ img {
   font-weight: bold;
   top: -15px;
   right: -10px;
-  background-color: red;
+  background-color: orange;
+  color: #fff;
   border-radius: 40px;
   padding: 3px;
   z-index: 3;

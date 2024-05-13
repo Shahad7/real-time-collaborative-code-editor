@@ -163,3 +163,12 @@ a {
 #copy-btn {
   justify-self: end;
 }
+
+.cus-b{
+  background-color: #075e54;
+  color: #fff;
+  font-size: 15px;
+  padding: 5px 10px;
+  border-style: none;
+  border-radius: 5px;
+}

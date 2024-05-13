@@ -38,6 +38,7 @@ export class SidebarMenuComponent implements OnInit {
     this.sidebarService.messageCountUpdate$.subscribe((value) => {
       if (value == 'new' && this.currentOption != 'chatbox') {
         this.count++;
+        console.log('called')
         this.notificationSound.play();
       }
     });

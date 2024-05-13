@@ -64,6 +64,7 @@
 a {
   cursor: pointer;
 }
+
 .popup1 {
   display: none;
   flex-direction: column;
@@ -332,6 +333,54 @@ form button {
   margin: 0;
 }
 
+.admit{
+  top: 0%;
+  left: 36%;
+  max-height: 140px;
+  max-width: 400px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 2% 3%;
+  animation: slideInFromTop 300ms ease-in-out;
+}
+
+.admit .cus-pos{
+  position: absolute;
+  bottom: 25px;
+  right: 30px;
+}
+
+.admit .b1{
+  background-color: #075e54;
+  margin-right: 8px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 5px 10px;
+  border-style: none;
+  border-radius: 5px;
+}
+
+.admit .b2{
+  background-color: #cd0000;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 5px 10px;
+  border-style: none;
+  border-radius: 5px;
+}
+
+.warn .b1{
+  background-color: #000;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 5px 10px;
+  border-style: none;
+  border-radius: 5px;
+}
+
 @keyframes slideInFromRight {
   0% {
     transform: translateX(+100%);
@@ -344,6 +393,15 @@ form button {
   }
   100% {
     transform: translateX(+150%);
+  }
+}
+
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 

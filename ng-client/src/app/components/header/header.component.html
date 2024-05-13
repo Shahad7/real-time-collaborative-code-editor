@@ -104,7 +104,7 @@
   </div>
 </div>
 
-<div #successorWarning class="popup1">
+<div #successorWarning class="popup1 warn">
   <img
     src="assets/close.png"
     alt=""
@@ -113,7 +113,7 @@
   />
   <p style="color: red">You must make someone else admin before you leave</p>
   <div class="flex">
-    <button id="view-members-btn" (click)="showMembers()">View members</button>
+    <button class="b1" id="view-members-btn" (click)="showMembers()">View members</button>
   </div>
 </div>
 
@@ -124,7 +124,7 @@
     class="cus-img"
     (click)="closeSessionEndDiv()"
   />
-  <p>the session was ended by admin</p>
+  <p>The session was ended by admin</p>
 </div>
 
 <div #notificationDiv class="pop">
@@ -132,12 +132,12 @@
   <p #notification></p>
 </div>
 
-<div #joinRequest class="popup1" style="max-height: 220px">
+<div #joinRequest class="popup1 admit">
   <p #joinRequestDIV></p>
-  <div class="flex">
-    <button style="margin-right: 8px; color: green" (click)="admit()">
+  <div class="flex cus-pos">
+    <button class="b1" (click)="admit()">
       Admit
     </button>
-    <button style="color: red" (click)="reject()">Reject</button>
+    <button class="b2" (click)="reject()">Reject</button>
   </div>
 </div>
