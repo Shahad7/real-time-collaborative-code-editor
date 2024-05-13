@@ -31,6 +31,7 @@ export class SidebarService {
 
   updateMessageCount() {
     this.messageCountUpdateSource.next('new');
+    console.log("sidebar service updateMessageCount")
   }
 
   constructor() {}

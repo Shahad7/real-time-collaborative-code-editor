@@ -19,11 +19,14 @@ export class ChatboxComponent {
     this.socketServive.socket.on(
       'receive-message',
       (message, sender, color) => {
-        this.sidebarService.updateMessageCount();
+        
         let you = sessionStorage.getItem('username');
         if (sender == you)
           this.messages.push({ sender: 'you', message, color: 'black' });
-        else this.messages.push({ sender, message, color });
+        else{ this.messages.push({ sender, message, color });
+        this.sidebarService.updateMessageCount();
+        console.log("message receive event")
+        }
       }
     );
   }

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { FileExplorerService } from 'src/app/components/explorer/file-explorer.service';
 import { SidebarService } from '../sidebar/sidebar.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
@@ -8,11 +8,12 @@ import { OnInit } from '@angular/core';
   templateUrl: './sidebar-menu.component.html',
   styleUrls: ['./sidebar-menu.component.css'],
 })
-export class SidebarMenuComponent implements OnInit {
+export class SidebarMenuComponent implements OnInit,OnDestroy {
   @ViewChild('messageCount')
   messageCount: any;
   count: number = 0;
   notificationSound = new Audio('assets/notification1.mp3');
+  subscription : any;
   constructor(
     private sidebarService: SidebarService,
     private router: Router,
@@ -35,7 +36,8 @@ export class SidebarMenuComponent implements OnInit {
     });
 
     //updating new message count
-    this.sidebarService.messageCountUpdate$.subscribe((value) => {
+    this.subscription =  this.sidebarService.messageCountUpdate$.subscribe((value) => {
+      console.log('before if')
       if (value == 'new' && this.currentOption != 'chatbox') {
         this.count++;
         console.log('called')
@@ -56,5 +58,9 @@ export class SidebarMenuComponent implements OnInit {
     let option = this.route.snapshot.paramMap.get('option');
     if (option) this.selectOption(option as any);
     else this.selectOption('explorer');
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
   }
 }
